@@ -5241,18 +5241,12 @@ GameBoyCore.prototype.initSound = function () {
 	}
 	else if (this.audioHandle) {
 		//Mute the audio output, as it has an immediate silencing effect:
-		try {
-			this.audioHandle.changeVolume(0);
-		}
-		catch (error) { }
+		this.audioHandle.changeVolume(0);
 	}
 }
 GameBoyCore.prototype.changeVolume = function () {
 	if (settings[0] && this.audioHandle) {
-		try {
-			this.audioHandle.changeVolume(settings[3]);
-		}
-		catch (error) { }
+		this.audioHandle.changeVolume(settings[3]);
 	}
 }
 GameBoyCore.prototype.initAudioBuffer = function () {
