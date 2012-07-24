@@ -1,3 +1,4 @@
+"use strict";
 var windowStacks = [];
 function windowCreate(sId, bShow) {
 	var oWindow = new windowStack(document.getElementById(sId));
