@@ -4,15 +4,15 @@ html {
 	background-attachment: fixed;
 	background-repeat: none;
 	background-image: url("../images/gradient_01.svg.php");
-	background-image: linear-gradient(315deg, rgb(200, 200, 255), rgb(200, 255, 200));
-	background-image: -o-linear-gradient(315deg, rgb(200, 200, 255), rgb(200, 255, 200));
+	background-image: -webkit-linear-gradient(315deg, rgb(200, 200, 255), rgb(200, 255, 200));
 	background-image: -moz-linear-gradient(315deg, rgb(200, 200, 255), rgb(200, 255, 200));
-	background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0, #C8C8FF), color-stop(1, #C8FFC8));
-	margin: 0px;
-	padding: 0px;
+	background-image: -o-linear-gradient(315deg, rgb(200, 200, 255), rgb(200, 255, 200));
+	background-image: linear-gradient(315deg, rgb(200, 200, 255), rgb(200, 255, 200));
+	margin: 0;
+	padding: 0;
 	font-family: arial;
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 	overflow: auto;
 	text-align: left;
 	direction: ltr;
@@ -26,8 +26,8 @@ body {
 	min-width: 100%;
 	min-height: 100%;
 	border: none;
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 }
 div.menubar, div#GameBoy > div#gfx, div.window > div.button_rack, ul.menu {
 	-webkit-text-size-adjust: none;
@@ -43,25 +43,16 @@ div.window {
 	display: none;
 	position: absolute;
 	overflow: hidden;
-	margin: 0px;
+	margin: 0;
 	padding: 10px 0px 0px 0px;
-	top: 0px;
-	left: 0px;
+	top: 0;
+	left: 0;
 	color: rgb(0, 0, 0);
 	font-size: 16px;
-	border-radius: 3px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	box-shadow: 5px 5px 10px rgb(30, 30, 30);
-	-moz-box-shadow: 5px 5px 10px rgb(30, 30, 30);
+	-webkit-border-radius: 10px 10px 3px 3px;
+	border-radius: 10px 10px 3px 3px;
 	-webkit-box-shadow: 5px 5px 10px rgb(30, 30, 30);
-	border-top-left-radius: 10px;
-	border-top-right-radius: 10px;
-	-webkit-border-top-left-radius: 10px;
-	-webkit-border-top-right-radius: 10px;
-	-moz-border-radius-topleft: 10px;
-	-moz-border-radius-topright: 10px;
-
+	box-shadow: 5px 5px 10px rgb(30, 30, 30);
 	background-color: rgb(200, 200, 200);
 	z-index: 2;
 	opacity: 1;
@@ -80,12 +71,12 @@ div#instructions {
 }
 div.menubar {
 	max-height: 28px;
-	min-width: 250px;	/*Fail safe for shitty browsers.*/
+	min-width: 250px;	/*Fail safe for poopy browsers.*/
 	display: block;
 	overflow: hidden;
 	position: absolute;
-	left: 0px;
-	right: 0px;
+	left: 0;
+	right: 0;
 	border-top-style: solid;
 	border-top-width: 1px;
 	border-top-color: rgb(150, 150, 150);
@@ -95,60 +86,57 @@ div.menubar {
 	border-bottom-width: 1px;
 	border-bottom-color: rgb(50, 50, 50);
 	text-overflow: ellipsis;
-	margin: 0px;
-	padding: 0px 0px 0px 3px;
+	margin: 0;
+	padding: 0 0 0 3px;
 	text-align: left;
 	background-color: rgb(210, 210, 210);
 	background-repeat: repeat-x;
 	background-attachment: scroll;
 	background-image: url("../images/gradient_02.svg.php");
-	background-image: linear-gradient(top, rgb(150, 150, 150), rgb(220, 220, 220), rgb(180, 180, 180));
-	background-image: -o-gradient(top, rgb(150, 150, 150), rgb(220, 220, 220), rgb(180, 180, 180));
+	background-image: -webkit-linear-gradient(top, rgb(150, 150, 150), rgb(220, 220, 220), rgb(180, 180, 180));
 	background-image: -moz-linear-gradient(top, rgb(150, 150, 150), rgb(220, 220, 220), rgb(180, 180, 180));
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #969696), color-stop(0.5, #DCDCDC), color-stop(1, #B4B4B4));
+	background-image: -o-linear-gradient(top, rgb(150, 150, 150), rgb(220, 220, 220), rgb(180, 180, 180));
+	background-image: linear-gradient(top, rgb(150, 150, 150), rgb(220, 220, 220), rgb(180, 180, 180));
 }
 div.menubar > span {
 	cursor: pointer;
-	border-radius: 5px;
-	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
+	border-radius: 5px;
 	background-color: transparent;
 	padding: 2px 5px;
-	margin: 3px 3px 3px 0px;
+	margin: 3px 3px 3px 0;
 	display: inline;
 	display: inline-block;
 }
 div.menubar > span:hover {
-	box-shadow: 2px 2px 1px rgb(30, 30, 30);
-	-moz-box-shadow: 2px 2px 1px rgb(30, 30, 30);
 	-webkit-box-shadow: 2px 2px 1px rgb(30, 30, 30);
+	box-shadow: 2px 2px 1px rgb(30, 30, 30);
 	background-color: rgb(160, 160, 160);
 	background-repeat: repeat-x;
 	background-attachment: scroll;
 	background-image: url("../images/gradient_03.svg.php");
-	background-image: linear-gradient(top, rgb(160, 160, 160), rgb(190, 190, 190), rgb(160, 160, 160));
-	background-image: -o-linear-gradient(top, rgb(160, 160, 160), rgb(190, 190, 190), rgb(160, 160, 160));
+	background-image: -webkit-linear-gradient(top, rgb(160, 160, 160), rgb(190, 190, 190), rgb(160, 160, 160));
 	background-image: -moz-linear-gradient(top, rgb(160, 160, 160), rgb(190, 190, 190), rgb(160, 160, 160));
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #A0A0A0), color-stop(0.5, #BEBEBE), color-stop(1, #A0A0A0));
+	background-image: -o-linear-gradient(top, rgb(160, 160, 160), rgb(190, 190, 190), rgb(160, 160, 160));
+	background-image: linear-gradient(top, rgb(160, 160, 160), rgb(190, 190, 190), rgb(160, 160, 160));
 }
 div.menubar > span:active {
-	box-shadow: inset 2px 2px 1px rgb(30, 30, 30);
-	-moz-box-shadow: inset 2px 2px 1px rgb(30, 30, 30);
 	-webkit-box-shadow: inset 2px 2px 1px rgb(30, 30, 30);
+	box-shadow: inset 2px 2px 1px rgb(30, 30, 30);
 	background-color: rgb(220, 220, 220);
 	background-repeat: repeat-x;
 	background-attachment: scroll;
 	background-image: url("../images/gradient_04.svg.php");
-	background-image: linear-gradient(top, rgb(190, 190, 190), rgb(160, 160, 160), rgb(190, 190, 190));
-	background-image: -o-linear-gradient(top, rgb(190, 190, 190), rgb(160, 160, 160), rgb(190, 190, 190));
+	background-image: -webkit-linear-gradient(top, rgb(190, 190, 190), rgb(160, 160, 160), rgb(190, 190, 190));
 	background-image: -moz-linear-gradient(top, rgb(190, 190, 190), rgb(160, 160, 160), rgb(190, 190, 190));
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #BEBEBE), color-stop(0.5, #A0A0A0), color-stop(1, #BEBEBE));
+	background-image: -o-linear-gradient(top, rgb(190, 190, 190), rgb(160, 160, 160), rgb(190, 190, 190));
+	background-image: linear-gradient(top, rgb(190, 190, 190), rgb(160, 160, 160), rgb(190, 190, 190));
 }
 div#gfx {
 	height: auto;
 	width: auto;
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 	position: absolute;
 	bottom: 3px;
 	left: 3px;
@@ -158,19 +146,19 @@ div#gfx {
 	background-repeat: repeat-x;
 	background-attachment: scroll;
 	background-image: url("../images/gradient_05.svg.php");
-	background-image: linear-gradient(top, rgb(200, 50, 50), rgb(200, 75, 150));
-	background-image: -o-linear-gradient(top, rgb(200, 50, 50), rgb(200, 75, 150));
+	background-image: -webkit-linear-gradient(top, rgb(200, 50, 50), rgb(200, 75, 150));
 	background-image: -moz-linear-gradient(top, rgb(200, 50, 50), rgb(200, 75, 150));
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #C83232), color-stop(1, #C84B96));
+	background-image: -o-linear-gradient(top, rgb(200, 50, 50), rgb(200, 75, 150));
+	background-image: linear-gradient(top, rgb(200, 50, 50), rgb(200, 75, 150));
 }
 body > div#fullscreenContainer {
 	position: absolute;	/*Fallback here if fixed isn't supported*/
 	position: fixed;
 	height: 100%;
 	width: 100%;
-	left: 0px;
-	right: 0px;
-	top: 0px;
+	left: 0;
+	right: 0;
+	top: 0;
 	bottom: 0px;
 	background-color: rgb(0, 0, 0);
 	display: none;
@@ -180,8 +168,8 @@ body > div#fullscreenContainer > canvas#fullscreen.maximum {
 	position: static;
 	height: 100%;
 	width: 100%;
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 }
 body > div#fullscreenContainer > canvas#fullscreen.minimum {
 	position: absolute;
@@ -189,8 +177,8 @@ body > div#fullscreenContainer > canvas#fullscreen.minimum {
 	width: 160px;
 	top: 50%;
 	left: 50%;
-	margin: -72px 0px 0px -80px;
-	padding: 0px;
+	margin: -72px 0 0 -80px;
+	padding: 0;
 }
 div#GameBoy > div#gfx > canvas, body > div#fullscreenContainer > canvas#fullscreen {
 	/*The firefox specific prop was removed, as firefox doesn't slow down with rendering bi-linear.*/
@@ -202,10 +190,10 @@ div#GameBoy > div#gfx > canvas {
 	position: absolute;
 	z-index: 5;
 	visibility: hidden;
-	top: 0px;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 	width: 100%;
 	height: 100%;
 	background-color: rgb(255, 255, 255);
@@ -219,7 +207,7 @@ div#GameBoy > div#gfx > span#title {
 	text-shadow: 3px 3px 5px rgb(50, 50, 50);
 	font-style: italic;
 	z-index: 1;
-	padding: 0px 5px 0px 0px;
+	padding: 0 5px 0 0;
 }
 div#GameBoy > div#gfx > span#port_title {
 	position: absolute;
@@ -231,7 +219,7 @@ div#GameBoy > div#gfx > span#port_title {
 	font-style: italic;
 	font-weight: bold;
 	z-index: 2;
-	padding: 0px 5px 0px 0px;
+	padding: 0 5px 0 0;
 }
 div#about {
 	max-width: 400px;
@@ -267,12 +255,10 @@ div.storageList {
 	text-align: left;
 	bottom: 50px;
 	background-color: rgb(140, 140, 140);
-	border-radius: 3px;
-	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
-	box-shadow: inset 3px 3px 2px 1px rgb(110, 110, 110);
-	-moz-box-shadow: inset 3px 3px 2px 1px rgb(110, 110, 110);
+	border-radius: 3px;
 	-webkit-box-shadow: inset 3px 3px 2px 1px rgb(110, 110, 110);
+	box-shadow: inset 3px 3px 2px 1px rgb(110, 110, 110);
 	padding: 3px;
 }
 div#storageListingMasterContainer {
@@ -287,12 +273,10 @@ div#download_all_storage {
 	text-align: center;
 	font-style: bold;
 	background-color: rgb(140, 140, 140);
-	border-radius: 3px;
-	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
-	box-shadow: inset 3px 3px 2px 1px rgb(110, 110, 110);
-	-moz-box-shadow: inset 3px 3px 2px 1px rgb(110, 110, 110);
+	border-radius: 3px;
 	-webkit-box-shadow: inset 3px 3px 2px 1px rgb(110, 110, 110);
+	box-shadow: inset 3px 3px 2px 1px rgb(110, 110, 110);
 	padding: 3px;
 }
 div.storageList a, div#download_all_storage a {
@@ -300,8 +284,8 @@ div.storageList a, div#download_all_storage a {
 }
 div#terminal > div#terminal_output {
 	background-color: rgb(0, 0, 0);
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 	font-family: monotype;
 	font-size: 12px;
 	bottom: 50px;
@@ -363,8 +347,8 @@ div#settings > div#toggle_settings > div.setting {
 	text-align: left;
 	width: 100%;
 	position: relative;
-	margin: 0px;
-	padding: 0px 0px 3px 0px;
+	margin: 0;
+	padding: 0 0 3px 0;
 	border: none;
 }
 div#settings > div#toggle_settings > div.setting:hover {
@@ -377,8 +361,8 @@ div#settings > div#toggle_settings > div.setting input {
 }
 div.window > div.button_rack {
 	background-color: transparent;
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 	position: absolute;
 	height: 44px;
 	bottom: 3px;
@@ -388,8 +372,8 @@ div.window > div.button_rack {
 }
 div.window > div.button_rack > button {
 	cursor: pointer;
-	padding: 0px;
-	margin: 0px;
+	padding: 0;
+	margin: 0;
 	height: 44px;
 	width: 150px;
 	text-align: center;
@@ -412,25 +396,23 @@ ul.menu {
 	list-style-type: none;
 	width: auto;
 	height: auto;
-	margin: 0px;
-	padding: 0px;
-	top: 0px;
-	left: 0px;
+	margin: 0;
+	padding: 0;
+	top: 0;
+	left: 0;
 	z-index: 3;
 	background-color: rgb(200, 200, 200);
 	background-repeat: repeat-x;
 	background-attachment: scroll;
 	background-image: url("../images/gradient_06.svg.php");
-	background-image: linear-gradient(left, rgb(200, 200, 200), rgb(240, 240, 240));
-	background-image: -o-linear-gradient(left, rgb(200, 200, 200), rgb(240, 240, 240));
+	background-image: -webkit-linear-gradient(left, rgb(200, 200, 200), rgb(240, 240, 240));
 	background-image: -moz-linear-gradient(left, rgb(200, 200, 200), rgb(240, 240, 240));
-	background-image: -webkit-gradient(linear, top left, top right, color-stop(0, #C8C8C8), color-stop(1, #DCDCDC));
-	border-radius: 3px;
-	-moz-border-radius: 3px;
+	background-image: -o-linear-gradient(left, rgb(200, 200, 200), rgb(240, 240, 240));
+	background-image: linear-gradient(left, rgb(200, 200, 200), rgb(240, 240, 240));
 	-webkit-border-radius: 3px;
-	box-shadow: 5px 5px 10px rgb(30, 30, 30);
-	-moz-box-shadow: 5px 5px 10px rgb(30, 30, 30);
+	border-radius: 3px;
 	-webkit-box-shadow: 5px 5px 10px rgb(30, 30, 30);
+	box-shadow: 5px 5px 10px rgb(30, 30, 30);
 	border-style: solid;
 	border-top-width: 1px;
 	border-left-width: 1px;
@@ -445,13 +427,13 @@ ul.menu {
 ul.menu:hover {
 	display: block;
 	display: inline-block;
-	top: 0px;
-	left: 0px;
+	top: 0;
+	left: 0;
 }
 ul.menu > li {
 	display: block;
 	position: relative;
-	margin: 0px 0px -1px 0px;	/*Firefox DOM mouseover bug*/
+	margin: 0 0 -1px 0;	/*Firefox DOM mouseover bug*/
 	padding: 2px 5px 2px 15px;
 	color: rgb(0, 0, 0);
 	background-color: transparent;
@@ -468,7 +450,7 @@ ul.menu > li:hover {
 }
 ul.menu > li:hover > ul.menu {
 	left: 220px;
-	top: 0px;
+	top: 0;
 	display: block;
 	display: inline-block;
 }
