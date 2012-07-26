@@ -20,37 +20,27 @@ function windowStack(element) {
 			["mouseup", function (event) { thisObj2.dragDisable(); }]
 		];
 	}
-	else {
-		cout("In windowStack::windowStack() : The DOM element passed was invalid.", 2);
-	}
 }
 windowStack.prototype.registerMouseEvents = function () {
 	if (!this.hookedMouse) {
 		this.hookedMouse = true;
-		cout("windowStack::registerMouseEvents() called.", -1);
+		var eventIndex = null;
 		for (eventIndex in this.events) {
 			addEvent(this.events[eventIndex][0], document, this.events[eventIndex][1]);
 		}
 		this.center();
 	}
-	else {
-		cout("In windowStack::registerMouseEvents() : this.hookedMouse reported true, ignoring request to register mouse events.", 1);
-	}
 }
 windowStack.prototype.unregisterMouseEvents = function () {
 	if (this.hookedMouse) {
 		this.hookedMouse = false;
-		cout("windowStack::unregisterMouseEvents() called.", -1);
+		var eventIndex = null;
 		for (eventIndex in this.events) {
 			removeEvent(this.events[eventIndex][0], document, this.events[eventIndex][1]);
 		}
 	}
-	else {
-		cout("In windowStack::unregisterMouseEvents() : this.hookedMouse reported false, ignoring request to unregister mouse events.", 1);
-	}
 }
 windowStack.prototype.getStyleFloatOf = function (propertyNameOf, JSpropertyNameOf) {
-	cout("windowStack::getStyleFloatOf() called.", -1);
 	try {
 		var dirtyValue = window.getComputedStyle(this.domObject, null).getPropertyValue(propertyNameOf);
 	}
@@ -80,11 +70,9 @@ windowStack.prototype.dragEnable = function (event) {
 		this.domObject.style.zIndex = 2;
 		if (highX - this.leftLast < 25 && highY - this.topLast < 25) {	/*Inivisible resize corner area for windows.*/
 			this.resize = true;
-			cout("In windowStack::dragEnable() : Setup properties for a window resize event.", -1);
 		}
 		else {
 			this.resize = false;
-			cout("In windowStack::dragEnable() : Setup properties for a window drag event.", -1);
 		}
 		this.coordDiffLeft = this.leftLast - this.leftPos;
 		this.coordDiffTop = this.topLast - this.topPos;
@@ -93,7 +81,6 @@ windowStack.prototype.dragEnable = function (event) {
 	}
 	else {
 		this.lostFocus();
-		cout("In windowStack::dragEnable() : mousedWindow and this.mousedInsideWindow were false, so dragging setup ignored.", -1);
 	}
 }
 windowStack.prototype.drag = function (event) {
@@ -106,41 +93,27 @@ windowStack.prototype.drag = function (event) {
 			if (this.getStyleFloatOf("min-width", "minWidth") <= newWidth && this.getStyleFloatOf("min-height", "minHeight") <= newHeight && ((this.getStyleFloatOf("max-width", "maxWidth") >= newWidth || this.getStyleFloatOf("max-width", "maxWidth") == 0) && (this.getStyleFloatOf("max-height", "maxHeight") >= newHeight || this.getStyleFloatOf("max-height", "maxHeight") == 0))) {
 				this.domObject.style.width = newWidth + "px";
 				this.domObject.style.height = newHeight + "px";
-				cout("In windowStack::drag() : Changed the selected window's dimensions to " + this.domObject.style.width + " by " + this.domObject.style.height + ".", -1);
-			}
-			else {
-				cout("In windowStack::drag() : Ignored a width and/or height change, because the new size was out of bounds.", -1);
 			}
 		}
 		else if (!this.mousedInsideWindow) {
 			this.domObject.style.left = this.lastLeft + "px";
 			this.domObject.style.top = this.lastTop + "px";
-			cout("In windowStack::drag() : Moved selected window to (" + this.lastLeft + ", " + this.lastTop + ").", -1);
-		}
-		else {
-			cout("In windowStack::drag() : No action taken.", -1);
 		}
 		this.coordDiffLeft = this.leftLast = event.clientX;
 		this.coordDiffTop = this.topLast = event.clientY;
-	}
-	else {
-		cout("In windowStack::drag() : this.movable was false, so dragging ignored.", -1);
 	}
 }
 windowStack.prototype.dragDisable = function () {
 	this.movable = false;
 	this.hadFocus = true;
-	cout("windowStack::dragDisable() called.", -1);
 }
 windowStack.prototype.lostFocus = function () {
 	if (this.hadFocus) {
-		cout("windowStack::lostFocus() called.", -1);
 		this.domObject.style.zIndex = 1;
 		this.hadFocus = false;
 	}
 }
 windowStack.prototype.interceptOpacity = function () {
-	cout("windowStack::interceptOpacity() called.", -1);
 	if (this.lastOpacity != null) {
 		this.lastOpacity.bDoneRun = true;
 		return this.lastOpacity.RefOpacityAREABegin;
@@ -149,7 +122,6 @@ windowStack.prototype.interceptOpacity = function () {
 	return (sampledOpacity > 0) ? sampledOpacity : 100;	/*Dirty opacity first-set for IE*/
 }
 windowStack.prototype.center = function () {
-	cout("windowStack::center() called.", -1);
 	var docWidth = Math.max(document.documentElement.clientWidth, document.getElementsByTagName("body")[0].clientWidth);
 	var docHeight = Math.max(document.documentElement.clientHeight, document.getElementsByTagName("body")[0].clientHeight);
 	var docLeft = Math.max(document.documentElement.scrollLeft, document.getElementsByTagName("body")[0].scrollLeft);
@@ -158,12 +130,10 @@ windowStack.prototype.center = function () {
 	this.domObject.style.top = Math.round(((docHeight - this.domObject.offsetHeight) / 2) + docTop) + "px";
 }
 windowStack.prototype.hide = function () {
-	cout("windowStack::hide() called.", -1);
 	this.domObject.style.display = "none";
 	this.unregisterMouseEvents();
 }
 windowStack.prototype.show = function () {
-	cout("windowStack::show() called.", -1);
 	this.domObject.style.display = "block";
 	this.registerMouseEvents();
 }
@@ -181,40 +151,25 @@ function popupMenu(oClick, oMenu) {
 popupMenu.prototype.startPopup = function (event) {
 	if (!this.open) {
 		this.open = true;
-		cout("popupMenu::startPopup() called.", -1);
 		this.menuElement.style.display = "block";
 		removeEvent("click", this.clickElement, this.eventHandle[0]);
 		this.position(event);
 		addEvent("mouseout", this.menuElement, this.eventHandle[1]);
-	}
-	else {
-		cout("In popupMenu::startPopup() : Popup was already open.", 1);
 	}
 }
 popupMenu.prototype.endPopup = function (event) {
 	if (this.open) {
 		if (mouseLeaveVerify(this.menuElement, event)) {
 			this.open = false;
-			cout("popupMenu::endPopup() called.", -1);
 			this.menuElement.style.display = "none";
 			removeEvent("mouseout", this.menuElement, this.eventHandle[1]);
 			addEvent("click", this.clickElement, this.eventHandle[0]);
 		}
-		else {
-			cout("In popMenu::endPopup : The mouse did not leave the popup.", -1);
-		}
-	}
-	else {
-		cout("In popupMenu::endPopup() : Popup was already closed.", -1);
 	}
 }
 popupMenu.prototype.position = function (event) {
 	if (this.open) {
-		cout("popupMenu::position() called.", -1);
 		this.menuElement.style.left = (pageXCoord(event) - 5) + "px";
 		this.menuElement.style.top = (pageYCoord(event) - 5) + "px";
-	}
-	else {
-		cout("In popupMenu::position() : Popup could not be positioned, because it's closed.", 1);
 	}
 }
