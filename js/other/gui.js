@@ -64,17 +64,17 @@ function registerGUIEvents() {
 	addEvent("click", document.getElementById("local_storage_list_menu"), function () { refreshStorageListing(); windowStacks[7].show(); });
 	addEvent("click", document.getElementById("freeze_list_menu"), function () { refreshFreezeListing(); windowStacks[8].show(); });
 	addEvent("click", document.getElementById("view_importer"), function () { windowStacks[9].show() });
-	addEvent("keydown", document, function (event) {
+	addEvent("keydown", document, keyDown);
+	addEvent("keyup", document,  function (event) {
 		if (event.keyCode == 27) {
 			//Fullscreen on/off
 			fullscreenPlayer();
 		}
 		else {
 			//Control keys / other
-			keyDown(event);
+			keyUp(event);
 		}
 	});
-	addEvent("keyup", document, keyUp);
 	addEvent("MozOrientation", window, GameBoyGyroSignalHandler);
 	addEvent("deviceorientation", window, GameBoyGyroSignalHandler);
 	new popupMenu(document.getElementById("GameBoy_file_menu"), document.getElementById("GameBoy_file_popup"));
