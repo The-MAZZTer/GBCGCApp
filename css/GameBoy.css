@@ -7,7 +7,7 @@ html {
 	background-image: -webkit-linear-gradient(315deg, rgb(200, 200, 255), rgb(200, 255, 200));
 	background-image: -moz-linear-gradient(315deg, rgb(200, 200, 255), rgb(200, 255, 200));
 	background-image: -o-linear-gradient(315deg, rgb(200, 200, 255), rgb(200, 255, 200));
-	background-image: linear-gradient(315deg, rgb(200, 200, 255), rgb(200, 255, 200));
+	background-image: linear-gradient(135deg, rgb(200, 200, 255), rgb(200, 255, 200));
 	margin: 0;
 	padding: 0;
 	font-family: arial;
@@ -179,12 +179,6 @@ body > div#fullscreenContainer > canvas#fullscreen.minimum {
 	left: 50%;
 	margin: -72px 0 0 -80px;
 	padding: 0;
-}
-div#GameBoy > div#gfx > canvas, body > div#fullscreenContainer > canvas#fullscreen {
-	/*The firefox specific prop was removed, as firefox doesn't slow down with rendering bi-linear.*/
-	image-rendering: optimizeSpeed;
-	image-rendering: optimize-contrast;
-	image-rendering: -webkit-optimize-contrast;
 }
 div#GameBoy > div#gfx > canvas {
 	position: absolute;
