@@ -1,3 +1,9 @@
+I am porting this project to a Chrome app.  It will be able to run in the browser without an active internet connection.
+
+No ROMs will be included, but a file browser dialog will be provided so you can load your own.
+
+Original README follows.
+
 JavaScript GameBoy Color Emulator
 =================================
 
