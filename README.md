@@ -1,5 +1,25 @@
 I am porting this project to a Chrome app.  It will be able to run in the browser without an active internet connection.
 
+TODO: (?s at the end are maybe)
+- Add manifest file, icons, etc files needed for Chrome app.
+- Streamline UI.
+  - Remove the background, move the menu bar up to the top.
+  - Remove base64/url load option (url one won't work anyway).
+  - Move settings into dedicated Options page?
+  - Make file open/save dialogs include file filters, remove the input field if possible.
+  - Allow setting volume/speed without a rom loaded.
+  - Remove confirm()s, replace with a real UI?
+  - Move Instructions and About into some sort of Help menu or remove entirely?
+  - Unify UI for managing/downloading LocalStorage saved info.
+  - Unify Pause/Resume options.
+- Add option to fullscreen mode to preserve aspect ratio
+- Make fullscreen use Fullscreen API, current fullscreen will simply be called some sort of scale mode.
+- Add option to have canvas scaling only scale in increments of 100%
+- Save game memory does not appear to autosave?  Make it.
+- Auto save a freeze snapshot on unload or rom unload.  Auto load this when resuming (like the 3DS does).
+- Use filesystem API to store and manage save states/freezes instead of LocalStorage (would need to make them persist as 
+non-JSON for this)?
+
 Original README follows.
 
 JavaScript GameBoy Color Emulator
