@@ -1,0 +1,20 @@
+{
+	"manifest_version": 2,
+	"name": "__MSG_name__",
+	"version": "1.0.0.1",
+	"description": "__MSG_description__",
+	"icons": {
+		"16": "favicon.png",
+		"32": "32.png",
+		"64": "64.png",
+		"128": "128.png",
+		"256": "256.png"
+	},
+	"default_locale": "en",
+	"app": {
+		"launch": {
+			"local_path": "index.html"
+		}
+	},
+	"permissions": ["unlimitedStorage"]
+}

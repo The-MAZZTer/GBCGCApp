@@ -3,7 +3,6 @@ html {
 	background-color: rgb(200, 225, 225);
 	background-attachment: fixed;
 	background-repeat: none;
-	background-image: url("../images/gradient_01.svg.php");
 	background-image: -webkit-linear-gradient(315deg, rgb(200, 200, 255), rgb(200, 255, 200));
 	background-image: -moz-linear-gradient(315deg, rgb(200, 200, 255), rgb(200, 255, 200));
 	background-image: -o-linear-gradient(315deg, rgb(200, 200, 255), rgb(200, 255, 200));
@@ -92,7 +91,6 @@ div.menubar {
 	background-color: rgb(210, 210, 210);
 	background-repeat: repeat-x;
 	background-attachment: scroll;
-	background-image: url("../images/gradient_02.svg.php");
 	background-image: -webkit-linear-gradient(top, rgb(150, 150, 150), rgb(220, 220, 220), rgb(180, 180, 180));
 	background-image: -moz-linear-gradient(top, rgb(150, 150, 150), rgb(220, 220, 220), rgb(180, 180, 180));
 	background-image: -o-linear-gradient(top, rgb(150, 150, 150), rgb(220, 220, 220), rgb(180, 180, 180));
@@ -114,7 +112,6 @@ div.menubar > span:hover {
 	background-color: rgb(160, 160, 160);
 	background-repeat: repeat-x;
 	background-attachment: scroll;
-	background-image: url("../images/gradient_03.svg.php");
 	background-image: -webkit-linear-gradient(top, rgb(160, 160, 160), rgb(190, 190, 190), rgb(160, 160, 160));
 	background-image: -moz-linear-gradient(top, rgb(160, 160, 160), rgb(190, 190, 190), rgb(160, 160, 160));
 	background-image: -o-linear-gradient(top, rgb(160, 160, 160), rgb(190, 190, 190), rgb(160, 160, 160));
@@ -126,7 +123,6 @@ div.menubar > span:active {
 	background-color: rgb(220, 220, 220);
 	background-repeat: repeat-x;
 	background-attachment: scroll;
-	background-image: url("../images/gradient_04.svg.php");
 	background-image: -webkit-linear-gradient(top, rgb(190, 190, 190), rgb(160, 160, 160), rgb(190, 190, 190));
 	background-image: -moz-linear-gradient(top, rgb(190, 190, 190), rgb(160, 160, 160), rgb(190, 190, 190));
 	background-image: -o-linear-gradient(top, rgb(190, 190, 190), rgb(160, 160, 160), rgb(190, 190, 190));
@@ -145,7 +141,6 @@ div#gfx {
 	background-color: rgb(200, 50, 50);
 	background-repeat: repeat-x;
 	background-attachment: scroll;
-	background-image: url("../images/gradient_05.svg.php");
 	background-image: -webkit-linear-gradient(top, rgb(200, 50, 50), rgb(200, 75, 150));
 	background-image: -moz-linear-gradient(top, rgb(200, 50, 50), rgb(200, 75, 150));
 	background-image: -o-linear-gradient(top, rgb(200, 50, 50), rgb(200, 75, 150));
@@ -398,7 +393,6 @@ ul.menu {
 	background-color: rgb(200, 200, 200);
 	background-repeat: repeat-x;
 	background-attachment: scroll;
-	background-image: url("../images/gradient_06.svg.php");
 	background-image: -webkit-linear-gradient(left, rgb(200, 200, 200), rgb(240, 240, 240));
 	background-image: -moz-linear-gradient(left, rgb(200, 200, 200), rgb(240, 240, 240));
 	background-image: -o-linear-gradient(left, rgb(200, 200, 200), rgb(240, 240, 240));

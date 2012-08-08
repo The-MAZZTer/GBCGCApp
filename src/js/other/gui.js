@@ -1,3 +1,9 @@
+DEBUG_MESSAGES = false;
+DEBUG_WINDOWING = false;
+window.onload = function () {
+	windowingInitialize();
+}
+
 var inFullscreen = false;
 var mainCanvas = null;
 var fullscreenCanvas = null;

@@ -1,0 +1,10 @@
+{
+	"name": {
+		"message": "Gameboy Color Game Center",
+		"description": "Name of the extension that appears on the Extensions page."
+	},
+	"description": {
+		"message": "Gameboy Color emulator for the browser by grantgalitz.",
+		"description": "The description that appears on the Extensions page."
+	}
+}
