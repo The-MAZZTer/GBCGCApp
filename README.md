@@ -3,23 +3,24 @@ I am porting this project to a Chrome app.  It will be able to run in the browse
 Favicon: http://starvingartist.deviantart.com/art/Antiseptic-Videogame-Systems-23217105
 Other icons: http://www.famfamfam.com/lab/icons/silk/
 
+Borrowed some old Chrome NTP code to make i18n stuff in HTML easier (see source for details).
+
 TODO: (?s at the end are maybe)
-- Add manifest file, icons, etc files needed for Chrome app.
 - Streamline UI.
   - Remove the background, move the menu bar up to the top.
   - Remove base64/url load option (url one won't work anyway).
-  - Move settings into dedicated Options page?
-  - Make file open/save dialogs include file filters, remove the input field if possible.
+  - Move settings into dedicated Options page
+  - Make file save dialogs include file filters, remove the input field if possible.
   - Allow setting volume/speed without a rom loaded.
-  - Remove confirm()s, replace with a real UI?
-  - Move Instructions and About into some sort of Help menu or remove entirely?
-  - Make UI for managing save states/freezes a bit nicer?
+  - Remove confirm()s, replace with a real UI
+  - Move Instructions and About into some sort of Help menu or remove entirely
+  - Make UI for managing save states/freezes a bit nicer
   - Unify Pause/Resume options.
-- Toolbar instead of menu?
+- Toolbar instead of menu
 	- Open
 	- Save State
 	- Load State
-	- Manage Saves
+	- Manage Saves (Import/Export/Copy/Delete)
 	- Options
 	- Volume
 	- Speed
@@ -31,12 +32,14 @@ TODO: (?s at the end are maybe)
 - Add option to have canvas scaling only scale in increments of 100%
 	- Or scale to fit.
 	- Preserve aspect ratio toggle.
+- Remove JS scaling option?  (Might not work as-is with my new scaling methods, will have to look into it.)
 - Save game memory does not appear to autosave?  Make it.
 - Auto save a freeze snapshot on unload or rom unload.  Auto load this when resuming (like the 3DS does).
 - Use a different api other than LocalStorage to store saves/freezes as it is capped at 5MB.  Web database seems to explicitly be supported by the unlimtiedStorage permission, should also test the persistant filesystem API?
-- Add quick save/load keys for freezes?
-  - Possibly use this to make freezes easier to manage?  IE F1-F10 slot selection?
+- Add quick save/load keys for freezes
+  - Possibly use this to make freezes easier to manage... IE F1-F10 slot selection
 - Allow custom key binds.
+- Look into registering this App as a handler for .gb/.gbc files on Chrome OS.
 
 Original README follows.
 
