@@ -6,5 +6,13 @@
 	"description": {
 		"message": "Gameboy Color emulator for the browser by grantgalitz.",
 		"description": "The description that appears on the Extensions page."
+	},
+	"textdirection": {
+		"message": "direction: ltr;",
+		"description": "For HTML documents, specifies the value of the HTML tag's style attribute, to set the text direction."
+	},
+	"open": {
+		"message": "Open",
+		"description": "Caption of toolbar button to open ROM files."
 	}
 }

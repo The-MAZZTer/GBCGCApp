@@ -1,6 +1,7 @@
 I am porting this project to a Chrome app.  It will be able to run in the browser without an active internet connection.
 
-Icons are from: http://starvingartist.deviantart.com/art/Antiseptic-Videogame-Systems-23217105
+Favicon: http://starvingartist.deviantart.com/art/Antiseptic-Videogame-Systems-23217105
+Other icons: http://www.famfamfam.com/lab/icons/silk/
 
 TODO: (?s at the end are maybe)
 - Add manifest file, icons, etc files needed for Chrome app.
@@ -14,16 +15,28 @@ TODO: (?s at the end are maybe)
   - Move Instructions and About into some sort of Help menu or remove entirely?
   - Make UI for managing save states/freezes a bit nicer?
   - Unify Pause/Resume options.
-- Add option to fullscreen mode to preserve aspect ratio
+- Toolbar instead of menu?
+	- Open
+	- Save State
+	- Load State
+	- Manage Saves
+	- Options
+	- Volume
+	- Speed
+	- Pause/Resume
+	- Restart
+	- Fullscreen
+	- About/Help
 - Make fullscreen use Fullscreen API, current fullscreen will simply be called some sort of scale mode.
 - Add option to have canvas scaling only scale in increments of 100%
+	- Or scale to fit.
+	- Preserve aspect ratio toggle.
 - Save game memory does not appear to autosave?  Make it.
 - Auto save a freeze snapshot on unload or rom unload.  Auto load this when resuming (like the 3DS does).
 - Use a different api other than LocalStorage to store saves/freezes as it is capped at 5MB.  Web database seems to explicitly be supported by the unlimtiedStorage permission, should also test the persistant filesystem API?
 - Add quick save/load keys for freezes?
   - Possibly use this to make freezes easier to manage?  IE F1-F10 slot selection?
-- Remove non-Chrome support, namely the flash audio component.
-- Use new Chrome dev panels support to make it look and behave like a native app?
+- Allow custom key binds.
 
 Original README follows.
 
