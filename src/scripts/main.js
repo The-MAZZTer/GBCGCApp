@@ -20,14 +20,14 @@ $(document).ready(function() {
 	});
 });
 
+function cout(message, colorIndex) {
+	console[["log", "warn", "error"][colorIndex || 0]](message);
+}
+
 function openROM(file) {
 	var fr = new FileReader();
 	fr.onload = function() {
 		start($("canvas")[0], this.result);
 	}
 	fr.readAsBinaryString(file);
-}
-
-function cout() {
-	console.log.apply(console, arguments);
 }
