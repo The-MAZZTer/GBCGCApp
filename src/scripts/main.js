@@ -18,6 +18,24 @@ $(document).ready(function() {
 			openROM(this.files[0]);
 		}).click();
 	});
+	
+	$("#fullscreen").click(function() {
+		if (document.isFullScreen) {
+			document.cancelFullScreen();
+			return;
+		}
+		if (document.webkitIsFullScreen) {
+			document.webkitCancelFullScreen();
+			return;
+		}
+		
+		var html = document.documentElement;
+		if (html.requestFullScreen) {
+			html.requestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+		} else {
+			html.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+		}
+	});
 });
 
 function cout(message, colorIndex) {

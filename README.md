@@ -18,15 +18,19 @@ TODO: (?s at the end are maybe)
   - Unify Pause/Resume options.
 - Toolbar instead of menu
 	- Open
-	- Save State
-	- Load State
-	- Manage Saves (Import/Export/Copy/Delete)
-	- Options
-	- Volume
-	- Speed
 	- Pause/Resume
 	- Restart
+	- -
+	- Load State
+	- Slot Select (drop down)
+	- Save State
+	- -
 	- Fullscreen
+	- Tools (drop down)
+		- Settings
+		- Volume (slider/textbox)
+		- Speed (slider/textbox)
+		- Manage Saves (Import/Export/Copy/Delete)
 	- About/Help
 - Make fullscreen use Fullscreen API, current fullscreen will simply be called some sort of scale mode.
 - Add option to have canvas scaling only scale in increments of 100%
@@ -40,6 +44,7 @@ TODO: (?s at the end are maybe)
   - Possibly use this to make freezes easier to manage... IE F1-F10 slot selection
 - Allow custom key binds.
 - Look into registering this App as a handler for .gb/.gbc files on Chrome OS.
+- Option to mute/pause game on page unfocus.
 
 Original README follows.
 

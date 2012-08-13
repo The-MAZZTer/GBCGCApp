@@ -16,8 +16,19 @@
 	</head>
 	<body>
 		<div id="toolbar">
-			<div class="item" id="openfile" i18n-content="open">Open</div>
-			<div class="separator"></div>
+			<button id="openfile" i18n-content="openfile">Open</button>
+			<button id="pause" class="disabled" i18n-content="pause">Pause</button>
+			<button id="resume" class="hidden disabled" i18n-content="resume">Resume</button>
+			<button id="reset" class="disabled" i18n-content="reset">Reset</button>
+			<div></div>
+			<button id="loadstate" class="disabled" i18n-content="loadstate">Load State</button>
+			<button id="selectstate" class="dropdown">1</button>
+			<button id="savestate" class="disabled" i18n-content="savestate">Save State</button>
+			<div></div>
+			<button id="fullscreen" i18n-content="fullscreen">Fullscreen</button>
+			<button id="tools" class="dropdown" i18n-content="tools">Tools</button>
+			<button id="about" i18n-content="about">About</button>
+			<!-- <button id="managestates" i18n-content="managestates">Manage States</button> -->
 		</div>
 		<canvas></canvas>
 	</body>

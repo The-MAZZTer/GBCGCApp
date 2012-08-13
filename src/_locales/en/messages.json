@@ -11,8 +11,44 @@
 		"message": "direction: ltr;",
 		"description": "For HTML documents, specifies the value of the HTML tag's style attribute, to set the text direction."
 	},
-	"open": {
+	"openfile": {
 		"message": "Open",
-		"description": "Caption of toolbar button to open ROM files."
+		"description": "Caption of toolbar button."
+	},
+	"pause": {
+		"message": "Pause",
+		"description": "Caption of toolbar button."
+	},
+	"resume": {
+		"message": "Resume",
+		"description": "Caption of toolbar button."
+	},
+	"reset": {
+		"message": "Reset",
+		"description": "Caption of toolbar button."
+	},
+	"loadstate": {
+		"message": "Load State",
+		"description": "Caption of toolbar button."
+	},
+	"savestate": {
+		"message": "Save State",
+		"description": "Caption of toolbar button."
+	},
+	"fullscreen": {
+		"message": "Fullscreen",
+		"description": "Caption of toolbar button."
+	},
+	"tools": {
+		"message": "Tools",
+		"description": "Caption of toolbar button."
+	},
+	"about": {
+		"message": "About",
+		"description": "Caption of toolbar button."
+	},
+	"managestates": {
+		"message": "Manage States",
+		"description": "Caption of toolbar button."
 	}
 }

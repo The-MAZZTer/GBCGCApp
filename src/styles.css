@@ -4,48 +4,116 @@ html, body {
 	margin: 0px;
 	padding: 0px;
 	border: none;
-	font-family: Arial, sans;
+	overflow: hidden;
 }
+
 #toolbar {
 	background-color: lightgray;
 	border-bottom-color: black;
 	border-bottom-style: solid;
 	border-bottom-width: 1px;
-	height: 22px;
-	font-size: 10pt;
+	height: 24px;
 	cursor: default;
 }
-#toolbar div {
+
+#toolbar > button, #toolbar > div {
 	display: inline-block;
 	vertical-align: middle;
 }
-#toolbar .item {
+#toolbar > button {
+	background-color: transparent;
+	box-sizing: content-box;
+	font-family: Arial, sans;
+	font-size: 10pt;
+	color: black;
+	text-align: left;
+	
 	height: 16px;
 	margin: 1px;
-	padding: 1px;
-	padding-left: 18px;
-	background-size: 16px 16px;
+	padding: 2px 2px 2px 19px;
+	
 	background-repeat: no-repeat;
-	background-position: 1px center;
+	background-position: 2px 2px, -webkit-calc(100% - 5px) 8px;
+	background-position: 2px 2px, calc(100% - 5px) 8px;
+	
 	border-color: transparent;
 	border-width: 1px;
 	border-style: solid;
 }
-#toolbar .item:hover {
+#toolbar > button:hover:not(.disabled) {
 	border-color: gray;
 }
-#toolbar .separator {
+#toolbar > button:active:not(.disabled) {
+	padding: 3px 1px 1px 20px;
+	background-position: 3px 3px, -webkit-calc(100% - 4px) 9px;
+	background-position: 3px 3px, calc(100% - 4px) 9px;
+	background-color: #AAAAAA;
+}
+.disabled {
+	-webkit-filter: grayscale(100%);
+	filter: grayscale(100%); 
+}
+#toolbar > button.disabled {
+	color: gray;
+}
+#toolbar > button.hidden {
+	display: none;
+}
+#toolbar > button.dropdown {
+	background-size: 16px 16px, auto;
+	background-repeat: no-repeat;
+
+	padding: 2px 16px 2px 19px;
+}
+#toolbar > button.dropdown:active:not(.disabled) {
+	padding: 3px 15px 1px 20px;
+}
+
+#toolbar > div {
 	width: 1px;
 	height: 16px;
 	margin: 3px 0px 3px 0px;
 	background-color: black;
 }
+
 #openfile {
 	background-image: url("images/folder.png");
 }
+#pause {
+	background-image: url("images/control_pause.png");
+}
+#resume {
+	background-image: url("images/control_play.png");
+}
+#reset {
+	background-image: url("images/control_start.png");
+}
+#loadstate {
+	background-image: url("images/picture_go.png");
+}
+#selectstate {
+	background-image: url("images/picture.png"), url("images/dropdown.png");
+}
+#savestate {
+	background-image: url("images/picture_save.png");
+}
+#fullscreen {
+	background-image: url("images/monitor.png");
+}
+#tools {
+	background-image: url("images/wrench.png"), url("images/dropdown.png");
+}
+#about {
+	background-image: url("images/information.png");
+}
+
+#managestates {
+	background-image: url("images/folder_picture.png");
+}
+
 canvas {
-	background-color: black;
+	background-color: white;
 	width: 100%;
-	height: -webkit-calc(100% - 27px);
-	height: calc(100% - 27px);
+	height: -webkit-calc(100% - 24px);
+	height: calc(100% - 24px);
 }
