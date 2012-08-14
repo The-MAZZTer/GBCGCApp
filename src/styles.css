@@ -117,3 +117,6 @@ canvas {
 	height: -webkit-calc(100% - 24px);
 	height: calc(100% - 24px);
 }
+.fullscreen {
+	height: 100%;
+}

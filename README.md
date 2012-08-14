@@ -7,10 +7,7 @@ Borrowed some old Chrome NTP code to make i18n stuff in HTML easier (see source 
 
 TODO: (?s at the end are maybe)
 - Streamline UI.
-  - Remove the background, move the menu bar up to the top.
-  - Remove base64/url load option (url one won't work anyway).
   - Move settings into dedicated Options page
-  - Make file save dialogs include file filters, remove the input field if possible.
   - Allow setting volume/speed without a rom loaded.
   - Remove confirm()s, replace with a real UI
   - Move Instructions and About into some sort of Help menu or remove entirely
@@ -32,7 +29,9 @@ TODO: (?s at the end are maybe)
 		- Speed (slider/textbox)
 		- Manage Saves (Import/Export/Copy/Delete)
 	- About/Help
-- Make fullscreen use Fullscreen API, current fullscreen will simply be called some sort of scale mode.
+- Figure out why canvas is getting width and height tags and look into removing them.
+	- Remove visibility style being set by emulator.
+	- Look into all styles being set.
 - Add option to have canvas scaling only scale in increments of 100%
 	- Or scale to fit.
 	- Preserve aspect ratio toggle.
@@ -45,6 +44,7 @@ TODO: (?s at the end are maybe)
 - Allow custom key binds.
 - Look into registering this App as a handler for .gb/.gbc files on Chrome OS.
 - Option to mute/pause game on page unfocus.
+- Add support for gamepad input.
 
 Original README follows.
 
