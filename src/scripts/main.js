@@ -22,7 +22,13 @@ $(document).ready(function() {
 		"fullscreen": function() {}
 	}
 
-	$(document).on("keydown", function(e) {
+	$(window).resize(sizeCanvas);
+	
+	$(document).mousedown(function() {
+		if (document.dropdown) {
+			closeDropDown({target: document.dropdown});
+		}
+	}).keydown(function(e) {
 		var control = keyMap[e.keyCode];
 		if (!control) {
 			return true;
@@ -32,7 +38,7 @@ $(document).ready(function() {
 		e.preventDefault();
 		controlDownMap[control](control);
 		return false;
-	}).on("keyup", function(e) {
+	}).keyup(function(e) {
 		var control = keyMap[e.keyCode];
 		if (!control) {
 			return true;
@@ -56,16 +62,7 @@ $(document).ready(function() {
 		e.preventDefault();
 		openROM(e.originalEvent.dataTransfer.files[0]);
 	}).on("onfullscreenchange" in document ? "fullscreenchange" :
-		"webkitfullscreenchange", function() {
-		
-		if (document.isFullScreen || document.webkitIsFullScreen ||
-			document.fullScreenElement || document.webkitFullScreenElement) {
-			
-			$("canvas").addClass("fullscreen");
-		} else {
-			$("canvas").removeClass("fullscreen");
-		}
-	});
+		"webkitfullscreenchange", sizeCanvas);
 	
 	$("#openfile").click(function() {
 		$.create("input").prop("type", "file").prop("accept",
@@ -91,8 +88,48 @@ $(document).ready(function() {
 		}
 	});
 	
+	$("#selectstate, #tools").mousedown(function(e) {
+		var dropdown = $("#" + e.target.id + "_dropdown");
+		if (document.dropdown === e.target) {
+			$(e.target).mouseup(closeDropDown);
+		} else {
+			if (document.dropdown) {
+				closeDropDown({target: document.dropdown});
+			}
+			document.dropdown = e.target;
+			$(e.target).addClass("selected");
+			dropdown.slideDown("fast", sizeCanvas);
+		}
+		
+		e.stopPropagation();
+		e.preventDefault();
+		return false;
+	});
+
+	$("#selectstate_dropdown, #tools_dropdown").mousedown(function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		return false;
+	});
+	
+	for (var i = 1; i <= 20; i++) {
+		var button = $.create("button").text(i);
+		if (i == 1) {
+			button.addClass("selected");
+		}
+		$("#selectstate_dropdown").append(button);
+	}
+	
 	$("#fullscreen").click(toggleFullScreen);
+	
+	sizeCanvas();
 });
+
+function closeDropDown(e) {
+	delete document.dropdown;
+	$(e.target).removeClass("selected").unbind("mouseup", closeDropDown);
+	$("#" + e.target.id + "_dropdown").not(":hidden").slideUp("fast", sizeCanvas);
+}
 
 var keyMap = {
 	39: "right",
@@ -144,4 +181,16 @@ function openROM(file) {
 		loadROM(this.result);
 	}
 	fr.readAsBinaryString(file);
+}
+
+function sizeCanvas() {
+	if (document.isFullScreen || document.webkitIsFullScreen ||
+		document.fullScreenElement || document.webkitFullScreenElement) {
+		
+		$("canvas").addClass("fullscreen").height("100%").width("100%");
+	} else {
+		$("canvas").removeClass("fullscreen").height($("body").height() -
+			$("#toolbar").height() - ($("#secondaryToolbar").not(":hidden").height()
+			|| 0)).width("100%");
+	}
 }

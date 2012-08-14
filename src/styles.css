@@ -7,20 +7,32 @@ html, body {
 	overflow: hidden;
 }
 
+.disabled {
+	-webkit-filter: grayscale(100%);
+	filter: grayscale(100%); 
+}
+.hidden {
+	display: none;
+}
+
 #toolbar {
 	background-color: lightgray;
+	cursor: default;
+
 	border-bottom-color: black;
 	border-bottom-style: solid;
 	border-bottom-width: 1px;
-	height: 24px;
-	cursor: default;
+	padding-bottom: 1px;
+}
+#toolbar > div {
+	height: 23px;
 }
 
-#toolbar > button, #toolbar > div {
+#toolbar button, #toolbar > div > div {
 	display: inline-block;
 	vertical-align: middle;
 }
-#toolbar > button {
+#toolbar button {
 	background-color: transparent;
 	box-sizing: content-box;
 	font-family: Arial, sans;
@@ -29,7 +41,7 @@ html, body {
 	text-align: left;
 	
 	height: 16px;
-	margin: 1px;
+	margin: 1px 1px 0px 1px;
 	padding: 2px 2px 2px 19px;
 	
 	background-repeat: no-repeat;
@@ -40,36 +52,29 @@ html, body {
 	border-width: 1px;
 	border-style: solid;
 }
-#toolbar > button:hover:not(.disabled) {
+#toolbar button:hover:not(.disabled), #toolbar button.selected {
 	border-color: gray;
 }
-#toolbar > button:active:not(.disabled) {
+#toolbar button:active:not(.disabled), #toolbar button.selected {
 	padding: 3px 1px 1px 20px;
 	background-position: 3px 3px, -webkit-calc(100% - 4px) 9px;
 	background-position: 3px 3px, calc(100% - 4px) 9px;
 	background-color: #AAAAAA;
 }
-.disabled {
-	-webkit-filter: grayscale(100%);
-	filter: grayscale(100%); 
-}
-#toolbar > button.disabled {
+#toolbar button.disabled {
 	color: gray;
 }
-#toolbar > button.hidden {
-	display: none;
-}
-#toolbar > button.dropdown {
+#toolbar button.dropdown {
 	background-size: 16px 16px, auto;
 	background-repeat: no-repeat;
 
 	padding: 2px 16px 2px 19px;
 }
-#toolbar > button.dropdown:active:not(.disabled) {
+#toolbar button.dropdown:active:not(.disabled) {
 	padding: 3px 15px 1px 20px;
 }
 
-#toolbar > div {
+#toolbar > div > div {
 	width: 1px;
 	height: 16px;
 	margin: 3px 0px 3px 0px;
@@ -107,16 +112,19 @@ html, body {
 	background-image: url("images/information.png");
 }
 
+#selectstate_dropdown > button {
+	background-image: url("images/picture.png");
+}
+
 #managestates {
 	background-image: url("images/folder_picture.png");
 }
 
 canvas {
 	background-color: white;
-	width: 100%;
-	height: -webkit-calc(100% - 24px);
-	height: calc(100% - 24px);
+	margin-left: auto;
+	margin-right: auto;
 }
 .fullscreen {
-	height: 100%;
+	border-top-width: 0px;
 }
