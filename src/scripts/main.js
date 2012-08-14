@@ -42,6 +42,8 @@ $(document).ready(function() {
 		e.preventDefault();
 		controlUpMap[control](control);
 		return false;
+	}).on("selectstart", function() {
+		return false;
 	}).on("dragover", function(e) {
 		e.stopPropagation();
 		var items = e.originalEvent.dataTransfer.items;
@@ -72,6 +74,21 @@ $(document).ready(function() {
 			$(this).off("change");
 			openROM(this.files[0]);
 		}).click();
+	});
+	$("#pause").click(function() {
+		$("#pause").addClass("hidden");
+		$("#resume").removeClass("hidden");
+		pause();
+	});
+	$("#resume").click(function() {
+		$("#resume").addClass("hidden");
+		$("#pause").removeClass("hidden");
+		run();
+	});
+	$("#reset").click(function() {
+		if (GameBoyEmulatorInitialized()) {
+			loadROM(gameboy.getROMImage());
+		}
 	});
 	
 	$("#fullscreen").click(toggleFullScreen);
@@ -113,10 +130,18 @@ function cout(message, colorIndex) {
 	console[["log", "warn", "error"][colorIndex || 0]](message);
 }
 
+function loadROM(data) {
+	$("#toolbar > button").removeClass("disabled");
+	$("#resume").addClass("hidden");
+	$("#pause").removeClass("hidden");
+	
+	start($("canvas")[0], data);
+}
+
 function openROM(file) {
 	var fr = new FileReader();
 	fr.onload = function() {
-		start($("canvas")[0], this.result);
+		loadROM(this.result);
 	}
 	fr.readAsBinaryString(file);
 }

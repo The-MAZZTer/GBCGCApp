@@ -39,10 +39,12 @@ TODO: (?s at the end are maybe)
 - Save game memory does not appear to autosave?  Make it.
 - Auto save a freeze snapshot on unload or rom unload.  Auto load this when resuming (like the 3DS does).
 - Use a different api other than LocalStorage to store saves/freezes as it is capped at 5MB.  Web database seems to explicitly be supported by the unlimtiedStorage permission, should also test the persistant filesystem API?
+	- GameBoyIO appears to call several functions that use LocalStorage, I'll probably want to replicate that API.
 - Add quick save/load keys for freezes
   - Possibly use this to make freezes easier to manage... IE F1-F10 slot selection
 - Allow custom key binds.
 - Look into registering this App as a handler for .gb/.gbc files on Chrome OS.
+	- Different default fullscreen key bind to reflect Chrome OS keyboard layout.
 - Option to mute/pause game on page unfocus.
 - Add support for gamepad input.
 
