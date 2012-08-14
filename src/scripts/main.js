@@ -168,7 +168,7 @@ function cout(message, colorIndex) {
 }
 
 function loadROM(data) {
-	$("#toolbar > button").removeClass("disabled");
+	$("#toolbar button").removeClass("disabled");
 	$("#resume").addClass("hidden");
 	$("#pause").removeClass("hidden");
 	
