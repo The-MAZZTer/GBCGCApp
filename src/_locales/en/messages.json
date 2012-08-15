@@ -47,8 +47,20 @@
 		"message": "About",
 		"description": "Caption of toolbar button."
 	},
+	"options": {
+		"message": "Options",
+		"description": "Caption of toolbar button."
+	},
 	"managestates": {
 		"message": "Manage States",
+		"description": "Caption of toolbar button."
+	},
+	"volume": {
+		"message": "Volume",
+		"description": "Caption of toolbar button."
+	},
+	"speed": {
+		"message": "Speed",
 		"description": "Caption of toolbar button."
 	}
 }

@@ -5,29 +5,21 @@ Other icons: http://www.famfamfam.com/lab/icons/silk/
 
 Borrowed some old Chrome NTP code to make i18n stuff in HTML easier (see source for details).
 
-TODO: (?s at the end are maybe)
+TODO:
 - Streamline UI.
   - Move settings into dedicated Options page
   - Allow setting volume/speed without a rom loaded.
   - Remove confirm()s, replace with a real UI
   - Move Instructions and About into some sort of Help menu or remove entirely
   - Make UI for managing save states/freezes a bit nicer
-  - Unify Pause/Resume options.
-- Toolbar instead of menu
-	- Open
-	- Pause/Resume
-	- Restart
-	- -
+- Hook up Toolbar functionality
 	- Load State
 	- Slot Select (drop down)
 	- Save State
-	- -
-	- Fullscreen
-	- Tools (drop down)
-		- Settings
-		- Volume (slider/textbox)
-		- Speed (slider/textbox)
-		- Manage Saves (Import/Export/Copy/Delete)
+	- Options
+	- Manage Saves (Import/Export/Copy/Delete)
+	- Volume (slider/textbox)
+	- Speed (slider/textbox)
 	- About/Help
 - Figure out why canvas is getting width and height tags and look into removing them.
 	- Remove visibility style being set by emulator.
@@ -47,6 +39,7 @@ TODO: (?s at the end are maybe)
 	- Different default fullscreen key bind to reflect Chrome OS keyboard layout.
 - Option to mute/pause game on page unfocus.
 - Add support for gamepad input.
+- When selecting different save states, gray out load if the state does not exist.  Use different icon for states that don't exist.
 
 Original README follows.
 

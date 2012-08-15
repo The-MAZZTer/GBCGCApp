@@ -23,7 +23,7 @@
 				<button id="reset" class="disabled" i18n-content="reset">Reset</button>
 				<div></div>
 				<button id="loadstate" class="disabled" i18n-content="loadstate">Load State</button>
-				<button id="selectstate" class="dropdown" i18n-content="slot1">1</button>
+				<button id="selectstate" class="dropdown">1</button>
 				<button id="savestate" class="disabled" i18n-content="savestate">Save State</button>
 				<div></div>
 				<button id="fullscreen" i18n-content="fullscreen">Fullscreen</button>
@@ -33,7 +33,16 @@
 			<div id="selectstate_dropdown" class="hidden">
 			</div>
 			<div id="tools_dropdown" class="hidden">
+				<button id="options" i18n-content="options">Options</button>
 				<button id="managestates" i18n-content="managestates">Manage States</button>
+				<div></div>
+				<label for="volume" i18n-content="volume">Volume</label>
+				<input type="range" id="volume" min="0" max="1" step="0.01" value="1"  />
+				<input type="number" id="volume_text" min="0" max="1" step="0.01" value="1" />
+				<div></div>
+				<label for="speed" i18n-content="speed">Speed</label>
+				<input type="range" id="speed" min="0.1" max="3" step="0.1" value="1"  />
+				<input type="number" id="speed_text" min="0.001" step="0.1" value="1" />
 			</div>
 		</div>
 		<canvas></canvas>

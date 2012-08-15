@@ -5,6 +5,13 @@ html, body {
 	padding: 0px;
 	border: none;
 	overflow: hidden;
+
+	color: black;
+	font-family: Arial, sans;
+	font-size: 10pt;
+}
+input, label {
+	vertical-align: middle;
 }
 
 .disabled {
@@ -97,6 +104,9 @@ html, body {
 	background-image: url("images/picture_go.png");
 }
 #selectstate {
+	background-image: url("images/picture_empty.png"), url("images/dropdown.png");
+}
+#selectstate.slotused {
 	background-image: url("images/picture.png"), url("images/dropdown.png");
 }
 #savestate {
@@ -113,11 +123,50 @@ html, body {
 }
 
 #selectstate_dropdown > button {
+	background-image: url("images/picture_empty.png");
+}
+.slotused {
 	background-image: url("images/picture.png");
 }
 
+#options {
+	background-image: url("images/cog.png");
+}
 #managestates {
 	background-image: url("images/folder_picture.png");
+}
+#toolbar label {
+	text-align: left;
+	
+	height: 16px;
+	margin: 1px 0px 0px 1px;
+	padding: 2px 0px 2px 19px;
+	
+	background-repeat: no-repeat;
+	background-position: 2px 2px, -webkit-calc(100% - 5px) 8px;
+	background-position: 2px 2px, calc(100% - 5px) 8px;
+	
+	border-color: transparent;
+	border-width: 1px 0px 1px 1px;
+	border-style: solid;
+}
+#toolbar input {
+	margin: 0px;
+}
+#toolbar input[type="range"] {
+	height: 22px;
+	width: 100px;
+}
+#toolbar input[type="number"] {
+	height: 16px;
+	width: 60px;
+}
+
+label[for="volume"] {
+	background-image: url("images/sound.png");
+}
+label[for="speed"] {
+	background-image: url("images/lightning.png");
 }
 
 canvas {

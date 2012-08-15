@@ -8,6 +8,8 @@ $(document).ready(function() {
 		"a": GameBoyKeyDown,
 		"select": GameBoyKeyDown,
 		"start": GameBoyKeyDown,
+		"savestate": function() {},
+		"loadstate": function() {},
 		"fullscreen": toggleFullScreen
 	}
 	var controlUpMap = {
@@ -19,16 +21,20 @@ $(document).ready(function() {
 		"a": GameBoyKeyUp,
 		"select": GameBoyKeyUp,
 		"start": GameBoyKeyUp,
+		"savestate": function() {},
+		"loadstate": function() {},
 		"fullscreen": function() {}
 	}
 
 	$(window).resize(sizeCanvas);
 	
-	$(document).mousedown(function() {
-		if (document.dropdown) {
-			closeDropDown({target: document.dropdown});
+	$(document).mousedown(closeDropDown).keydown(function(e) {
+		if (e.target.tagName == "INPUT") {
+			return true;
 		}
-	}).keydown(function(e) {
+	
+		closeDropDown();
+	
 		var control = keyMap[e.keyCode];
 		if (!control) {
 			return true;
@@ -39,6 +45,12 @@ $(document).ready(function() {
 		controlDownMap[control](control);
 		return false;
 	}).keyup(function(e) {
+		if (e.target.tagName == "INPUT") {
+			return true;
+		}
+	
+		closeDropDown();
+	
 		var control = keyMap[e.keyCode];
 		if (!control) {
 			return true;
@@ -65,7 +77,7 @@ $(document).ready(function() {
 		"webkitfullscreenchange", sizeCanvas);
 	
 	$("#openfile").click(function() {
-		$.create("input").prop("type", "file").prop("accept",
+		$.create("INPUT").prop("type", "file").prop("accept",
 			".gb,.gbc").change(function() {
 			
 			$(this).off("change");
@@ -93,9 +105,7 @@ $(document).ready(function() {
 		if (document.dropdown === e.target) {
 			$(e.target).mouseup(closeDropDown);
 		} else {
-			if (document.dropdown) {
-				closeDropDown({target: document.dropdown});
-			}
+			closeDropDown();
 			document.dropdown = e.target;
 			$(e.target).addClass("selected");
 			dropdown.slideDown("fast", sizeCanvas);
@@ -107,9 +117,26 @@ $(document).ready(function() {
 	});
 
 	$("#selectstate_dropdown, #tools_dropdown").mousedown(function(e) {
+		if (e.target.tagName == "INPUT") {
+			return true;
+		}
+	
 		e.stopPropagation();
 		e.preventDefault();
 		return false;
+	});
+	
+	$("#volume").change(function(e) {
+		$("#volume_text").val(e.target.value);
+	});
+	$("#volume_text").change(function(e) {
+		$("#volume").val(e.target.value);
+	});
+	$("#speed").change(function(e) {
+		$("#speed_text").val(Math.round(Math.pow(e.target.value, 3) * 1000) / 1000);
+	});
+	$("#speed_text").change(function(e) {
+		$("#speed").val(Math.pow(e.target.value, 1/3));
 	});
 	
 	for (var i = 1; i <= 20; i++) {
@@ -126,9 +153,16 @@ $(document).ready(function() {
 });
 
 function closeDropDown(e) {
-	delete document.dropdown;
-	$(e.target).removeClass("selected").unbind("mouseup", closeDropDown);
-	$("#" + e.target.id + "_dropdown").not(":hidden").slideUp("fast", sizeCanvas);
+	if (e && e.target.tagName == "INPUT") {
+		return true;
+	}
+	
+	var x = document.dropdown;
+	if (x) {
+		$(x).removeClass("selected").unbind("mouseup", closeDropDown);
+		$("#" + x.id + "_dropdown").not(":hidden").slideUp("fast", sizeCanvas);
+		delete document.dropdown;
+	}
 }
 
 var keyMap = {
@@ -140,6 +174,8 @@ var keyMap = {
 	90: "b",
 	9: "select",
 	13: "start",
+	116: "savestate",
+	120: "loadstate",
 	122: "fullscreen"
 }
 
