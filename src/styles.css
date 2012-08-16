@@ -129,27 +129,6 @@ input, label {
 	background-image: url("images/picture.png");
 }
 
-#options {
-	background-image: url("images/cog.png");
-}
-#managestates {
-	background-image: url("images/folder_picture.png");
-}
-#toolbar label {
-	text-align: left;
-	
-	height: 16px;
-	margin: 1px 0px 0px 1px;
-	padding: 2px 0px 2px 19px;
-	
-	background-repeat: no-repeat;
-	background-position: 2px 2px, -webkit-calc(100% - 5px) 8px;
-	background-position: 2px 2px, calc(100% - 5px) 8px;
-	
-	border-color: transparent;
-	border-width: 1px 0px 1px 1px;
-	border-style: solid;
-}
 #toolbar input {
 	margin: 0px;
 }
@@ -162,11 +141,32 @@ input, label {
 	width: 60px;
 }
 
-label[for="volume"] {
+#options {
+	background-image: url("images/cog.png");
+}
+#managestates {
+	background-image: url("images/folder_picture.png");
+}
+#volume_button {
 	background-image: url("images/sound.png");
 }
-label[for="speed"] {
+#volume_button.low {
+	background-image: url("images/sound_low.png");
+}
+#volume_button.none {
+	background-image: url("images/sound_none.png");
+}
+#volume_button.mute {
+	background-image: url("images/sound_mute.png");
+}
+#speed_button.less {
+	background-image: url("images/lightning_delete.png");
+}
+#speed_button {
 	background-image: url("images/lightning.png");
+}
+#speed_button.more {
+	background-image: url("images/lightning_add.png");
 }
 
 canvas {

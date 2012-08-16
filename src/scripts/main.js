@@ -126,18 +126,25 @@ $(document).ready(function() {
 		return false;
 	});
 	
-	$("#volume").change(function(e) {
-		$("#volume_text").val(e.target.value);
+	$("#volume_button").click(function() {
+		if ($("#volume").val() <= 0) {
+			$("#volume").val(window.unmuteTo || 1);
+			setVolume({target: $("#volume")[0]});
+		} else {
+			window.unmuteTo = $("#volume").val();
+			$("#volume").val(0);
+			setVolume({target: $("#volume")[0]});
+		}
 	});
-	$("#volume_text").change(function(e) {
-		$("#volume").val(e.target.value);
+	$("#volume").change(setVolume).mouseup(rememberUnmute);
+	$("#volume_text").change(setVolume).blur(rememberUnmute);
+
+	$("#speed_button").click(function() {
+		$("#speed").val(1);
+		setSpeed({target: $("#speed")[0]});
 	});
-	$("#speed").change(function(e) {
-		$("#speed_text").val(Math.round(Math.pow(e.target.value, 3) * 1000) / 1000);
-	});
-	$("#speed_text").change(function(e) {
-		$("#speed").val(Math.pow(e.target.value, 1/3));
-	});
+	$("#speed").change(setSpeed);
+	$("#speed_text").change(setSpeed);
 	
 	for (var i = 1; i <= 20; i++) {
 		var button = $.create("button").text(i);
@@ -228,5 +235,48 @@ function sizeCanvas() {
 		$("canvas").removeClass("fullscreen").height($("body").height() -
 			$("#toolbar").height() - ($("#secondaryToolbar").not(":hidden").height()
 			|| 0)).width("100%");
+	}
+}
+
+function setVolume(e) {
+	var val = e.target.value;
+	
+	$("#volume").val(val);
+	$("#volume_text").val(val);
+	
+	if (val <= 0) {
+		$("#volume_button").removeClass().addClass("mute");
+	} else if (val <= 1/3) {
+		$("#volume_button").removeClass().addClass("none");
+	} else if (val <= 2/3) {
+		$("#volume_button").removeClass().addClass("low");
+	} else {
+		$("#volume_button").removeClass();
+	}
+}
+
+function rememberUnmute() {
+	var val = $("#volume").val();
+	if (val <= 0) {
+		return;
+	}
+	window.unmuteTo = val;
+}
+
+function setSpeed(e) {
+	var val = e.target.value;
+	if (e.target.id == "speed") {
+		val = Math.round(Math.pow(val, 3) * 1000) / 1000;
+		$("#speed_text").val(val);
+	} else {
+		$("#speed").val(Math.pow(val, 1/3));
+	}
+	
+	if (val < 1) {
+		$("#speed_button").removeClass().addClass("less");
+	} else if (val > 1) {
+		$("#speed_button").removeClass().addClass("more");
+	} else {
+		$("#speed_button").removeClass();
 	}
 }
