@@ -32,6 +32,13 @@ $(document).ready(function() {
 		if (e.target.tagName == "INPUT") {
 			return true;
 		}
+		
+		if ($("#aboutlayer").is(":visible")) {
+			closeAbout();
+			e.stopPropagation();
+			e.preventDefault();
+			return false;
+		}
 	
 		closeDropDown();
 	
@@ -156,6 +163,16 @@ $(document).ready(function() {
 	
 	$("#fullscreen").click(toggleFullScreen);
 	
+	$("#about").click(function() {
+		if (window.autoResume = (GameBoyEmulatorInitialized() &&
+			GameBoyEmulatorPlaying())) {
+			
+			$("#pause").click();
+		}
+		$("#aboutlayer").removeClass("hidden");
+	});
+	$("#aboutlayer").click(closeAbout);
+	
 	sizeCanvas();
 });
 
@@ -279,4 +296,12 @@ function setSpeed(e) {
 	} else {
 		$("#speed_button").removeClass();
 	}
+}
+
+function closeAbout() {
+	if (window.autoResume) {
+		$("#resume").click();
+	}
+	
+	$("#aboutlayer").addClass("hidden");
 }
