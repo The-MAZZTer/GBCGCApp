@@ -1,3 +1,5 @@
+Function.Empty = function() {}
+
 $(document).ready(function() {
 	var controlDownMap = {
 		"right": GameBoyKeyDown,
@@ -8,8 +10,8 @@ $(document).ready(function() {
 		"a": GameBoyKeyDown,
 		"select": GameBoyKeyDown,
 		"start": GameBoyKeyDown,
-		"savestate": function() {},
-		"loadstate": function() {},
+		"savestate": SaveStates.save,
+		"loadstate": SaveStates.load,
 		"fullscreen": toggleFullScreen
 	}
 	var controlUpMap = {
@@ -21,12 +23,14 @@ $(document).ready(function() {
 		"a": GameBoyKeyUp,
 		"select": GameBoyKeyUp,
 		"start": GameBoyKeyUp,
-		"savestate": function() {},
-		"loadstate": function() {},
-		"fullscreen": function() {}
+		"savestate": Function.Empty,
+		"loadstate": Function.Empty,
+		"fullscreen": Function.Empty
 	}
 
-	$(window).resize(sizeCanvas);
+	$(window).resize(sizeCanvas).unload(function() {
+		autoSave();
+	});
 	
 	$(document).mousedown(closeDropDown).keydown(function(e) {
 		if (e.target.tagName == "INPUT") {
@@ -39,9 +43,9 @@ $(document).ready(function() {
 			e.preventDefault();
 			return false;
 		}
-	
+		
 		closeDropDown();
-	
+		
 		var control = keyMap[e.keyCode];
 		if (!control) {
 			return true;
@@ -55,9 +59,9 @@ $(document).ready(function() {
 		if (e.target.tagName == "INPUT") {
 			return true;
 		}
-	
+		
 		closeDropDown();
-	
+		
 		var control = keyMap[e.keyCode];
 		if (!control) {
 			return true;
@@ -107,6 +111,8 @@ $(document).ready(function() {
 		}
 	});
 	
+	$("#loadstate").click(SaveStates.load);
+	
 	$("#selectstate, #tools").mousedown(function(e) {
 		var dropdown = $("#" + e.target.id + "_dropdown");
 		if (document.dropdown === e.target) {
@@ -133,6 +139,8 @@ $(document).ready(function() {
 		return false;
 	});
 	
+	$("#savestate").click(SaveStates.save);
+	
 	$("#volume_button").click(function() {
 		if ($("#volume").val() <= 0) {
 			$("#volume").val(window.unmuteTo || 1);
@@ -145,7 +153,8 @@ $(document).ready(function() {
 	});
 	$("#volume").change(setVolume).mouseup(rememberUnmute);
 	$("#volume_text").change(setVolume).blur(rememberUnmute);
-
+	//setVolume({target: {value: settings[3]}});
+	
 	$("#speed_button").click(function() {
 		$("#speed").val(1);
 		setSpeed({target: $("#speed")[0]});
@@ -153,12 +162,20 @@ $(document).ready(function() {
 	$("#speed").change(setSpeed);
 	$("#speed_text").change(setSpeed);
 	
+	window.slotUsed = 1;
 	for (var i = 1; i <= 20; i++) {
-		var button = $.create("button").text(i);
-		if (i == 1) {
+		var button = $.create("button").prop("id", "slot" +
+			i).text(i).click(function() {
+			
+			switchSlot(this.id);
+		});
+		if (i == window.slotUsed) {
 			button.addClass("selected");
 		}
 		$("#selectstate_dropdown").append(button);
+		
+		controlDownMap["slot" + i] = switchSlot;
+		controlUpMap["slot" + i] = Function.Empty;
 	}
 	
 	$("#fullscreen").click(toggleFullScreen);
@@ -200,7 +217,17 @@ var keyMap = {
 	13: "start",
 	116: "savestate",
 	120: "loadstate",
-	122: "fullscreen"
+	122: "fullscreen",
+	49: "slot1",
+	50: "slot2",
+	51: "slot3",
+	52: "slot4",
+	53: "slot5",
+	54: "slot6",
+	55: "slot7",
+	56: "slot8",
+	57: "slot9",
+	48: "slot10"
 }
 
 function toggleFullScreen() {
@@ -233,6 +260,22 @@ function loadROM(data) {
 	$("#pause").removeClass("hidden");
 	
 	start($("canvas")[0], data);
+	gameboy.setSpeed($("#speed_text").val());
+	
+	$("#selectstate_dropdown > button").each(function(index, element) {
+		if (SaveStates.exists(index + 1)) {
+			$(element).addClass("slotused");
+		} else {
+			$(element).removeClass("slotused");
+		}
+	});
+	if (SaveStates.exists(window.slotUsed)) {
+		$("#selectstate").addClass("slotused");
+		$("#loadstate").removeClass("disabled");
+	} else {
+		$("#selectstate").removeClass("slotused");
+		$("#loadstate").addClass("disabled");
+	}
 }
 
 function openROM(file) {
@@ -256,7 +299,7 @@ function sizeCanvas() {
 }
 
 function setVolume(e) {
-	var val = e.target.value;
+	var val = Math.min(Math.max(parseFloat(e.target.value), 0), 1);
 	
 	$("#volume").val(val);
 	$("#volume_text").val(val);
@@ -270,6 +313,12 @@ function setVolume(e) {
 	} else {
 		$("#volume_button").removeClass();
 	}
+	
+	settings[3] = val;
+	
+	if (GameBoyEmulatorInitialized()) {
+		gameboy.changeVolume();
+	}
 }
 
 function rememberUnmute() {
@@ -281,11 +330,12 @@ function rememberUnmute() {
 }
 
 function setSpeed(e) {
-	var val = e.target.value;
+	var val = parseFloat(e.target.value);
 	if (e.target.id == "speed") {
-		val = Math.round(Math.pow(val, 3) * 1000) / 1000;
+		val = Math.max(Math.round(Math.pow(val, 3) * 1000) / 1000, 0.001);
 		$("#speed_text").val(val);
 	} else {
+		val = Math.max(val, 0.001);
 		$("#speed").val(Math.pow(val, 1/3));
 	}
 	
@@ -296,6 +346,10 @@ function setSpeed(e) {
 	} else {
 		$("#speed_button").removeClass();
 	}
+	
+	if (GameBoyEmulatorInitialized()) {
+		gameboy.setSpeed(val);
+	}
 }
 
 function closeAbout() {
@@ -304,4 +358,51 @@ function closeAbout() {
 	}
 	
 	$("#aboutlayer").addClass("hidden");
+}
+
+function switchSlot(slot) {
+	var index = parseInt(slot.substr(4), 10);
+	$("#selectstate_dropdown > button:nth-child(" + window.slotUsed +
+		")").removeClass("selected");
+	$("#selectstate_dropdown > button:nth-child(" + index +
+		")").addClass("selected");
+	$("#selectstate").text(index);
+	if (SaveStates.exists(index)) {
+		$("#selectstate").addClass("slotused");
+		$("#loadstate").removeClass("disabled");
+	} else {
+		$("#selectstate").removeClass("slotused");
+		$("#loadstate").addClass("disabled");
+	}
+	window.slotUsed = index;
+	closeDropDown();
+}
+
+SaveStates = {
+	exists: function(n) {
+		return GameBoyEmulatorInitialized() && Boolean(localStorage["FREEZE_" +
+			gameboy.name + "_" + n]);
+	},
+	save: function() {
+		if (GameBoyEmulatorInitialized()) {
+			localStorage["FREEZE_" + gameboy.name + "_" + window.slotUsed] =
+				JSON.stringify(gameboy.saveState());
+			
+			$("#selectstate_dropdown > button:nth-child(" + window.slotUsed +
+				")").addClass("slotused");
+			$("#selectstate").addClass("slotused");
+			$("#loadstate").removeClass("disabled");
+		}
+	},
+	load: function() {
+		if (GameBoyEmulatorInitialized() && SaveStates.exists(window.slotUsed)) {
+			var filename = "FREEZE_" + gameboy.name + "_" + window.slotUsed;
+			clearLastEmulation();
+			gameboy = new GameBoyCore($("canvas")[0], "");
+			gameboy.savedStateFileName = filename;
+			gameboy.returnFromState(JSON.parse(localStorage[filename]));
+			gameboy.setSpeed($("#speed_text").val());
+			$("#resume").click();
+		}
+	}
 }

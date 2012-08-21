@@ -125,7 +125,7 @@ input, label {
 #selectstate_dropdown > button {
 	background-image: url("images/picture_empty.png");
 }
-.slotused {
+#selectstate_dropdown > button.slotused {
 	background-image: url("images/picture.png");
 }
 

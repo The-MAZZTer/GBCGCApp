@@ -6,21 +6,16 @@ Other icons: http://www.famfamfam.com/lab/icons/silk/
 Borrowed some old Chrome NTP code to make i18n stuff in HTML easier (see source for details).
 
 TODO:
+- Figure out how to load volume setting.
 - Streamline UI.
   - Move settings into dedicated Options page
-  - Allow setting volume/speed without a rom loaded.
   - Remove confirm()s, replace with a real UI
   - Move Instructions and About into some sort of Help menu or remove entirely
   - Make UI for managing save states/freezes a bit nicer
 - Hook up Toolbar functionality
-	- Load State
 	- Slot Select (drop down)
-	- Save State
 	- Options
 	- Manage Saves (Import/Export/Copy/Delete)
-	- Volume (slider/textbox)
-	- Speed (slider/textbox)
-	- About/Help
 - Figure out why canvas is getting width and height tags and look into removing them.
 	- Remove visibility style being set by emulator.
 	- Look into all styles being set.
@@ -28,18 +23,17 @@ TODO:
 	- Or scale to fit.
 	- Preserve aspect ratio toggle.
 - Remove JS scaling option?  (Might not work as-is with my new scaling methods, will have to look into it.)
-- Save game memory does not appear to autosave?  Make it.
 - Auto save a freeze snapshot on unload or rom unload.  Auto load this when resuming (like the 3DS does).
+	- unload and loadROM need to save, loadROM to load
 - Use a different api other than LocalStorage to store saves/freezes as it is capped at 5MB.  Web database seems to explicitly be supported by the unlimtiedStorage permission, should also test the persistant filesystem API?
 	- GameBoyIO appears to call several functions that use LocalStorage, I'll probably want to replicate that API.
-- Add quick save/load keys for freezes
-  - Possibly use this to make freezes easier to manage... IE F1-F10 slot selection
 - Allow custom key binds.
 - Look into registering this App as a handler for .gb/.gbc files on Chrome OS.
 	- Different default fullscreen key bind to reflect Chrome OS keyboard layout.
 - Option to mute/pause game on page unfocus.
 - Add support for gamepad input.
 - When selecting different save states, gray out load if the state does not exist.  Use different icon for states that don't exist.
+- See what device orientation handlers do.  My scaling will probably have to take them into account.
 
 Original README follows.
 
