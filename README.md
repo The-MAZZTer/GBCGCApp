@@ -6,7 +6,6 @@ Other icons: http://www.famfamfam.com/lab/icons/silk/
 Borrowed some old Chrome NTP code to make i18n stuff in HTML easier (see source for details).
 
 TODO:
-- Figure out how to load volume setting.
 - Streamline UI.
   - Move settings into dedicated Options page
   - Remove confirm()s, replace with a real UI

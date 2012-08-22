@@ -93,3 +93,48 @@ $.create = function(tag) {
 $(document).ready(function() {
 	i18nTemplate.process(document);
 });
+
+Settings = {
+	init: function() {
+		var s = localStorage.settings;
+		if (s) {
+			s = JSON.parse(s);
+			for (var i in s) {
+				this[i] = s[i];
+			}
+		}
+		this.onchange();
+	},
+	onchange: function() {
+		settings[this.Legacy.Volume] = this.volume;
+
+		var s = {};
+		for (var i in this) {
+			if (this[i] instanceof Function) {
+				continue;
+			}
+			if (this[i] === this.Legacy) {
+				continue;
+			}
+			
+			s[i] = this[i];
+		}
+		localStorage.settings = JSON.stringify(s);
+	},
+	volume: 1,
+	Legacy: {
+		SoundEnabled: 0,
+		BootROM: 1,
+		GameBoyMode: 2,
+		Volume: 3,
+		ColorizeGB: 4,
+		DisableTypedArrays: 5,
+		EmulatorLoopInterval: 6,
+		AudioBufferMinSpan: 7,
+		AudioBufferManSpan: 8,
+		MBC1Only: 9,
+		UseGBROM: 10,
+		JSScale: 11,
+		ImageSmoothing: 12
+	}
+}

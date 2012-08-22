@@ -27,7 +27,7 @@ $(document).ready(function() {
 		"loadstate": Function.Empty,
 		"fullscreen": Function.Empty
 	}
-
+	
 	$(window).resize(sizeCanvas).unload(function() {
 		autoSave();
 	});
@@ -153,8 +153,7 @@ $(document).ready(function() {
 	});
 	$("#volume").change(setVolume).mouseup(rememberUnmute);
 	$("#volume_text").change(setVolume).blur(rememberUnmute);
-	//setVolume({target: {value: settings[3]}});
-	
+
 	$("#speed_button").click(function() {
 		$("#speed").val(1);
 		setSpeed({target: $("#speed")[0]});
@@ -191,6 +190,9 @@ $(document).ready(function() {
 	$("#aboutlayer").click(closeAbout);
 	
 	sizeCanvas();
+
+	Settings.init();
+	setVolume({target: {value: Settings.volume}});
 });
 
 function closeDropDown(e) {
@@ -314,7 +316,8 @@ function setVolume(e) {
 		$("#volume_button").removeClass();
 	}
 	
-	settings[3] = val;
+	Settings.volume = val;
+	Settings.onchange();
 	
 	if (GameBoyEmulatorInitialized()) {
 		gameboy.changeVolume();
