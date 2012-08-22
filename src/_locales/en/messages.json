@@ -62,5 +62,26 @@
 	"speed": {
 		"message": "Speed",
 		"description": "Caption of toolbar button."
+	},
+	
+	"optionsTitle": {
+		"message": "Options",
+		"description": "Options page title."
+	},
+	"gbcgcTitle": {
+		"message": "GBCGC",
+		"description": "Options page header."
+	},
+	"optionsNav": {
+		"message": "Options",
+		"description": "Options page options nav."
+	},
+	"controlsNav": {
+		"message": "Controls",
+		"description": "Options page controls nav."
+	},
+	"manageNav": {
+		"message": "Manage Saves",
+		"description": "Options page manage saves nav."
 	}
 }

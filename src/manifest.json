@@ -16,5 +16,6 @@
 			"local_path": "index.html"
 		}
 	},
+  "options_page": "options.html",
 	"permissions": ["unlimitedStorage"]
 }

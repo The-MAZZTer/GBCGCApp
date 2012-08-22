@@ -141,6 +141,23 @@ $(document).ready(function() {
 	
 	$("#savestate").click(SaveStates.save);
 	
+	$("#fullscreen").click(toggleFullScreen);
+	
+	$("#options").click(function() {
+		if (GameBoyEmulatorInitialized() && GameBoyEmulatorPlaying()) {
+			$("#pause").click();
+		}
+		closeDropDown();
+		window.open("options.html");
+	});
+	$("#managestates").click(function() {
+		if (GameBoyEmulatorInitialized() && GameBoyEmulatorPlaying()) {
+			$("#pause").click();
+		}
+		closeDropDown();
+		window.open("options.html#manage");
+	});
+	
 	$("#volume_button").click(function() {
 		if ($("#volume").val() <= 0) {
 			$("#volume").val(window.unmuteTo || 1);
@@ -176,8 +193,6 @@ $(document).ready(function() {
 		controlDownMap["slot" + i] = switchSlot;
 		controlUpMap["slot" + i] = Function.Empty;
 	}
-	
-	$("#fullscreen").click(toggleFullScreen);
 	
 	$("#about").click(function() {
 		if (window.autoResume = (GameBoyEmulatorInitialized() &&
