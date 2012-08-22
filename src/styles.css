@@ -144,6 +144,9 @@ input, label {
 #options {
 	background-image: url("images/cog.png");
 }
+#controls {
+	background-image: url("images/controller.png");
+}
 #managestates {
 	background-image: url("images/folder_picture.png");
 }

@@ -51,6 +51,10 @@
 		"message": "Options",
 		"description": "Caption of toolbar button."
 	},
+	"controls": {
+		"message": "Controls",
+		"description": "Caption of toolbar button."
+	},
 	"managestates": {
 		"message": "Manage States",
 		"description": "Caption of toolbar button."
@@ -64,10 +68,6 @@
 		"description": "Caption of toolbar button."
 	},
 	
-	"optionsTitle": {
-		"message": "Options",
-		"description": "Options page title."
-	},
 	"gbcgcTitle": {
 		"message": "GBCGC",
 		"description": "Options page header."

@@ -150,6 +150,13 @@ $(document).ready(function() {
 		closeDropDown();
 		window.open("options.html");
 	});
+	$("#controls").click(function() {
+		if (GameBoyEmulatorInitialized() && GameBoyEmulatorPlaying()) {
+			$("#pause").click();
+		}
+		closeDropDown();
+		window.open("options.html#controls");
+	});
 	$("#managestates").click(function() {
 		if (GameBoyEmulatorInitialized() && GameBoyEmulatorPlaying()) {
 			$("#pause").click();
