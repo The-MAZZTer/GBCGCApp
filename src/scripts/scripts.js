@@ -107,6 +107,8 @@ Settings = {
 	},
 	onchange: function() {
 		settings[this.Legacy.Volume] = this.volume;
+		settings[this.Legacy.EmulatorLoopInterval] = this.emulatorLoopInterval;
+		settings[this.Legacy.ImageSmoothing] = this.imageSmoothing;
 
 		var s = {};
 		for (var i in this) {
@@ -121,6 +123,11 @@ Settings = {
 		}
 		localStorage.settings = JSON.stringify(s);
 	},
+	autoSaveState: true,
+	emulatorLoopInterval: 4,
+	imageSmoothing: true,
+	runWhenHidden: false,
+	runWhenUnfocused: true,
 	volume: 1,
 	Legacy: {
 		SoundEnabled: 0,
@@ -133,8 +140,82 @@ Settings = {
 		AudioBufferMinSpan: 7,
 		AudioBufferManSpan: 8,
 		MBC1Only: 9,
-		UseGBROM: 10,
-		JSScale: 11,
-		ImageSmoothing: 12
+		AlwaysAllowMBCBanks: 10,
+		UseGBROM: 11,
+		JSScale: 12,
+		ImageSmoothing: 13
+	}
+}
+
+SaveStates = {
+	exists: function(n) {
+		return GameBoyEmulatorInitialized() && Boolean(localStorage["FREEZE_" +
+			gameboy.name + "_" + n]);
+	},
+	save: function(n) {
+		n = isNaN(n) ? window.slotUsed : n;
+		if (GameBoyEmulatorInitialized()) {
+			localStorage["FREEZE_" + gameboy.name + "_" + n] =
+				JSON.stringify(gameboy.saveState());
+			
+			$("#selectstate_dropdown > button:nth-child(" + n +
+				")").addClass("slotused");
+			$("#selectstate").addClass("slotused");
+			$("#loadstate").removeClass("disabled");
+		}
+	},
+	load: function(n) {
+		n = isNaN(n) ? window.slotUsed : n;
+		if (GameBoyEmulatorInitialized() && SaveStates.exists(n)) {
+			var filename = "FREEZE_" + gameboy.name + "_" + n;
+			clearLastEmulation();
+			gameboy = new GameBoyCore($("canvas")[0], "");
+			gameboy.returnFromState(JSON.parse(localStorage[filename]));
+			gameboy.setSpeed($("#speed_text").val());
+			$("#resume").click();
+		}
+	}
+}
+
+SaveMemory = {
+	save: function() {
+		if (GameBoyEmulatorInitialized()) {
+			if (gameboy.cBATT) {
+				var sram = gameboy.saveSRAMState();
+				if (sram.length > 0) {
+					var s = "";
+					for (var i = 0; i < s.length; i++) {
+						s += String.fromCharCode(sram[i]);
+					}
+					localStorage["SRAM_" + gameboy.name] = s;
+				} else {
+					delete localStorage["SRAM_" + gameboy.name];
+				}
+			}
+			if (gameboy.cTIMER) {
+				localStorage["RTC_" + gameboy.name] =
+					JSON.stringify(gameboy.saveRTCState());
+			}
+		}
+	},
+	load: {
+		SRAM: function(filename) {
+			var s = localStorage["SRAM_" + filename];
+			if (s) {
+				return [];
+			}
+			var x = new Array(s.length);
+			for (var i = 0; i < s.length; i++) {
+				x[i] = s.charCodeAt(i);
+			}
+			return x;
+		},
+		RTC: function(filename) {
+			var x = localStorage["RTC_" + filename];
+			if (!x) {
+				return [];
+			}
+			return JSON.parse(x);
+		}
 	}
 }

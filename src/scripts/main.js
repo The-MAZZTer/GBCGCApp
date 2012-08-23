@@ -28,11 +28,17 @@ $(document).ready(function() {
 		"fullscreen": Function.Empty
 	}
 	
-	$(window).resize(sizeCanvas).unload(function() {
-		autoSave();
+	$(window).resize(sizeCanvas).unload(autoSave).on("deviceorientation",
+		GameBoyGyroSignalHandler).focus(function() {
+		
+		window.isFocused = true;
+	}).blur(function() {
+		window.isFocused = false;
 	});
 	
 	$(document).mousedown(closeDropDown).keydown(function(e) {
+		window.isFocused = true;
+	
 		if (e.target.tagName == "INPUT") {
 			return true;
 		}
@@ -56,6 +62,8 @@ $(document).ready(function() {
 		controlDownMap[control](control);
 		return false;
 	}).keyup(function(e) {
+		window.isFocused = true;	
+
 		if (e.target.tagName == "INPUT") {
 			return true;
 		}
@@ -211,6 +219,10 @@ $(document).ready(function() {
 	});
 	$("#aboutlayer").click(closeAbout);
 	
+	if (Settings.imageSmoothing) {
+		$("canvas").addClass("smooth");
+	}
+
 	sizeCanvas();
 
 	Settings.init();
@@ -218,6 +230,8 @@ $(document).ready(function() {
 });
 
 function closeDropDown(e) {
+	window.isFocused = true;	
+	
 	if (e && e.target.tagName == "INPUT") {
 		return true;
 	}
@@ -283,7 +297,19 @@ function loadROM(data) {
 	$("#resume").addClass("hidden");
 	$("#pause").removeClass("hidden");
 	
-	start($("canvas")[0], data);
+	clearLastEmulation();
+	autoSave();	//If we are about to load a new game, then save the last one...
+	gameboy = new GameBoyCore($("canvas")[0], data);
+	gameboy.openMBC = SaveMemory.load.SRAM;
+	gameboy.openRTC = SaveMemory.load.RTC;
+	gameboy.start();
+	
+	if (Settings.autoSaveState && SaveStates.exists(0)) {
+		SaveStates.load(0);
+	}
+	
+	run();
+
 	gameboy.setSpeed($("#speed_text").val());
 	
 	$("#selectstate_dropdown > button").each(function(index, element) {
@@ -403,31 +429,30 @@ function switchSlot(slot) {
 	closeDropDown();
 }
 
-SaveStates = {
-	exists: function(n) {
-		return GameBoyEmulatorInitialized() && Boolean(localStorage["FREEZE_" +
-			gameboy.name + "_" + n]);
-	},
-	save: function() {
-		if (GameBoyEmulatorInitialized()) {
-			localStorage["FREEZE_" + gameboy.name + "_" + window.slotUsed] =
-				JSON.stringify(gameboy.saveState());
+function autoSave() {
+	if (GameBoyEmulatorInitialized()) {
+		SaveMemory.save();
+		if (Settings.autoSaveState) {
+			SaveStates.save(0);
+		}
+	}
+}
+
+function run() {
+	if (GameBoyEmulatorInitialized() && !GameBoyEmulatorPlaying()) {
+		gameboy.stopEmulator &= 1;
+		gameboy.firstIteration = (new Date()).getTime();
+		gameboy.iterations = 0;
+		gbRunInterval = setInterval(function () {
+			if (!Settings.runWhenHidden && (document.hidden || document.webkitHidden)) {
+				return;
+			}
 			
-			$("#selectstate_dropdown > button:nth-child(" + window.slotUsed +
-				")").addClass("slotused");
-			$("#selectstate").addClass("slotused");
-			$("#loadstate").removeClass("disabled");
-		}
-	},
-	load: function() {
-		if (GameBoyEmulatorInitialized() && SaveStates.exists(window.slotUsed)) {
-			var filename = "FREEZE_" + gameboy.name + "_" + window.slotUsed;
-			clearLastEmulation();
-			gameboy = new GameBoyCore($("canvas")[0], "");
-			gameboy.savedStateFileName = filename;
-			gameboy.returnFromState(JSON.parse(localStorage[filename]));
-			gameboy.setSpeed($("#speed_text").val());
-			$("#resume").click();
-		}
+			if (!Settings.runWhenBlurred && !window.isFocused) {
+				return;
+			}
+			
+			gameboy.run();
+		}, Settings.emulatorLoopInterval);
 	}
 }
