@@ -6,14 +6,14 @@ Other icons: http://www.famfamfam.com/lab/icons/silk/
 Borrowed some old Chrome NTP code to make i18n stuff in HTML easier (see source for details).
 
 TODO:
-- Streamline UI.
-  - Move settings into dedicated Options page
-  - Make UI for managing save states/freezes a bit nicer
+- Use a different api other than LocalStorage to store saves/freezes as it is capped at 5MB.  Web database seems to explicitly be supported by the unlimtiedStorage permission, should also test the persistant filesystem API?
+- Allow custom key binds.
 - Add option to have canvas scaling only scale in increments of 100%
 	- Or scale to fit.
 	- Preserve aspect ratio toggle.
-- Use a different api other than LocalStorage to store saves/freezes as it is capped at 5MB.  Web database seems to explicitly be supported by the unlimtiedStorage permission, should also test the persistant filesystem API?
-- Allow custom key binds.
+- Streamline UI.
+  - Move settings into dedicated Options page
+  - Make UI for managing save states/freezes a bit nicer
 - Look into registering this App as a handler for .gb/.gbc files on Chrome OS.
 	- Different default fullscreen key bind to reflect Chrome OS keyboard layout.
 - Add support for gamepad input.

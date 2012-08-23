@@ -83,5 +83,9 @@
 	"manageNav": {
 		"message": "Manage Saves",
 		"description": "Options page manage saves nav."
+	},
+	"debugNav": {
+		"message": "Debug",
+		"description": "Options page debug nav."
 	}
 }

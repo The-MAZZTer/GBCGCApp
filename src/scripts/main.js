@@ -52,7 +52,7 @@ $(document).ready(function() {
 		
 		closeDropDown();
 		
-		var control = keyMap[e.keyCode];
+		var control = Settings.keyMap[e.keyCode];
 		if (!control) {
 			return true;
 		}
@@ -70,7 +70,7 @@ $(document).ready(function() {
 		
 		closeDropDown();
 		
-		var control = keyMap[e.keyCode];
+		var control = Settings.keyMap[e.keyCode];
 		if (!control) {
 			return true;
 		}
@@ -115,7 +115,7 @@ $(document).ready(function() {
 	});
 	$("#reset").click(function() {
 		if (GameBoyEmulatorInitialized()) {
-			loadROM(gameboy.getROMImage());
+			loadROM(gameboy.getROMImage(), true);
 		}
 	});
 	
@@ -244,30 +244,6 @@ function closeDropDown(e) {
 	}
 }
 
-var keyMap = {
-	39: "right",
-	37: "left",
-	38: "up",
-	40: "down",
-	88: "a",
-	90: "b",
-	9: "select",
-	13: "start",
-	116: "savestate",
-	120: "loadstate",
-	122: "fullscreen",
-	49: "slot1",
-	50: "slot2",
-	51: "slot3",
-	52: "slot4",
-	53: "slot5",
-	54: "slot6",
-	55: "slot7",
-	56: "slot8",
-	57: "slot9",
-	48: "slot10"
-}
-
 function toggleFullScreen() {
 	if (document.isFullScreen || document.webkitIsFullScreen ||
 		document.fullScreenElement || document.webkitFullScreenElement) {
@@ -292,19 +268,23 @@ function cout(message, colorIndex) {
 	console[["log", "warn", "error"][colorIndex || 0]](message);
 }
 
-function loadROM(data) {
+function loadROM(data, reset) {
 	$("#toolbar button").removeClass("disabled");
 	$("#resume").addClass("hidden");
 	$("#pause").removeClass("hidden");
 	
 	clearLastEmulation();
-	autoSave();	//If we are about to load a new game, then save the last one...
+	if (reset) {
+		SaveMemory.save();
+	} else {
+		autoSave();	//If we are about to load a new game, then save the last one...
+	}
 	gameboy = new GameBoyCore($("canvas")[0], data);
 	gameboy.openMBC = SaveMemory.load.SRAM;
 	gameboy.openRTC = SaveMemory.load.RTC;
 	gameboy.start();
 	
-	if (Settings.autoSaveState && SaveStates.exists(0)) {
+	if (!reset && Settings.autoSaveState && SaveStates.exists(0)) {
 		SaveStates.load(0);
 	}
 	

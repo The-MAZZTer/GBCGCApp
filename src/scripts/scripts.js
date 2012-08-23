@@ -106,16 +106,29 @@ Settings = {
 		this.onchange();
 	},
 	onchange: function() {
-		settings[this.Legacy.Volume] = this.volume;
-		settings[this.Legacy.EmulatorLoopInterval] = this.emulatorLoopInterval;
-		settings[this.Legacy.ImageSmoothing] = this.imageSmoothing;
+		var legacy: {
+			soundEnabled: 0,
+			bootROM: 1,
+			gameBoyMode: 2,
+			volume: 3,
+			colorizeGB: 4,
+			disableTypedArrays: 5,
+			emulatorLoopInterval: 6,
+			audioBufferMinSpan: 7,
+			audioBufferManSpan: 8,
+			MBC1Only: 9,
+			alwaysAllowMBCBanks: 10,
+			useGBROM: 11,
+			JSScale: 12,
+			imageSmoothing: 13
+		}
+		for (var i in legacy) {
+			settings[legacy[i]] = this[i];
+		}
 
 		var s = {};
 		for (var i in this) {
 			if (this[i] instanceof Function) {
-				continue;
-			}
-			if (this[i] === this.Legacy) {
 				continue;
 			}
 			
@@ -123,28 +136,46 @@ Settings = {
 		}
 		localStorage.settings = JSON.stringify(s);
 	},
+	alwaysAllowMBCBanks: false,
+	audioBufferMaxSpan: 30,
+	audioBufferMinSpan: 15,
 	autoSaveState: true,
+	bootROM: true,
+	colorizeGB: true,
+	disableTypedArrays: false,
 	emulatorLoopInterval: 4,
+	gameBoyMode: false,
 	imageSmoothing: true,
+	JSScale: false,
+	keyMap: {
+		39: "right",
+		37: "left",
+		38: "up",
+		40: "down",
+		88: "a",
+		90: "b",
+		9: "select",
+		13: "start",
+		116: "savestate",
+		120: "loadstate",
+		122: "fullscreen",
+		49: "slot1",
+		50: "slot2",
+		51: "slot3",
+		52: "slot4",
+		53: "slot5",
+		54: "slot6",
+		55: "slot7",
+		56: "slot8",
+		57: "slot9",
+		48: "slot10"
+	},
+	MBC1Only: false,
 	runWhenHidden: false,
 	runWhenUnfocused: true,
-	volume: 1,
-	Legacy: {
-		SoundEnabled: 0,
-		BootROM: 1,
-		GameBoyMode: 2,
-		Volume: 3,
-		ColorizeGB: 4,
-		DisableTypedArrays: 5,
-		EmulatorLoopInterval: 6,
-		AudioBufferMinSpan: 7,
-		AudioBufferManSpan: 8,
-		MBC1Only: 9,
-		AlwaysAllowMBCBanks: 10,
-		UseGBROM: 11,
-		JSScale: 12,
-		ImageSmoothing: 13
-	}
+	soundEnabled: true,
+	useGBROM: false,
+	volume: 1
 }
 
 SaveStates = {

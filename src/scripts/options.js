@@ -4,33 +4,16 @@ $(document).ready(function(e) {
 	});
 	switchPage(location.hash);
 	
-	$("#optionsNav").click(function() {
-		location.hash = "";
-	});
-	$("#controlsNav").click(function() {
-		location.hash = "#controls";
-	});
-	$("#manageNav").click(function() {
-		location.hash = "#manage";
+	$("#nav li").click(function() {
+		location.hash = "#" + this.id;
 	});
 });
 
 function switchPage(hash) {
-	$("#optionsNav").removeClass("selected");
-	$("#controlsNav").removeClass("selected");
-	$("#manageNav").removeClass("selected");
-	switch (hash) {
-		case "#controls":
-			$("#controlsNav").addClass("selected");
-			$("title").text($("#controlsNav button").text());
-			break;
-		case "#manage":
-			$("#manageNav").addClass("selected");
-			$("title").text($("#manageNav button").text());
-			break;
-		default:
-			$("#optionsNav").addClass("selected");
-			$("title").text($("#optionsNav button").text());
-			break;
+	if (!hash || !$("#nav > ul > li" + hash)[0]) {
+		hash = "#options";
 	}
+	$("#nav li").removeClass("selected");
+	$(hash).addClass("selected");
+	$("title").text($(hash + " > button").text());
 }
