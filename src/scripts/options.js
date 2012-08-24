@@ -46,7 +46,8 @@ layout = {
 			"volume": {
 				type: "range",
 				min: 0,
-				max: 1
+				max: 1,
+				step: 0.01
 			}
 		}
 	},
@@ -70,7 +71,8 @@ layout = {
 				type: "range",
 				min: 1,
 				max: 999,
-				rangeMax: 20
+				rangeMax: 20,
+				step: 1
 			}
 		},
 		"graphics": {
@@ -86,13 +88,15 @@ layout = {
 				type: "range",
 				min: 1,
 				max: 999,
-				rangeMax: 99
+				rangeMax: 99,
+				step: 1
 			},
 			"audioBufferMaxSpan": {
 				type: "range",
 				min: 1,
 				max: 999,
-				rangeMax: 99
+				rangeMax: 99,
+				step: 1
 			}
 		},
 		"bios": {
@@ -206,6 +210,33 @@ function generateCheckbox(name, setting, parent) {
 }
 
 function generateRange(name, setting, parent) {
+	var min = setting.min;
+	var max = setting.max;
+	var rangeMax = setting.rangeMax || max;
+	var step = setting.step;
+	var range = $.create("input").prop("type", "range").prop("name", name).
+		prop("max", rangeMax).prop("min", min).prop("step", step).prop("value",
+		Settings[name]).change(function() {
+		
+		Settings[this.name] = this.updown.value = this.value;
+		Settings.onchange();
+	});
+	var updown = $.create("input").prop("type", "number").prop("name", name).
+		prop("max", max).prop("min", min).prop("step", step).prop("value",
+		Settings[name]).prop("range", range[0]).change(function() {
+		
+		Settings[this.name] = this.range.value = this.value;
+		Settings.onchange();
+	})
+	range[0].updown = updown[0];
+
+	parent.append(
+		$.create("div").addClass("range").append(
+			$.create("label").append(
+				$.create("span").attr("i18n-content", name + "Setting")
+			).append(range).append(updown)
+		)
+	);
 }
 
 function generateControls(name, setting, parent) {

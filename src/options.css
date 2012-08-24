@@ -6,7 +6,8 @@ body {
 }
 
 #nav {
-	float: left;
+	position: fixed;
+	display: inline-block;
 	width: 155px;
 }
 #nav h1 {
@@ -80,12 +81,12 @@ body {
 	margin-bottom: 0.8em;
 }
 
-#content .checkbox label {
+#content .checkbox label, #content .range label {
 	display: -webkit-inline-box;
 	padding-bottom: 7px;
 	padding-top: 7px;
 }
-#content .checkbox label:hover {
+#content .checkbox label:hover, #content .range label:hover {
 	color: black;
 }
 #content input[type=checkbox] {
@@ -143,6 +144,37 @@ body {
 	padding-bottom: 1px;
 }
 #content button:focus {
+	-webkit-transition: border-color 200ms;
+	border-color: #4D90FE;
+	outline: none;
+}
+
+#content .range label span {
+	-webkit-margin-end: 0.6em;
+	display: block;
+	margin-top: 4px;
+}
+
+#content input[type=range] {
+	vertical-align: middle;
+}
+
+#content input[type=number] {
+	border: 1px solid #BFBFBF;
+	border-radius: 2px;
+	box-sizing: border-box;
+	color: #444;
+	font: inherit;
+	margin: 0;
+	min-height: 2em;
+	padding: 3px;
+	padding-bottom: 4px;
+	
+	-webkit-margin-start: 0.6em;
+	vertical-align: middle;
+	width: 60px;
+}
+#content input[type=number]:focus {
 	-webkit-transition: border-color 200ms;
 	border-color: #4D90FE;
 	outline: none;

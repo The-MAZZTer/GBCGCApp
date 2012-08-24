@@ -158,7 +158,7 @@
 		"description": "Option caption."
 	},
 	"volumeSetting": {
-		"message": "Volume",
+		"message": "Volume:",
 		"description": "Option caption."
 	},
 	
@@ -171,7 +171,7 @@
 		"description": "Option caption."
 	},
 	"emulatorLoopIntervalSetting": {
-		"message": "Milliseconds between each emulation frame",
+		"message": "Milliseconds between each emulation frame:",
 		"description": "Option caption."
 	},
 	
@@ -188,20 +188,16 @@
 		"description": "Option caption."
 	},
 	
-	"graphicsCategory": {
-		"message": "Image Smoothing",
-		"description": "Options page section."
-	},
 	"audioBufferCategory": {
 		"message": "Audio Buffer",
 		"description": "Options page section."
 	},
 	"audioBufferMinSpanSetting": {
-		"message": "Minimum emulation frames to span",
+		"message": "Minimum emulation frames to span:",
 		"description": "Option caption."
 	},
 	"audioBufferMaxSpanSetting": {
-		"message": "Maximum emulation frames to span",
+		"message": "Maximum emulation frames to span:",
 		"description": "Option caption."
 	},
 	
