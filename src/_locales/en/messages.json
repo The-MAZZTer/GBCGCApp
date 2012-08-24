@@ -106,17 +106,60 @@
 		"message": "Auto Pause",
 		"description": "Options page section."
 	},
+	"runWhenUnfocusedSetting": {
+		"message": "Keep running when using other tabs or windows",
+		"description": "Option caption."
+	},
+	"runWhenHiddenSetting": {
+		"message": "Keep running when window isn't visible",
+		"description": "Option caption."
+	},
+	
 	"savesCategory": {
 		"message": "Save States",
 		"description": "Options page section."
 	},
+	"autoSaveStateSetting": {
+		"message": "Automatically save and restore states on ROM unload/load",
+		"description": "Option caption."
+	},
+	"manageSetting": {
+		"message": "Manage Saves",
+		"description": "Option caption."
+	},
+	
 	"scaleCategory": {
 		"message": "Graphics Scaling",
 		"description": "Options page section."
 	},
+	"scaleWindowedSetting": {
+		"message": "Scale in windowed mode",
+		"description": "Option caption."
+	},
+	"scaleFullscreenSetting": {
+		"message": "Scale in fullscreen mode",
+		"description": "Option caption."
+	},
+	"preserveAspectSetting": {
+		"message": "Preserve aspect ratio when scaling",
+		"description": "Option caption."
+	},
+	"scaleBy1xSetting": {
+		"message": "Only scale by increments of 100%",
+		"description": "Option caption."
+	},
+	
 	"soundCategory": {
 		"message": "Audio",
 		"description": "Options page section."
+	},
+	"soundEnabledSetting": {
+		"message": "Enable Sound",
+		"description": "Option caption."
+	},
+	"volumeSetting": {
+		"message": "Volume",
+		"description": "Option caption."
 	},
 	
 	"javascriptCategory": {
