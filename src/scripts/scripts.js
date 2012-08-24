@@ -106,24 +106,26 @@ Settings = {
 		this.onchange();
 	},
 	onchange: function() {
-		var legacy = {
-			soundEnabled: 0,
-			bootROM: 1,
-			gameBoyMode: 2,
-			volume: 3,
-			colorizeGB: 4,
-			disableTypedArrays: 5,
-			emulatorLoopInterval: 6,
-			audioBufferMinSpan: 7,
-			audioBufferManSpan: 8,
-			MBC1Only: 9,
-			alwaysAllowMBCBanks: 10,
-			useGBROM: 11,
-			JSScale: 12,
-			imageSmoothing: 13
-		}
-		for (var i in legacy) {
-			settings[legacy[i]] = this[i];
+		if ("settings" in window) {
+			var legacy = {
+				soundEnabled: 0,
+				bootROM: 1,
+				gameBoyMode: 2,
+				volume: 3,
+				colorizeGB: 4,
+				disableTypedArrays: 5,
+				emulatorLoopInterval: 6,
+				audioBufferMinSpan: 7,
+				audioBufferManSpan: 8,
+				MBC1Only: 9,
+				alwaysAllowMBCBanks: 10,
+				useGBROM: 11,
+				JSScale: 12,
+				imageSmoothing: 13
+			}
+			for (var i in legacy) {
+				settings[legacy[i]] = this[i];
+			}
 		}
 
 		var s = {};
@@ -181,6 +183,7 @@ Settings = {
 	useGBROM: false,
 	volume: 1
 }
+Settings.init();
 
 SaveStates = {
 	exists: function(n) {

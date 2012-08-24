@@ -123,7 +123,7 @@
 		"message": "Automatically save and restore states on ROM unload/load",
 		"description": "Option caption."
 	},
-	"manageSetting": {
+	"manageButtonSetting": {
 		"message": "Manage Saves",
 		"description": "Option caption."
 	},

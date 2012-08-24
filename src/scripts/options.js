@@ -20,8 +20,9 @@ layout = {
 			"autoSaveState": {
 				type: "checkbox"
 			},
-			"manage": {
-				type: "button"
+			"manageButton": {
+				type: "button",
+				target: "manage"
 			}
 		},
 		"scale": {
@@ -187,17 +188,19 @@ function switchPage(hash) {
 }
 
 function generateCheckbox(name, setting, parent) {
-	var value = Settings[name];
-	if (setting.invert) {
-		value = !value;
-	}
 	parent.append(
-		$.create("div").append(
-			$.create("label").append(
-				$.create("input").prop("type", "checkbox").prop("checked", value)
+		$.create("div").addClass("checkbox").append(
+			$.create("label").prop("name", name).prop("invert", setting.invert).
+				append(
+				
+				$.create("input").prop("type", "checkbox").prop("checked",
+					Boolean(Settings[name] ^ setting.invert))
 			).append(
 				$.create("span").attr("i18n-content", name + "Setting")
-			)
+			).change(function() {
+				Settings[this.name] = Boolean($(this).children("input:checked").length ^ this.invert);
+				Settings.onchange();
+			})
 		)
 	);
 }
@@ -212,4 +215,13 @@ function generateManage(name, setting, parent) {
 }
 
 function generateButton(name, setting, parent) {
+	parent.append(
+		$.create("div").addClass("button").append(
+			$.create("button").attr("i18n-content", name + "Setting").prop("target",
+				setting.target).click(function() {
+				
+				$("#" + this.target).click();
+			})
+		)
+	);
 }

@@ -228,7 +228,6 @@ $(document).ready(function() {
 
 	sizeCanvas();
 
-	Settings.init();
 	setVolume({target: {value: Settings.volume}});
 });
 
