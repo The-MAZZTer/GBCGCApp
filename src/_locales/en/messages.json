@@ -154,7 +154,7 @@
 		"description": "Options page section."
 	},
 	"soundEnabledSetting": {
-		"message": "Enable Sound",
+		"message": "Enable sound",
 		"description": "Option caption."
 	},
 	"volumeSetting": {
@@ -166,10 +166,28 @@
 		"message": "Compatibility",
 		"description": "Options page section."
 	},
+	"disableTypedArraysSetting": {
+		"message": "Use typed arrays",
+		"description": "Option caption."
+	},
+	"emulatorLoopIntervalSetting": {
+		"message": "Milliseconds between each emulation frame",
+		"description": "Option caption."
+	},
+	
 	"graphicsCategory": {
 		"message": "Graphics Scaling",
 		"description": "Options page section."
 	},
+	"imageSmoothingSetting": {
+		"message": "Enable image smoothing",
+		"description": "Option caption."
+	},
+	"JSScaleSetting": {
+		"message": "Scale in software",
+		"description": "Option caption."
+	},
+	
 	"graphicsCategory": {
 		"message": "Image Smoothing",
 		"description": "Options page section."
@@ -178,12 +196,38 @@
 		"message": "Audio Buffer",
 		"description": "Options page section."
 	},
+	"audioBufferMinSpanSetting": {
+		"message": "Minimum emulation frames to span",
+		"description": "Option caption."
+	},
+	"audioBufferMaxSpanSetting": {
+		"message": "Maximum emulation frames to span",
+		"description": "Option caption."
+	},
+	
 	"biosCategory": {
 		"message": "BIOS",
 		"description": "Options page section."
 	},
+	"bootROMSetting": {
+		"message": "Use boot ROM",
+		"description": "Option caption."
+	},
+	"useGBROMSetting": {
+		"message": "Use Gameboy (Mono) boot ROM instead of Color",
+		"description": "Option caption."
+	},
+
 	"bankingCategory": {
 		"message": "ROM Banking",
 		"description": "Options page section."
+	},
+	"alwaysAllowMBCBanksSetting": {
+		"message": "Force bank switching to always enabled",
+		"description": "Option caption."
+	},
+	"MBC1OnlySetting": {
+		"message": "Treat bank-less (ROM) cartridges like single-bank (MBC1) ones",
+		"description": "Option caption."
 	}
 }
