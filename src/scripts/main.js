@@ -89,6 +89,7 @@ $(document).ready(function() {
 		}
 		e.originalEvent.dataTransfer.dropEffect = "copy";
 	}).on("drop", function(e) {
+		window.isFocused = true;
 		e.stopPropagation();
 		e.preventDefault();
 		openROM(e.originalEvent.dataTransfer.files[0]);
@@ -122,6 +123,7 @@ $(document).ready(function() {
 	$("#loadstate").click(SaveStates.load);
 	
 	$("#selectstate, #tools").mousedown(function(e) {
+		window.isFocused = true;
 		var dropdown = $("#" + e.target.id + "_dropdown");
 		if (document.dropdown === e.target) {
 			$(e.target).mouseup(closeDropDown);
@@ -138,6 +140,7 @@ $(document).ready(function() {
 	});
 
 	$("#selectstate_dropdown, #tools_dropdown").mousedown(function(e) {
+		window.isFocused = true;
 		if (e.target.tagName == "INPUT") {
 			return true;
 		}

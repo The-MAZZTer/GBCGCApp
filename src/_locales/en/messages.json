@@ -85,7 +85,53 @@
 		"description": "Options page manage saves nav."
 	},
 	"debugNav": {
-		"message": "Debug",
+		"message": "Advanced/Debug",
 		"description": "Options page debug nav."
+	},
+	
+	"gameboyCategory": {
+		"message": "Gameboy (Mono) Cartridges",
+		"description": "Options page section."
+	},
+	"autopauseCategory": {
+		"message": "Auto Pause",
+		"description": "Options page section."
+	},
+	"savesCategory": {
+		"message": "Save States",
+		"description": "Options page section."
+	},
+	"scaleCategory": {
+		"message": "Graphics Scaling",
+		"description": "Options page section."
+	},
+	"soundCategory": {
+		"message": "Audio",
+		"description": "Options page section."
+	},
+	
+	"javascriptCategory": {
+		"message": "Compatibility",
+		"description": "Options page section."
+	},
+	"graphicsCategory": {
+		"message": "Graphics Scaling",
+		"description": "Options page section."
+	},
+	"graphicsCategory": {
+		"message": "Image Smoothing",
+		"description": "Options page section."
+	},
+	"audioBufferCategory": {
+		"message": "Audio Buffer",
+		"description": "Options page section."
+	},
+	"biosCategory": {
+		"message": "BIOS",
+		"description": "Options page section."
+	},
+	"bankingCategory": {
+		"message": "ROM Banking",
+		"description": "Options page section."
 	}
 }

@@ -106,7 +106,7 @@ Settings = {
 		this.onchange();
 	},
 	onchange: function() {
-		var legacy: {
+		var legacy = {
 			soundEnabled: 0,
 			bootROM: 1,
 			gameBoyMode: 2,
@@ -171,8 +171,12 @@ Settings = {
 		48: "slot10"
 	},
 	MBC1Only: false,
+	preserveAspect: true,
 	runWhenHidden: false,
 	runWhenUnfocused: true,
+	scaleBy1x: false,
+	scaleFullscreen: true,
+	scaleWindowed: true,
 	soundEnabled: true,
 	useGBROM: false,
 	volume: 1
