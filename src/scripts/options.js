@@ -190,17 +190,17 @@ function switchPage(hash) {
 function generateCheckbox(name, setting, parent) {
 	parent.append(
 		$.create("div").addClass("checkbox").append(
-			$.create("label").prop("name", name).prop("invert", setting.invert).
-				append(
-				
-				$.create("input").prop("type", "checkbox").prop("checked",
-					Boolean(Settings[name] ^ setting.invert))
+			$.create("label").append(
+				$.create("input").prop("type", "checkbox").prop("name", name).
+					prop("invert", setting.invert).prop("checked", Boolean(Settings[name]
+					^ setting.invert)).change(function() {
+					
+					Settings[this.name] = Boolean(this.checked ^ this.invert);
+					Settings.onchange();
+				})
 			).append(
 				$.create("span").attr("i18n-content", name + "Setting")
-			).change(function() {
-				Settings[this.name] = Boolean($(this).children("input:checked").length ^ this.invert);
-				Settings.onchange();
-			})
+			)
 		)
 	);
 }
