@@ -68,7 +68,7 @@ layout = {
 			"emulatorLoopInterval": {
 				type: "range",
 				min: 1,
-				max: Infinity,
+				max: 999,
 				rangeMax: 20
 			}
 		},
@@ -84,13 +84,13 @@ layout = {
 			"audioBufferMinSpan": {
 				type: "range",
 				min: 1,
-				max: Infinity,
+				max: 999,
 				rangeMax: 99
 			},
 			"audioBufferMaxSpan": {
 				type: "range",
 				min: 1,
-				max: Infinity,
+				max: 999,
 				rangeMax: 99
 			}
 		},
@@ -117,13 +117,45 @@ $(document).off("ready").ready(function(e) {
 	var frag = $(document.createDocumentFragment());
 	var frag2 = $(document.createDocumentFragment());
 	for (var i in layout) {
-		frag.append($.create("li").prop("id", i).append($.create("button").
-			attr("i18n-content", i + "Nav")));
+		var page = layout[i];
+		frag.append(
+			$.create("li").prop("id", i).append(
+				$.create("button").attr("i18n-content", i + "Nav")
+			)
+		);
 			
 		var content = $.create("div").prop("id", i + "Content")
-		content.append($.create("h1").attr("i18n-content", i + "Nav"))
-		for (var j in layout[i]) {
-			content.append($.create("h2").attr("i18n-content", j + "Category"));
+		content.append(
+			$.create("h1").attr("i18n-content", i + "Nav")
+		);
+		for (var j in page) {
+			var category = page[j];
+			var section = $.create("div");
+			section.append(
+				$.create("h2").attr("i18n-content", j + "Category")
+			);
+			
+			for (var k in category) {
+				var setting = category[k];
+				switch (setting.type) {
+					case "checkbox":
+						generateCheckbox(k, setting, section);
+						break;
+					case "range":
+						generateRange(k, setting, section);
+						break;
+					case "controls":
+						generateControls(k, setting, section);
+						break;
+					case "manage":
+						generateManage(k, setting, section);
+						break;
+					case "button":
+						generateButton(k, setting, section);
+						break;
+				}
+			}
+			content.append(section)
 		}
 		
 		frag2.append(content);
@@ -152,4 +184,32 @@ function switchPage(hash) {
 	$(hash).addClass("selected");
 	$(hash + "Content").addClass("selected");
 	$("title").text($(hash + " > button").text());
+}
+
+function generateCheckbox(name, setting, parent) {
+	var value = Settings[name];
+	if (setting.invert) {
+		value = !value;
+	}
+	parent.append(
+		$.create("div").append(
+			$.create("label").append(
+				$.create("input").prop("type", "checkbox").prop("checked", value)
+			).append(
+				$.create("span").attr("i18n-content", name + "Setting")
+			)
+		)
+	);
+}
+
+function generateRange(name, setting, parent) {
+}
+
+function generateControls(name, setting, parent) {
+}
+
+function generateManage(name, setting, parent) {
+}
+
+function generateButton(name, setting, parent) {
 }

@@ -93,6 +93,15 @@
 		"message": "Gameboy (Mono) Cartridges",
 		"description": "Options page section."
 	},
+	"gameBoyModeSetting": {
+		"message": "Prefer Gameboy (Mono) mode over Color",
+		"description": "Option caption."
+	},
+	"colorizeGBSetting": {
+		"message": "Colorize Gameboy (Mono) games",
+		"description": "Option caption."
+	},
+	
 	"autopauseCategory": {
 		"message": "Auto Pause",
 		"description": "Options page section."
