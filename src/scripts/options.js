@@ -91,13 +91,8 @@ layout = {
 				max: 999,
 				rangeMax: 20,
 				step: 1
-			}
-		},
-		"graphics": {
-			"imageSmoothing": {
-				type: "checkbox"
 			},
-			"JSScale": {
+			"imageSmoothing": {
 				type: "checkbox"
 			}
 		},
@@ -137,12 +132,14 @@ layout = {
 }
 
 $(document).off("ready").ready(function(e) {
-	var frag = $(document.createDocumentFragment());
-	var frag2 = $(document.createDocumentFragment());
+	var frag = $.create();
+	var frag2 = $.create();
 	for (var i in layout) {
 		var page = layout[i];
 		frag.append(
-			$.create("li").prop("id", i).append(
+			$.create("li").prop("id", i).click(function() {
+				location.hash = "#" + this.id;
+			}).append(
 				$.create("button").attr("i18n-content", i + "Nav")
 			)
 		);
@@ -184,19 +181,25 @@ $(document).off("ready").ready(function(e) {
 		
 		frag2.append(content);
 	}
-	$("#nav ul").append(frag);
+	$("#nav ul").prepend(frag);
 	$("#content").append(frag2);
 	
 	i18nTemplate.process(document);
-
+	
+	$("#nav li:last-child").click(function() {
+		for (var i in Settings.defaults) {
+			Settings[i] = Settings.defaults[i];
+		}
+		Settings.onchange();
+		
+		syncSettings();
+		syncKeys();
+	});
+	
 	$(window).on("hashchange", function() {
 		switchPage(location.hash);
 	});
 	switchPage(location.hash);
-	
-	$("#nav li").click(function() {
-		location.hash = "#" + this.id;
-	});
 });
 
 function switchPage(hash) {
@@ -269,24 +272,6 @@ function generateButton(name, setting, parent) {
 	);
 }
 
-function syncKeys() {
-	var map = {};
-	for (var i in Settings.keyMap) {
-		map[Settings.keyMap[i]] = i;
-	}
-	
-	$("list").children().each(function(index, element) {
-		var name = $(element).prop("name");
-		var key = map[name];
-		if (!key) {
-			$(element).removeProp("key").find(".keyCol").text("");
-		} else {
-			$(element).prop("key", key).find(".keyCol").
-				text(chrome.i18n.getMessage("key" + key) || ("Unknown (" + key + ")"));
-		}
-	});
-}
-
 function generateControls(name, setting, parent) {
 	var keys = setting.keys;
 	
@@ -353,4 +338,32 @@ function generateControls(name, setting, parent) {
 }
 
 function generateManage(name, setting, parent) {
+}
+
+function syncSettings() {
+	$("input[type=checkbox]").each(function(index, element) {
+		element.checked = Settings[element.name];
+	});
+	
+	$("input[type=range], input[type=number]").each(function(index, element) {
+		element.value = Settings[element.name];
+	});
+}
+
+function syncKeys() {
+	var map = {};
+	for (var i in Settings.keyMap) {
+		map[Settings.keyMap[i]] = i;
+	}
+	
+	$("list").children().each(function(index, element) {
+		var name = $(element).prop("name");
+		var key = map[name];
+		if (!key) {
+			$(element).removeProp("key").find(".keyCol").text("");
+		} else {
+			$(element).prop("key", key).find(".keyCol").
+				text(chrome.i18n.getMessage("key" + key) || ("Unknown (" + key + ")"));
+		}
+	});
 }

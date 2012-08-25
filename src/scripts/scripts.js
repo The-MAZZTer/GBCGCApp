@@ -87,7 +87,8 @@ var i18nTemplate = (function() {
 })();
 
 $.create = function(tag) {
-	return $(document.createElement(tag));
+	return tag ? $(document.createElement(tag)) :
+		$(document.createDocumentFragment());
 }
 
 $(document).ready(function() {
@@ -129,12 +130,12 @@ Settings = {
 				MBC1Only: 9,
 				alwaysAllowMBCBanks: 10,
 				useGBROM: 11,
-				JSScale: 12,
 				imageSmoothing: 13
 			}
 			for (var i in legacy) {
 				settings[legacy[i]] = this[i];
 			}
+			settings[12] = false;
 		}
 
 		var s = {};
@@ -159,8 +160,7 @@ Settings = {
 		disableTypedArrays: false,
 		emulatorLoopInterval: 4,
 		gameBoyMode: false,
-		imageSmoothing: true,
-		JSScale: false,
+		imageSmoothing: false,
 		keyMap: {
 			39: "right",
 			37: "left",
@@ -188,7 +188,7 @@ Settings = {
 		preserveAspect: true,
 		runWhenHidden: false,
 		runWhenUnfocused: false,
-		scaleBy1x: true,
+		scaleBy1x: false,
 		scaleFullscreen: true,
 		scaleWindowed: true,
 		soundEnabled: true,
@@ -205,8 +205,7 @@ Settings = {
 		disableTypedArrays: false,
 		emulatorLoopInterval: 4,
 		gameBoyMode: false,
-		imageSmoothing: true,
-		JSScale: false,
+		imageSmoothing: false,
 		keyMap: {
 			39: "right",
 			37: "left",
@@ -234,7 +233,7 @@ Settings = {
 		preserveAspect: true,
 		runWhenHidden: false,
 		runWhenUnfocused: false,
-		scaleBy1x: true,
+		scaleBy1x: false,
 		scaleFullscreen: true,
 		scaleWindowed: true,
 		soundEnabled: true,

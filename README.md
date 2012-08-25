@@ -6,16 +6,11 @@ Other icons: http://www.famfamfam.com/lab/icons/silk/
 Borrowed some old Chrome NTP code to make i18n stuff in HTML easier (see source for details).
 
 TODO:
+- Add support for gamepad input.
 - Use a different api other than LocalStorage to store saves/freezes as it is capped at 5MB.  Web database seems to explicitly be supported by the unlimtiedStorage permission, should also test the persistant filesystem API?
-- Make Options page
-  - Manage saves
-	- Add reset to defaults link
-- Option to have canvas scaling only scale in increments of 100%
-	- Or [not] scale to fit.
-	- Preserve aspect ratio toggle.
+  - Make manage saves options page
 - Look into registering this App as a handler for .gb/.gbc files on Chrome OS. (Done, test)
 	- Different default fullscreen key bind to reflect Chrome OS keyboard layout. (Done, test)
-- Add support for gamepad input.
 
 Original README follows.
 

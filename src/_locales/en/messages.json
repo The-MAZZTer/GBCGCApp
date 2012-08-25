@@ -88,6 +88,10 @@
 		"message": "Advanced/Debug",
 		"description": "Options page debug nav."
 	},
+	"resetDefaults": {
+		"message": "Reset to Defaults",
+		"description": "Warning about changes not taking effect immediately."
+	},
 	
 	"gameboyCategory": {
 		"message": "Gameboy (Mono) Cartridges",
@@ -278,17 +282,8 @@
 		"message": "Milliseconds between each emulation frame:",
 		"description": "Option caption."
 	},
-	
-	"graphicsCategory": {
-		"message": "Graphics Scaling",
-		"description": "Options page section."
-	},
 	"imageSmoothingSetting": {
 		"message": "Enable image smoothing",
-		"description": "Option caption."
-	},
-	"JSScaleSetting": {
-		"message": "Scale in software",
 		"description": "Option caption."
 	},
 	

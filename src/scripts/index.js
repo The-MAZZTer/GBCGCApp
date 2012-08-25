@@ -271,7 +271,7 @@ function toggleFullScreen() {
 		return;
 	}
 	
-	var canvas = $("canvas")[0];
+	var canvas = $("#canvasContainer")[0];
 	if (canvas.requestFullScreen) {
 		canvas.requestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
 	} else {
@@ -332,15 +332,50 @@ function openROM(file) {
 }
 
 function sizeCanvas() {
+	var container = $("#canvasContainer");
+	var canvas = container.children("canvas");
+	
+	var nativeWidth = 394;
+	var nativeHeight = 304;	
+	
 	if (document.isFullScreen || document.webkitIsFullScreen ||
 		document.fullScreenElement || document.webkitFullScreenElement) {
 		
-		$("canvas").addClass("fullscreen").height("100%").width("100%");
+		var canScale = Settings.scaleFullscreen;
+		var maxHeight = container.css("height", "100%").height();
 	} else {
-		$("canvas").removeClass("fullscreen").height($("body").height() -
-			$("#toolbar").height() - ($("#secondaryToolbar").not(":hidden").height()
-			|| 0)).width("100%");
+		var canScale = Settings.scaleWindowed;
+		var maxHeight = container.height($(document.body).height() -
+			$("#toolbar").height() - 2).height();
 	}
+	
+	var maxWidth = container.width();
+	
+	if (!canScale) {
+		var width = nativeWidth;
+		var height = nativeHeight;
+	} else {
+		if (Settings.scaleBy1x) {
+			var width = (Math.floor(maxWidth / nativeWidth) * nativeWidth) ||
+				maxWidth;
+			var height = (Math.floor(maxHeight / nativeHeight) * nativeHeight) ||
+				maxHeight;
+		} else {
+			var width = maxWidth;
+			var height = maxHeight;
+		}
+		
+		if (Settings.preserveAspect) {
+			var aspect = nativeWidth / nativeHeight;
+			if (height * aspect > maxWidth) {
+				height = width / aspect;
+			} else {
+				width = height * aspect;
+			}
+		}
+	}
+	canvas.css("marginLeft", (maxWidth - width) / 2).css("marginTop", (maxHeight -
+		height) / 2).width(width).height(height);
 }
 
 function setVolume(e) {

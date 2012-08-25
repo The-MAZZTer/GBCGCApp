@@ -5,7 +5,8 @@ html, body {
 	padding: 0px;
 	border: none;
 	overflow: hidden;
-
+	
+	background-color: black;
 	color: black;
 	font-family: Arial, sans;
 	font-size: 10pt;
@@ -81,6 +82,11 @@ input, label {
 	padding: 3px 15px 1px 20px;
 }
 
+#toolbar > div {
+	white-space: nowrap;
+	overflow: hidden;
+}
+
 #toolbar > div > div {
 	width: 1px;
 	height: 16px;
@@ -89,44 +95,44 @@ input, label {
 }
 
 #openfile {
-	background-image: url("images/folder.png");
+	background-image: url("../images/folder.png");
 }
 #pause {
-	background-image: url("images/control_pause.png");
+	background-image: url("../images/control_pause.png");
 }
 #resume {
-	background-image: url("images/control_play.png");
+	background-image: url("../images/control_play.png");
 }
 #reset {
-	background-image: url("images/control_start.png");
+	background-image: url("../images/control_start.png");
 }
 #loadstate {
-	background-image: url("images/picture_go.png");
+	background-image: url("../images/picture_go.png");
 }
 #selectstate {
-	background-image: url("images/picture_empty.png"), url("images/dropdown.png");
+	background-image: url("../images/picture_empty.png"), url("../images/dropdown.png");
 }
 #selectstate.slotused {
-	background-image: url("images/picture.png"), url("images/dropdown.png");
+	background-image: url("../images/picture.png"), url("../images/dropdown.png");
 }
 #savestate {
-	background-image: url("images/picture_save.png");
+	background-image: url("../images/picture_save.png");
 }
 #fullscreen {
-	background-image: url("images/monitor.png");
+	background-image: url("../images/monitor.png");
 }
 #tools {
-	background-image: url("images/wrench.png"), url("images/dropdown.png");
+	background-image: url("../images/wrench.png"), url("../images/dropdown.png");
 }
 #about {
-	background-image: url("images/information.png");
+	background-image: url("../images/information.png");
 }
 
 #selectstate_dropdown > button {
-	background-image: url("images/picture_empty.png");
+	background-image: url("../images/picture_empty.png");
 }
 #selectstate_dropdown > button.slotused {
-	background-image: url("images/picture.png");
+	background-image: url("../images/picture.png");
 }
 
 #toolbar input {
@@ -142,47 +148,46 @@ input, label {
 }
 
 #options {
-	background-image: url("images/cog.png");
+	background-image: url("../images/cog.png");
 }
 #controls {
-	background-image: url("images/controller.png");
+	background-image: url("../images/controller.png");
 }
 #managestates {
-	background-image: url("images/folder_picture.png");
+	background-image: url("../images/folder_picture.png");
 }
 #volume_button {
-	background-image: url("images/sound.png");
+	background-image: url("../images/sound.png");
 }
 #volume_button.low {
-	background-image: url("images/sound_low.png");
+	background-image: url("../images/sound_low.png");
 }
 #volume_button.none {
-	background-image: url("images/sound_none.png");
+	background-image: url("../images/sound_none.png");
 }
 #volume_button.mute {
-	background-image: url("images/sound_mute.png");
+	background-image: url("../images/sound_mute.png");
 }
 #speed_button.less {
-	background-image: url("images/lightning_delete.png");
+	background-image: url("../images/lightning_delete.png");
 }
 #speed_button {
-	background-image: url("images/lightning.png");
+	background-image: url("../images/lightning.png");
 }
 #speed_button.more {
-	background-image: url("images/lightning_add.png");
+	background-image: url("../images/lightning_add.png");
 }
 
+#canvasContainer {
+	background-color: black;
+	width: 100%;
+}
 canvas {
 	background-color: white;
-	margin-left: auto;
-	margin-right: auto;
 	image-smoothing: auto;
 }
 canvas.smooth {
 	image-smoothing: -webkit-optimize-contrast;
-}
-.fullscreen {
-	border-top-width: 0px;
 }
 
 #aboutlayer {
