@@ -8,8 +8,6 @@ Borrowed some old Chrome NTP code to make i18n stuff in HTML easier (see source 
 TODO:
 - Use a different api other than LocalStorage to store saves/freezes as it is capped at 5MB.  Web database seems to explicitly be supported by the unlimtiedStorage permission, should also test the persistant filesystem API?
 - Make Options page
-  - Settings
-	- Controls
   - Manage saves
 	- On change "Settings will take effect on app page reload."
 - Option to have canvas scaling only scale in increments of 100%

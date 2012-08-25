@@ -15,11 +15,11 @@ input, label {
 }
 
 .disabled {
-	-webkit-filter: grayscale(100%); !important
-	filter: grayscale(100%); !important
+	-webkit-filter: grayscale(100%);
+	filter: grayscale(100%);
 }
-.hidden {
-	display: none; !important
+#toolbar .hidden, .hidden {
+	display: none;
 }
 
 #toolbar {

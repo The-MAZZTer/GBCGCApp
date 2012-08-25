@@ -116,7 +116,7 @@ Settings = {
 				disableTypedArrays: 5,
 				emulatorLoopInterval: 6,
 				audioBufferMinSpan: 7,
-				audioBufferManSpan: 8,
+				audioBufferMaxSpan: 8,
 				MBC1Only: 9,
 				alwaysAllowMBCBanks: 10,
 				useGBROM: 11,
