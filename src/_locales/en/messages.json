@@ -740,5 +740,10 @@
 	"fileBrowserCaption": {
 		"message": "Run",
 		"description": "Caption of the file browser handler button on Chrome OS."
+	},
+	
+	"changes": {
+		"message": "Changes will take effect the next time you open Gameboy Color Game Center.",
+		"description": "Warning about changes not taking effect immediately."
 	}
 }

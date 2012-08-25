@@ -4,11 +4,11 @@
 	"version": "1.0.0.1",
 	"description": "__MSG_description__",
 	"icons": {
-		"16": "favicon.png",
-		"32": "32.png",
-		"64": "64.png",
-		"128": "128.png",
-		"256": "256.png"
+		"16": "images/favicon.png",
+		"32": "images/32.png",
+		"64": "images/64.png",
+		"128": "images/128.png",
+		"256": "images/256.png"
 	},
 	"default_locale": "en",
 	"app": {

@@ -97,29 +97,12 @@ $(document).ready(function() {
 Settings = {
 	init: function() {
 		if (/CrOS/.test(navigator.userAgent)) {
-			this.keyMap = {
-				39: "right",
-				37: "left",
-				38: "up",
-				40: "down",
-				88: "a",
-				90: "b",
-				9: "select",
-				13: "start",
-				113: "savestate",
-				112: "loadstate",
-				115: "fullscreen",
-				49: "slot1",
-				50: "slot2",
-				51: "slot3",
-				52: "slot4",
-				53: "slot5",
-				54: "slot6",
-				55: "slot7",
-				56: "slot8",
-				57: "slot9",
-				48: "slot10"
-			}
+			this.defaults = this.crOSDefaults;
+		}
+		delete this.crOSDefaults;
+		
+		for (var i in this.defaults) {
+			this[i] = this.defaults[i];
 		}
 	
 		var s = localStorage.settings;
@@ -163,51 +146,101 @@ Settings = {
 			s[i] = this[i];
 		}
 		localStorage.settings = JSON.stringify(s);
+		
+		$(document.body).addClass("changed");
 	},
-	alwaysAllowMBCBanks: false,
-	audioBufferMaxSpan: 30,
-	audioBufferMinSpan: 15,
-	autoSaveState: true,
-	bootROM: true,
-	colorizeGB: true,
-	disableTypedArrays: false,
-	emulatorLoopInterval: 4,
-	gameBoyMode: false,
-	imageSmoothing: true,
-	JSScale: false,
-	keyMap: {
-		39: "right",
-		37: "left",
-		38: "up",
-		40: "down",
-		88: "a",
-		90: "b",
-		9: "select",
-		13: "start",
-		116: "savestate",
-		120: "loadstate",
-		122: "fullscreen",
-		49: "slot1",
-		50: "slot2",
-		51: "slot3",
-		52: "slot4",
-		53: "slot5",
-		54: "slot6",
-		55: "slot7",
-		56: "slot8",
-		57: "slot9",
-		48: "slot10"
+	defaults: {
+		alwaysAllowMBCBanks: false,
+		audioBufferMaxSpan: 30,
+		audioBufferMinSpan: 15,
+		autoSaveState: true,
+		bootROM: true,
+		colorizeGB: true,
+		disableTypedArrays: false,
+		emulatorLoopInterval: 4,
+		gameBoyMode: false,
+		imageSmoothing: true,
+		JSScale: false,
+		keyMap: {
+			39: "right",
+			37: "left",
+			38: "up",
+			40: "down",
+			88: "a",
+			90: "b",
+			9: "select",
+			13: "start",
+			116: "savestate",
+			120: "loadstate",
+			122: "fullscreen",
+			49: "slot1",
+			50: "slot2",
+			51: "slot3",
+			52: "slot4",
+			53: "slot5",
+			54: "slot6",
+			55: "slot7",
+			56: "slot8",
+			57: "slot9",
+			48: "slot10"
+		},
+		MBC1Only: false,
+		preserveAspect: true,
+		runWhenHidden: false,
+		runWhenUnfocused: false,
+		scaleBy1x: true,
+		scaleFullscreen: true,
+		scaleWindowed: true,
+		soundEnabled: true,
+		useGBROM: false,
+		volume: 1
 	},
-	MBC1Only: false,
-	preserveAspect: true,
-	runWhenHidden: false,
-	runWhenUnfocused: true,
-	scaleBy1x: false,
-	scaleFullscreen: true,
-	scaleWindowed: true,
-	soundEnabled: true,
-	useGBROM: false,
-	volume: 1
+	crOSDefaults: {
+		alwaysAllowMBCBanks: false,
+		audioBufferMaxSpan: 30,
+		audioBufferMinSpan: 15,
+		autoSaveState: true,
+		bootROM: true,
+		colorizeGB: true,
+		disableTypedArrays: false,
+		emulatorLoopInterval: 4,
+		gameBoyMode: false,
+		imageSmoothing: true,
+		JSScale: false,
+		keyMap: {
+			39: "right",
+			37: "left",
+			38: "up",
+			40: "down",
+			88: "a",
+			90: "b",
+			9: "select",
+			13: "start",
+			113: "savestate",
+			112: "loadstate",
+			115: "fullscreen",
+			49: "slot1",
+			50: "slot2",
+			51: "slot3",
+			52: "slot4",
+			53: "slot5",
+			54: "slot6",
+			55: "slot7",
+			56: "slot8",
+			57: "slot9",
+			48: "slot10"
+		},
+		MBC1Only: false,
+		preserveAspect: true,
+		runWhenHidden: false,
+		runWhenUnfocused: false,
+		scaleBy1x: true,
+		scaleFullscreen: true,
+		scaleWindowed: true,
+		soundEnabled: true,
+		useGBROM: false,
+		volume: 1
+	}
 }
 Settings.init();
 

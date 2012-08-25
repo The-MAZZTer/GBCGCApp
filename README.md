@@ -9,7 +9,6 @@ TODO:
 - Use a different api other than LocalStorage to store saves/freezes as it is capped at 5MB.  Web database seems to explicitly be supported by the unlimtiedStorage permission, should also test the persistant filesystem API?
 - Make Options page
   - Manage saves
-	- On change "Settings will take effect on app page reload."
 	- Add reset to defaults link
 - Option to have canvas scaling only scale in increments of 100%
 	- Or [not] scale to fit.
