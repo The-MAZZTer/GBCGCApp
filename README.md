@@ -10,6 +10,7 @@ TODO:
 - Make Options page
   - Manage saves
 	- On change "Settings will take effect on app page reload."
+	- Add reset to defaults link
 - Option to have canvas scaling only scale in increments of 100%
 	- Or [not] scale to fit.
 	- Preserve aspect ratio toggle.
