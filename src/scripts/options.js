@@ -52,13 +52,31 @@ layout = {
 		}
 	},
 	"controls": {
-		"keyMap": {
-			type: "controls"
+		"gameboyControls": {
+			"": {
+				type: "controls",
+				keys: ["up", "down", "left", "right", "a", "b", "select", "start"]
+			}
+		},
+		"stateControls": {
+			"": {
+				type: "controls",
+				keys: ["savestate", "loadstate", "slot1", "slot2", "slot3", "slot4",
+					"slot5", "slot6", "slot7", "slot8", "slot9", "slot10"]
+			}
+		},
+		"miscControls": {
+			"": {
+				type: "controls",
+				keys: ["fullscreen"]
+			}
 		}
 	},
 	"manage": {
 		"games": {
-			type: "manage"
+			"": {
+				type: "manage"
+			}
 		}
 	},
 	"debug": {
@@ -139,7 +157,7 @@ $(document).off("ready").ready(function(e) {
 			section.append(
 				$.create("h2").attr("i18n-content", j + "Category")
 			);
-			
+
 			for (var k in category) {
 				var setting = category[k];
 				switch (setting.type) {
@@ -149,18 +167,19 @@ $(document).off("ready").ready(function(e) {
 					case "range":
 						generateRange(k, setting, section);
 						break;
+					case "button":
+						generateButton(k, setting, section);
+						break;
 					case "controls":
 						generateControls(k, setting, section);
 						break;
 					case "manage":
 						generateManage(k, setting, section);
 						break;
-					case "button":
-						generateButton(k, setting, section);
-						break;
 				}
 			}
-			content.append(section)
+			
+			content.append(section);
 		}
 		
 		frag2.append(content);
@@ -229,7 +248,6 @@ function generateRange(name, setting, parent) {
 		Settings.onchange();
 	})
 	range[0].updown = updown[0];
-
 	parent.append(
 		$.create("div").addClass("range").append(
 			$.create("label").append(
@@ -237,12 +255,6 @@ function generateRange(name, setting, parent) {
 			).append(range).append(updown)
 		)
 	);
-}
-
-function generateControls(name, setting, parent) {
-}
-
-function generateManage(name, setting, parent) {
 }
 
 function generateButton(name, setting, parent) {
@@ -255,4 +267,90 @@ function generateButton(name, setting, parent) {
 			})
 		)
 	);
+}
+
+function syncKeys() {
+	var map = {};
+	for (var i in Settings.keyMap) {
+		map[Settings.keyMap[i]] = i;
+	}
+	
+	$("list").children().each(function(index, element) {
+		var name = $(element).prop("name");
+		var key = map[name];
+		if (!key) {
+			$(element).removeProp("key").find(".keyCol").text("");
+		} else {
+			$(element).prop("key", key).find(".keyCol").
+				text(chrome.i18n.getMessage("key" + key) || ("Unknown (" + key + ")"));
+		}
+	});
+}
+
+function generateControls(name, setting, parent) {
+	var keys = setting.keys;
+	
+	var map = {};
+	for (var i in Settings.keyMap) {
+		map[Settings.keyMap[i]] = i;
+	}
+	
+	var list = $.create("list");
+	for (var i = 0; i < keys.length; i++) {
+		list.append(
+			$.create("div").prop("name", keys[i]).prop("key", map[keys[i]]).
+				mousedown(function(e) {
+				
+				if (e.target.tagName == "BUTTON") {
+					return;
+				}
+				
+				$("list").children().removeAttr("selected");
+				$(this).attr("selected", "selected").find(".keyCol").
+					text(chrome.i18n.getMessage("waitingForKey"));
+				
+				$(document).off("keydown").off("mousedown").prop("activeRow", this).
+					keydown(function(e) {
+					
+					delete Settings.keyMap[this.activeRow.key];
+					Settings.keyMap[e.keyCode] = this.activeRow.name;
+					Settings.onchange();
+					this.activeRow.key = e.keyCode;
+					
+					$(this).mousedown();
+					
+					e.stopPropagation();
+					e.preventDefault();
+					return false;
+				}).mousedown(function() {
+					$("list").children().removeAttr("selected");
+					$(document).removeProp("activeRow").off("keydown").off("mousedown");
+					syncKeys();
+				});
+				
+				e.stopPropagation();
+				e.preventDefault();
+				return false;
+			}).append(
+				$.create("div").append(
+					$.create("div").addClass("nameCol").attr("i18n-content", keys[i] +
+						"Control")
+				).append(
+					$.create("div").addClass("keyCol").text(map[keys[i]] ? (chrome.i18n.getMessage("key" +
+						map[keys[i]]) || ("Unknown (" + map[keys[i]] + ")")) : "")
+				)
+			).append(
+				$.create("button").click(function() {
+					delete Settings.keyMap[this.parentNode.key];
+					Settings.onchange();
+					delete this.parentNode.key;
+					syncKeys();
+				})
+			)
+		);
+	}
+	parent.append(list);
+}
+
+function generateManage(name, setting, parent) {
 }

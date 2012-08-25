@@ -162,6 +162,110 @@
 		"description": "Option caption."
 	},
 	
+	"gameboyControlsCategory": {
+		"message": "Gameboy",
+		"description": "Option page section."
+	},
+	"upControl": {
+		"message": "Up",
+		"description": "Control name."
+	},
+	"downControl": {
+		"message": "Down",
+		"description": "Control name."
+	},
+	"leftControl": {
+		"message": "Left",
+		"description": "Control name."
+	},
+	"rightControl": {
+		"message": "Right",
+		"description": "Control name."
+	},
+	"aControl": {
+		"message": "A",
+		"description": "Control name."
+	},
+	"bControl": {
+		"message": "B",
+		"description": "Control name."
+	},
+	"selectControl": {
+		"message": "Select",
+		"description": "Control name."
+	},
+	"startControl": {
+		"message": "Start",
+		"description": "Control name."
+	},
+		
+	"stateControlsCategory": {
+		"message": "Save States",
+		"description": "Option page section."
+	},
+	"savestateControl": {
+		"message": "Save State",
+		"description": "Control name."
+	},
+	"loadstateControl": {
+		"message": "Load State",
+		"description": "Control name."
+	},
+	"slot1Control": {
+		"message": "Select Slot 1",
+		"description": "Control name."
+	},
+	"slot2Control": {
+		"message": "Select Slot 2",
+		"description": "Control name."
+	},
+	"slot3Control": {
+		"message": "Select Slot 3",
+		"description": "Control name."
+	},
+	"slot4Control": {
+		"message": "Select Slot 4",
+		"description": "Control name."
+	},
+	"slot5Control": {
+		"message": "Select Slot 5",
+		"description": "Control name."
+	},
+	"slot6Control": {
+		"message": "Select Slot 6",
+		"description": "Control name."
+	},
+	"slot7Control": {
+		"message": "Select Slot 7",
+		"description": "Control name."
+	},
+	"slot8Control": {
+		"message": "Select Slot 8",
+		"description": "Control name."
+	},
+	"slot9Control": {
+		"message": "Select Slot 9",
+		"description": "Control name."
+	},
+	"slot10Control": {
+		"message": "Select Slot 10",
+		"description": "Control name."
+	},
+	
+	"miscControlsCategory": {
+		"message": "Miscellaneous",
+		"description": "Option page section."
+	},
+	"fullscreenControl": {
+		"message": "Toggle Fullscreen",
+		"description": "Control name."
+	},
+	
+	"gamesCategory": {
+		"message": "Games",
+		"description": "Option page section."
+	},
+	
 	"javascriptCategory": {
 		"message": "Compatibility",
 		"description": "Options page section."
@@ -225,5 +329,411 @@
 	"MBC1OnlySetting": {
 		"message": "Treat bank-less (ROM) cartridges like single-bank (MBC1) ones",
 		"description": "Option caption."
+	},
+	
+	"waitingForKey": {
+		"message": "...",
+		"description": "Waiting for keypress prompt."
+	},
+	
+	"key8": {
+		"message": "Backspace",
+		"description": "A key name."
+	},
+	"key9": {
+		"message": "Tab",
+		"description": "A key name."
+	},
+	"key12": {
+		"message": "Numpad Center",
+		"description": "A key name."
+	},
+	"key13": {
+		"message": "Enter",
+		"description": "A key name."
+	},
+	"key16": {
+		"message": "Shift",
+		"description": "A key name."
+	},
+	"key17": {
+		"message": "Control",
+		"description": "A key name."
+	},
+	"key18": {
+		"message": "Alt",
+		"description": "A key name."
+	},
+	"key19": {
+		"message": "Pause",
+		"description": "A key name."
+	},
+	"key20": {
+		"message": "Caps Lock",
+		"description": "A key name."
+	},
+	"key27": {
+		"message": "Escape",
+		"description": "A key name."
+	},
+	"key32": {
+		"message": "Space",
+		"description": "A key name."
+	},
+	"key33": {
+		"message": "Page Up",
+		"description": "A key name."
+	},
+	"key34": {
+		"message": "Page Down",
+		"description": "A key name."
+	},
+	"key35": {
+		"message": "End",
+		"description": "A key name."
+	},
+	"key36": {
+		"message": "Home",
+		"description": "A key name."
+	},
+	"key37": {
+		"message": "Left Arrow",
+		"description": "A key name."
+	},
+	"key38": {
+		"message": "Up Arrow",
+		"description": "A key name."
+	},
+	"key39": {
+		"message": "Right Arrow",
+		"description": "A key name."
+	},
+	"key40": {
+		"message": "Down Arrow",
+		"description": "A key name."
+	},
+	"key45": {
+		"message": "Insert",
+		"description": "A key name."
+	},
+	"key46": {
+		"message": "Delete",
+		"description": "A key name."
+	},
+	"key48": {
+		"message": "0",
+		"description": "A key name."
+	},
+	"key49": {
+		"message": "1",
+		"description": "A key name."
+	},
+	"key50": {
+		"message": "2",
+		"description": "A key name."
+	},
+	"key51": {
+		"message": "3",
+		"description": "A key name."
+	},
+	"key52": {
+		"message": "4",
+		"description": "A key name."
+	},
+	"key53": {
+		"message": "5",
+		"description": "A key name."
+	},
+	"key54": {
+		"message": "6",
+		"description": "A key name."
+	},
+	"key55": {
+		"message": "7",
+		"description": "A key name."
+	},
+	"key56": {
+		"message": "8",
+		"description": "A key name."
+	},
+	"key57": {
+		"message": "9",
+		"description": "A key name."
+	},
+	"key65": {
+		"message": "A",
+		"description": "A key name."
+	},
+	"key66": {
+		"message": "B",
+		"description": "A key name."
+	},
+	"key67": {
+		"message": "C",
+		"description": "A key name."
+	},
+	"key68": {
+		"message": "D",
+		"description": "A key name."
+	},
+	"key69": {
+		"message": "E",
+		"description": "A key name."
+	},
+	"key70": {
+		"message": "F",
+		"description": "A key name."
+	},
+	"key71": {
+		"message": "G",
+		"description": "A key name."
+	},
+	"key72": {
+		"message": "H",
+		"description": "A key name."
+	},
+	"key73": {
+		"message": "I",
+		"description": "A key name."
+	},
+	"key74": {
+		"message": "J",
+		"description": "A key name."
+	},
+	"key75": {
+		"message": "K",
+		"description": "A key name."
+	},
+	"key76": {
+		"message": "L",
+		"description": "A key name."
+	},
+	"key77": {
+		"message": "M",
+		"description": "A key name."
+	},
+	"key78": {
+		"message": "N",
+		"description": "A key name."
+	},
+	"key79": {
+		"message": "O",
+		"description": "A key name."
+	},
+	"key80": {
+		"message": "P",
+		"description": "A key name."
+	},
+	"key81": {
+		"message": "Q",
+		"description": "A key name."
+	},
+	"key82": {
+		"message": "R",
+		"description": "A key name."
+	},
+	"key83": {
+		"message": "S",
+		"description": "A key name."
+	},
+	"key84": {
+		"message": "T",
+		"description": "A key name."
+	},
+	"key85": {
+		"message": "U",
+		"description": "A key name."
+	},
+	"key86": {
+		"message": "V",
+		"description": "A key name."
+	},
+	"key87": {
+		"message": "W",
+		"description": "A key name."
+	},
+	"key88": {
+		"message": "X",
+		"description": "A key name."
+	},
+	"key89": {
+		"message": "Y",
+		"description": "A key name."
+	},
+	"key90": {
+		"message": "Z",
+		"description": "A key name."
+	},
+	"key91": {
+		"message": "Left Windows",
+		"description": "A key name."
+	},
+	"key92": {
+		"message": "Right Windows",
+		"description": "A key name."
+	},
+	"key93": {
+		"message": "Apps",
+		"description": "A key name."
+	},
+	"key96": {
+		"message": "Numpad 0",
+		"description": "A key name."
+	},
+	"key97": {
+		"message": "Numpad 1",
+		"description": "A key name."
+	},
+	"key98": {
+		"message": "Numpad 2",
+		"description": "A key name."
+	},
+	"key99": {
+		"message": "Numpad 3",
+		"description": "A key name."
+	},
+	"key100": {
+		"message": "Numpad 4",
+		"description": "A key name."
+	},
+	"key101": {
+		"message": "Numpad 5",
+		"description": "A key name."
+	},
+	"key102": {
+		"message": "Numpad 6",
+		"description": "A key name."
+	},
+	"key103": {
+		"message": "Numpad 7",
+		"description": "A key name."
+	},
+	"key104": {
+		"message": "Numpad 8",
+		"description": "A key name."
+	},
+	"key105": {
+		"message": "Numpad 9",
+		"description": "A key name."
+	},
+	"key106": {
+		"message": "Numpad *",
+		"description": "A key name."
+	},
+	"key107": {
+		"message": "Numpad +",
+		"description": "A key name."
+	},
+	"key109": {
+		"message": "Numpad -",
+		"description": "A key name."
+	},
+	"key110": {
+		"message": "Numpad .",
+		"description": "A key name."
+	},
+	"key111": {
+		"message": "Numpad /",
+		"description": "A key name."
+	},
+	"key112": {
+		"message": "F1",
+		"description": "A key name."
+	},
+	"key113": {
+		"message": "F2",
+		"description": "A key name."
+	},
+	"key114": {
+		"message": "F3",
+		"description": "A key name."
+	},
+	"key115": {
+		"message": "F4",
+		"description": "A key name."
+	},
+	"key116": {
+		"message": "F5",
+		"description": "A key name."
+	},
+	"key117": {
+		"message": "F6",
+		"description": "A key name."
+	},
+	"key118": {
+		"message": "F7",
+		"description": "A key name."
+	},
+	"key119": {
+		"message": "F8",
+		"description": "A key name."
+	},
+	"key120": {
+		"message": "F9",
+		"description": "A key name."
+	},
+	"key121": {
+		"message": "F10",
+		"description": "A key name."
+	},
+	"key122": {
+		"message": "F11",
+		"description": "A key name."
+	},
+	"key123": {
+		"message": "F12",
+		"description": "A key name."
+	},
+	"key144": {
+		"message": "Num Lock",
+		"description": "A key name."
+	},
+	"key145": {
+		"message": "Scroll Lock",
+		"description": "A key name."
+	},
+	"key186": {
+		"message": ";",
+		"description": "A key name."
+	},
+	"key187": {
+		"message": "=",
+		"description": "A key name."
+	},
+	"key188": {
+		"message": ",",
+		"description": "A key name."
+	},
+	"key189": {
+		"message": "-",
+		"description": "A key name."
+	},
+	"key190": {
+		"message": ".",
+		"description": "A key name."
+	},
+	"key191": {
+		"message": "/",
+		"description": "A key name."
+	},
+	"key192": {
+		"message": "`",
+		"description": "A key name."
+	},
+	"key219": {
+		"message": "[",
+		"description": "A key name."
+	},
+	"key220": {
+		"message": "\\",
+		"description": "A key name."
+	},
+	"key221": {
+		"message": "]",
+		"description": "A key name."
+	},
+	"key222": {
+		"message": "'",
+		"description": "A key name."
 	}
 }
