@@ -229,6 +229,19 @@ $(document).ready(function() {
 	sizeCanvas();
 
 	setVolume({target: {value: Settings.volume}});
+	
+	var query = location.search;
+	if (query[0] == "?") {
+		query = query.substr(1).split("&");
+		var kvp = {};
+		for (var i = 0; i < query.length; i++) {
+			var x = query[i].split("=");
+			kvp[x[0]] = x[1];
+		}
+		if (kvp.file) {
+			loadROM(decodeURI(kvp.file));
+		}
+	}
 });
 
 function closeDropDown(e) {

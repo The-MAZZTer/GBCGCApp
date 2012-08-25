@@ -13,8 +13,8 @@ TODO:
 - Option to have canvas scaling only scale in increments of 100%
 	- Or [not] scale to fit.
 	- Preserve aspect ratio toggle.
-- Look into registering this App as a handler for .gb/.gbc files on Chrome OS.
-	- Different default fullscreen key bind to reflect Chrome OS keyboard layout.
+- Look into registering this App as a handler for .gb/.gbc files on Chrome OS. (Done, test)
+	- Different default fullscreen key bind to reflect Chrome OS keyboard layout. (Done, test)
 - Add support for gamepad input.
 
 Original README follows.

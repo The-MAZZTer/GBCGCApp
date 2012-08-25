@@ -96,6 +96,32 @@ $(document).ready(function() {
 
 Settings = {
 	init: function() {
+		if (/CrOS/.test(navigator.userAgent)) {
+			this.keyMap = {
+				39: "right",
+				37: "left",
+				38: "up",
+				40: "down",
+				88: "a",
+				90: "b",
+				9: "select",
+				13: "start",
+				113: "savestate",
+				112: "loadstate",
+				115: "fullscreen",
+				49: "slot1",
+				50: "slot2",
+				51: "slot3",
+				52: "slot4",
+				53: "slot5",
+				54: "slot6",
+				55: "slot7",
+				56: "slot8",
+				57: "slot9",
+				48: "slot10"
+			}
+		}
+	
 		var s = localStorage.settings;
 		if (s) {
 			s = JSON.parse(s);

@@ -16,6 +16,18 @@
 			"local_path": "index.html"
 		}
 	},
+  "background": {
+    "scripts": ["scripts/background.js"],
+    "persistent": false
+  },
+	"file_browser_handlers": [{
+		"id": "open",
+		"default_title": "__MSG_fileBrowserCaption__",
+		"file_filters": [
+			"filesystem:*.gb",
+			"filesystem:*.gbc"
+		]
+	}],
   "options_page": "options.html",
-	"permissions": ["unlimitedStorage"]
+	"permissions": ["unlimitedStorage", "fileBrowserHandler"]
 }

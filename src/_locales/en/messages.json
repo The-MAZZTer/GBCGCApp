@@ -735,5 +735,10 @@
 	"key222": {
 		"message": "'",
 		"description": "A key name."
+	},
+	
+	"fileBrowserCaption": {
+		"message": "Run",
+		"description": "Caption of the file browser handler button on Chrome OS."
 	}
 }
