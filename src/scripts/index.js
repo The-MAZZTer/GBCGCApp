@@ -425,6 +425,8 @@ function autoSaveLoaded() {
 			$("#loadstate").addClass("disabled");
 		}
 	})
+	
+	db.writeGame();
 }
 
 function openROM(file) {

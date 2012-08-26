@@ -340,6 +340,7 @@ function generateControls(name, setting, parent) {
 }
 
 function generateManage(name, setting, parent) {
+	
 }
 
 function syncSettings() {

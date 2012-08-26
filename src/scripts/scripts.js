@@ -409,5 +409,31 @@ db = {
 			slot: n,
 			state: gameboy.saveState()
 		});
+	},
+	getAll: function(callback) {
+		var games = {};
+		var self = this;
+		this.handle.transaction("games", IDBTransaction.READ_WRITE).
+			objectStore("games").openCursor().onsuccess = function(e) {
+			
+			var x = e.target.result;
+			if (x) {
+				x.value.states = {};
+				games[x.value.id] = x.value;
+				x.continue();
+			} else {
+				self.handle.transaction("states", IDBTransaction.READ_WRITE).
+					objectStore("states").openCursor().onsuccess = function(e) {
+					
+					var x = e.target.result;
+					if (x) {
+						var states = games[x.value.game].states[x.value.slot] = x.value.state;
+						x.continue();
+					} else {
+						callback(games);
+					}
+				}
+			}
+		}
 	}
 }
