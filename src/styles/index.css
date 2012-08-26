@@ -127,6 +127,10 @@ input, label {
 #about {
 	background-image: url("../images/information.png");
 }
+#close {
+	float: right;
+	background-image: url("../images/cross.png");
+}
 
 #selectstate_dropdown > button {
 	background-image: url("../images/picture_empty.png");

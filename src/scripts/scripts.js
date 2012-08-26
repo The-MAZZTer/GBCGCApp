@@ -243,61 +243,35 @@ Settings = {
 }
 Settings.init();
 
-SaveStates = {
-	exists: function(n) {
-		return GameBoyEmulatorInitialized() && Boolean(localStorage["FREEZE_" +
-			gameboy.name + "_" + n]);
-	},
-	save: function(n) {
-		n = isNaN(n) ? window.slotUsed : n;
-		if (GameBoyEmulatorInitialized()) {
-			localStorage["FREEZE_" + gameboy.name + "_" + n] =
-				JSON.stringify(gameboy.saveState());
-			
-			$("#selectstate_dropdown > button:nth-child(" + n +
-				")").addClass("slotused");
-			$("#selectstate").addClass("slotused");
-			$("#loadstate").removeClass("disabled");
-		}
-	},
-	load: function(n) {
-		n = isNaN(n) ? window.slotUsed : n;
-		if (GameBoyEmulatorInitialized() && SaveStates.exists(n)) {
-			var filename = "FREEZE_" + gameboy.name + "_" + n;
-			clearLastEmulation();
-			gameboy = new GameBoyCore($("canvas")[0], "");
-			gameboy.returnFromState(JSON.parse(localStorage[filename]));
-			gameboy.setSpeed($("#speed_text").val());
-			$("#resume").click();
-		}
-	}
-}
-
 SaveMemory = {
-	save: function() {
-		if (GameBoyEmulatorInitialized()) {
-			if (gameboy.cBATT) {
-				var sram = gameboy.saveSRAMState();
-				if (sram.length > 0) {
-					var s = "";
-					for (var i = 0; i < s.length; i++) {
-						s += String.fromCharCode(sram[i]);
-					}
-					localStorage["SRAM_" + gameboy.name] = s;
-				} else {
-					delete localStorage["SRAM_" + gameboy.name];
+	get: {
+		SRAM: function() {
+			if (!GameBoyEmulatorInitialized() || !gameboy.cBATT) {
+				return null;
+			}
+			
+			var sram = gameboy.saveSRAMState();
+			if (sram.length > 0) {
+				var s = "";
+				for (var i = 0; i < s.length; i++) {
+					s += String.fromCharCode(sram[i]);
 				}
+				return s;
+			} else {
+				return null;
 			}
-			if (gameboy.cTIMER) {
-				localStorage["RTC_" + gameboy.name] =
-					JSON.stringify(gameboy.saveRTCState());
+		},
+		RTC: function() {
+			if (!GameBoyEmulatorInitialized() || !gameboy.cTIMER) {
+				return null;
 			}
+			
+			return gameboy.saveRTCState();
 		}
 	},
-	load: {
-		SRAM: function(filename) {
-			var s = localStorage["SRAM_" + filename];
-			if (s) {
+	decode: {
+		SRAM: function(s) {
+			if (!s) {
 				return [];
 			}
 			var x = new Array(s.length);
@@ -306,12 +280,134 @@ SaveMemory = {
 			}
 			return x;
 		},
-		RTC: function(filename) {
-			var x = localStorage["RTC_" + filename];
+		RTC: function(x) {
 			if (!x) {
 				return [];
 			}
-			return JSON.parse(x);
+			return x;
 		}
+	}
+}
+
+window.indexedDB = window.indexedDB || window.webkitIndexedDB;
+window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
+db = {
+	init: function() {
+		var self = this;
+		indexedDB.open("gbcgc").onsuccess = function(e) {
+			var h = self.handle = e.target.result;
+			if (h.version != self.version) {
+				h.setVersion(self.version).onsuccess = function(e) {
+					self.handle.createObjectStore("games", { keyPath: "id" });
+					self.handle.createObjectStore("states", { keyPath: "id" });
+					
+					self.doneInit();
+				}
+			} else {
+				self.doneInit();
+			}
+		}
+	},
+	doneInit: function() {},
+	dispose: function() {
+		if (this.handle) {
+			this.handle.close();
+			delete this.handle;
+		}
+	},
+	reset: function() {
+		this.dispose();
+		indexedDB.deleteDatabase("gbcgc");
+	},
+	handle: null,
+	version: 1,
+	tableExists: function(name) {
+		var tables = this.handle.objectStoreNames;
+		for (var i = 0; i < tables.length; i++) {
+			if (tables[i] === name) {
+				return true;
+			}
+		}
+		return false;
+	},
+	getGBColor: function() {
+		if (!GameBoyEmulatorInitialized()) {
+			return false;
+		}
+		var colorbyte = gameboy.ROM[0x143];
+		if (colorbyte === 0x80) {
+			return true;
+		}
+		if (colorbyte === 0x32 && this.name + this.gameCode == "Game and Watch ") {
+			return true;
+		}
+		return gameboy.cGBC;
+	},
+	writeGamesRecord: function(data) {
+		this.handle.transaction("games", IDBTransaction.READ_WRITE).
+			objectStore("games").put(data);
+	},
+	writeGame: function() {
+		if (!GameBoyEmulatorInitialized()) {
+			return false;
+		}
+		
+		this.writeGamesRecord({
+			id: gameboy.name,
+			system: Number(this.getGBColor()),
+			SRAM: SaveMemory.get.SRAM(),
+			RTC: SaveMemory.get.RTC()
+		});
+	},
+	readGame: function(name, callback) {
+		this.handle.transaction("games", IDBTransaction.READ_ONLY).
+			objectStore("games").get(name).onsuccess = function(e) {
+			
+			var res = e.target.result;
+			if (!res) {
+				callback([], []);
+			} else {
+				callback(SaveMemory.decode.SRAM(res.SRAM),
+					SaveMemory.decode.RTC(res.RTC));
+			}
+		}
+	},
+	saveStateLoad: function(n, callback) {
+		if (!GameBoyEmulatorInitialized()) {
+			callback(null);
+			return;
+		}
+		
+		n = isNaN(n) ? window.slotUsed : n;
+		
+		this.handle.transaction("states", IDBTransaction.READ_ONLY).
+			objectStore("states").get(n + "|" + gameboy.name).onsuccess =
+			function(e) {
+			
+			var res = e.target.result;
+			if (!res) {
+				callback(null);
+			} else {
+				callback(res.state, res.slot);
+			}
+		}
+	},
+	writeStateRecord: function(data) {
+		data.id = data.slot + "|" + data.game;
+		this.handle.transaction("states", IDBTransaction.READ_WRITE).
+			objectStore("states").put(data);
+	},
+	saveStateSave: function(n) {
+		if (!GameBoyEmulatorInitialized()) {
+			return;
+		}
+		
+		n = isNaN(n) ? window.slotUsed : n;
+		
+		this.writeStateRecord({
+			game: gameboy.name,
+			slot: n,
+			state: gameboy.saveState()
+		});
 	}
 }

@@ -1,3 +1,5 @@
+db.init();
+
 layout = {
 	"options": {
 		"gameboy": {

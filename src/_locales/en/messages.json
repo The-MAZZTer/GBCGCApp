@@ -47,6 +47,11 @@
 		"message": "About",
 		"description": "Caption of toolbar button."
 	},
+	"close": {
+		"message": "Close",
+		"description": "Caption of toolbar button."
+	},
+
 	"options": {
 		"message": "Options",
 		"description": "Caption of toolbar button."
@@ -740,5 +745,10 @@
 	"changes": {
 		"message": "Changes will take effect the next time you open Gameboy Color Game Center.",
 		"description": "Warning about changes not taking effect immediately."
+	},
+	
+	"unableToAutoSave": {
+		"message": "Due to Chrome security restrictions I won't be able to save your data, cancel and close from the toolbar to save.",
+		"description": "Warning when the user closes the page and we can't save the state."
 	}
 }
