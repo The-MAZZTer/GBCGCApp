@@ -33,10 +33,20 @@ $(document).ready(function() {
 			return;
 		}
 		
+		var sram = gameboy.saveSRAMState();
+		if (sram.length > 0) {
+			var s = "";
+			for (var i = 0; i < s.length; i++) {
+				s += String.fromCharCode(sram[i]);
+			}
+			sram = s;
+		} else {
+			sram = null;
+		}
 		var pendingSave = JSON.stringify({			
 			id: gameboy.name,
 			system: Number(db.getGBColor()),
-			SRAM: gameboy.saveSRAMState(),
+			SRAM: sram,
 			RTC: gameboy.saveRTCState()
 		});
 		
@@ -58,11 +68,21 @@ $(document).ready(function() {
 			return;
 		}
 		
+		var sram = gameboy.saveSRAMState();
+		if (sram.length > 0) {
+			var s = "";
+			for (var i = 0; i < s.length; i++) {
+				s += String.fromCharCode(sram[i]);
+			}
+			sram = s;
+		} else {
+			sram = null;
+		}
 		try {
 			localStorage.pendingSave = JSON.stringify({			
 				id: gameboy.name,
 				system: Number(db.getGBColor()),
-				SRAM: gameboy.saveSRAMState(),
+				SRAM: sram,
 				RTC: gameboy.saveRTCState()
 			});
 			if (Settings.autoSaveState) {
@@ -274,19 +294,9 @@ $(document).ready(function() {
 
 	setVolume({target: {value: Settings.volume}});
 	
-	db.doneInit = function() {
+	db.ready = function() {
 		if (localStorage.pendingSave) {
-			var x = JSON.parse(localStorage.pendingSave);
-			if (x.SRAM.length > 0) {
-				var s = "";
-				for (var i = 0; i < s.length; i++) {
-					s += String.fromCharCode(sram[i]);
-				}
-				x.SRAM = s;
-			} else {
-				x.SRAM = null;
-			}
-			db.writeGamesRecord(x);
+			db.writeGamesRecord(JSON.parse(localStorage.pendingSave));
 			delete localStorage.pendingSave;
 		}
 		

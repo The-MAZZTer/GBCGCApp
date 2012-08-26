@@ -301,21 +301,21 @@ db = {
 					self.handle.createObjectStore("games", { keyPath: "id" });
 					self.handle.createObjectStore("states", { keyPath: "id" });
 					
-					self.doneInit();
+					self.ready();
 				}
 			} else {
-				self.doneInit();
+				self.ready();
 			}
 		}
 	},
-	doneInit: function() {},
+	ready: function() {},
 	dispose: function() {
 		if (this.handle) {
 			this.handle.close();
 			delete this.handle;
 		}
 	},
-	reset: function() {
+	destroy: function() {
 		this.dispose();
 		indexedDB.deleteDatabase("gbcgc");
 	},
@@ -427,7 +427,7 @@ db = {
 					
 					var x = e.target.result;
 					if (x) {
-						var states = games[x.value.game].states[x.value.slot] = x.value.state;
+						var states = games[x.value.game].states[x.value.slot] = true;
 						x.continue();
 					} else {
 						callback(games);
