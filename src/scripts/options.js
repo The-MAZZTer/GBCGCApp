@@ -282,7 +282,7 @@ function generateControls(name, setting, parent) {
 		map[Settings.keyMap[i]] = i;
 	}
 	
-	var list = $.create("list");
+	var list = $.create("list").addClass("controls");
 	for (var i = 0; i < keys.length; i++) {
 		list.append(
 			$.create("div").prop("name", keys[i]).prop("key", map[keys[i]]).
@@ -340,7 +340,94 @@ function generateControls(name, setting, parent) {
 }
 
 function generateManage(name, setting, parent) {
-	
+	var container;
+	parent.append(
+		container = $.create("div").addClass("manage").append(
+			$.create("button").attr("i18n-content", "clearAll").click(function() {
+				if (confirm(chrome.i18n.getMessage("areYouSure"))) {
+					db.clear();
+					$(".manage > div").remove();
+				}
+			})
+		)
+	);
+	db.readyHandlers.push(function() {
+		this.eachGame(function(data) {
+			if (!data) {
+				return;
+			}
+			
+			var list;
+			container.append(
+				$.create("div").append(
+					$.create("h3").addClass("system" + data.system).text(data.id)
+				).append(
+					list = $.create("list")
+				)
+			);
+			
+			if ((data.SRAM && data.SRAM.length) || (data.RTC && data.RTC.length)) {
+				list.append(
+					$.create("div").addClass("savedGame").prop("name", data.id).
+						mousedown(function(e) {
+						
+						if (e.target.tagName == "BUTTON") {
+							return;
+						}
+						
+						$("list").children().removeAttr("selected");
+						$(this).attr("selected", "selected");
+					}).append(
+						$.create("div").text(chrome.i18n.getMessage("savedGame"))
+					).append(
+						$.create("button").click(function() {
+							
+						})
+					)
+				);
+			}
+			db.eachState(data.id, function(data) {
+				if (!data) {
+					return;
+				}
+				
+				var canvas, name;
+				list.append(
+					$.create("div").prop("name", data.game).prop("slot", data.slot).
+						mousedown(function(e) {
+						
+						if (e.target.tagName == "BUTTON") {
+							return;
+						}
+						
+						$("list").children().removeAttr("selected");
+						$(this).attr("selected", "selected");
+					}).append(
+						$.create("div").append(
+							$.create("div").addClass("canvasContainer").append(
+								canvas = $.create("canvas")
+							)
+						).append(
+							name = $.create("span")
+						)
+					).append(
+						$.create("button").click(function() {
+							
+						})
+					)
+				);
+				if (data.slot == 0) {
+					name.text(chrome.i18n.getMessage("slot0Description"));
+				} else {
+					name.text(chrome.i18n.getMessage("slotDescription", [data.slot]));
+				}
+				
+				canvas[0].width = 160;
+				canvas[0].height = 144;
+				renderFrameBuffer(data.state[71], canvas[0]);
+			});
+		});
+	});
 }
 
 function syncSettings() {
@@ -369,4 +456,17 @@ function syncKeys() {
 				text(chrome.i18n.getMessage("key" + key) || ("Unknown (" + key + ")"));
 		}
 	});
+}
+
+function renderFrameBuffer(buffer, canvas) {
+	var context = canvas.getContext("2d");
+	var imageData = context.createImageData(160, 144);
+	for (var from = 0, to = 0; from < 160 * 144; from++) {
+		var x = buffer[from];
+		imageData.data[to++] = (x >> 16) & 0xFF;
+		imageData.data[to++] = (x >> 8) & 0xFF;
+		imageData.data[to++] = x & 0xFF;
+		imageData.data[to++] = 0xFF;
+	}
+	context.putImageData(imageData, 0, 0);
 }

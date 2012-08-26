@@ -253,7 +253,7 @@ SaveMemory = {
 			var sram = gameboy.saveSRAMState();
 			if (sram.length > 0) {
 				var s = "";
-				for (var i = 0; i < s.length; i++) {
+				for (var i = 0; i < sram.length; i++) {
 					s += String.fromCharCode(sram[i]);
 				}
 				return s;
@@ -291,6 +291,7 @@ SaveMemory = {
 
 window.indexedDB = window.indexedDB || window.webkitIndexedDB;
 window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
+window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange;
 db = {
 	init: function() {
 		var self = this;
@@ -299,7 +300,8 @@ db = {
 			if (h.version != self.version) {
 				h.setVersion(self.version).onsuccess = function(e) {
 					self.handle.createObjectStore("games", { keyPath: "id" });
-					self.handle.createObjectStore("states", { keyPath: "id" });
+					self.handle.createObjectStore("states", { keyPath: "id" }).
+						createIndex("game", "game", { unique: false })
 					
 					self.ready();
 				}
@@ -308,12 +310,36 @@ db = {
 			}
 		}
 	},
-	ready: function() {},
+	ready: function() {
+		for (var i = 0; i < this.readyHandlers.length; i++) {
+			this.readyHandlers[i].apply(this, arguments);
+		}
+		delete this.readyHandlers;
+	},
+	readyHandlers: [function() {
+		if (localStorage.pendingSave) {
+			this.writeGamesRecord(JSON.parse(localStorage.pendingSave));
+			delete localStorage.pendingSave;
+		}
+		
+		if(localStorage.pendingSaveState) {
+			var x = JSON.parse(localStorage.pendingSaveState);
+			x.slot = 0;
+			this.writeStateRecord(x);
+			delete localStorage.pendingSaveState;
+		}
+	}],
 	dispose: function() {
 		if (this.handle) {
 			this.handle.close();
 			delete this.handle;
 		}
+	},
+	clear: function() {
+		this.handle.transaction("games", IDBTransaction.READ_WRITE).
+			objectStore("games").clear();
+		this.handle.transaction("states", IDBTransaction.READ_WRITE).
+			objectStore("states").clear();
 	},
 	destroy: function() {
 		this.dispose();
@@ -372,6 +398,18 @@ db = {
 			}
 		}
 	},
+	readStateRecord: function(game, n, callback) {
+		this.handle.transaction("states", IDBTransaction.READ_ONLY).
+			objectStore("states").get(n + "|" + game).onsuccess = function(e) {
+			
+			var res = e.target.result;
+			if (!res) {
+				callback(null);
+			} else {
+				callback(res);
+			}
+		}
+	},
 	saveStateLoad: function(n, callback) {
 		if (!GameBoyEmulatorInitialized()) {
 			callback(null);
@@ -380,17 +418,7 @@ db = {
 		
 		n = isNaN(n) ? window.slotUsed : n;
 		
-		this.handle.transaction("states", IDBTransaction.READ_ONLY).
-			objectStore("states").get(n + "|" + gameboy.name).onsuccess =
-			function(e) {
-			
-			var res = e.target.result;
-			if (!res) {
-				callback(null);
-			} else {
-				callback(res.state, res.slot);
-			}
-		}
+		this.readStateRecord(gameboy.name, n, callback);
 	},
 	writeStateRecord: function(data) {
 		data.id = data.slot + "|" + data.game;
@@ -410,29 +438,30 @@ db = {
 			state: gameboy.saveState()
 		});
 	},
-	getAll: function(callback) {
-		var games = {};
-		var self = this;
+	eachGame: function(callback) {
 		this.handle.transaction("games", IDBTransaction.READ_WRITE).
 			objectStore("games").openCursor().onsuccess = function(e) {
 			
 			var x = e.target.result;
 			if (x) {
-				x.value.states = {};
-				games[x.value.id] = x.value;
+				callback(x.value);
 				x.continue();
 			} else {
-				self.handle.transaction("states", IDBTransaction.READ_WRITE).
-					objectStore("states").openCursor().onsuccess = function(e) {
-					
-					var x = e.target.result;
-					if (x) {
-						var states = games[x.value.game].states[x.value.slot] = true;
-						x.continue();
-					} else {
-						callback(games);
-					}
-				}
+				callback();
+			}
+		}
+	},
+	eachState: function(game, callback) {
+		this.handle.transaction("states", IDBTransaction.READ_WRITE).
+			objectStore("states").index("game").openCursor(IDBKeyRange.only(game)).
+			onsuccess = function(e) {
+			
+			var x = e.target.result;
+			if (x) {
+				callback(x.value);
+				x.continue();
+			} else {
+				callback();
 			}
 		}
 	}

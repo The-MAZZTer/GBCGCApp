@@ -43,55 +43,37 @@ $(document).ready(function() {
 		} else {
 			sram = null;
 		}
-		var pendingSave = JSON.stringify({			
+		window.pendingSave = JSON.stringify({			
 			id: gameboy.name,
 			system: Number(db.getGBColor()),
 			SRAM: sram,
 			RTC: gameboy.saveRTCState()
 		});
 		
-		var pendingSaveState;
+		delete window.pendingSaveState;
 		if (Settings.autoSaveState) {
-			pendingSaveState = JSON.stringify({
+			window.pendingSaveState = JSON.stringify({
 				game: gameboy.name,
 				state: gameboy.saveState()
 			});
 		}
 		
-		if (pendingSave.length + pendingSaveState.length > 2600000) {
+		if (window.pendingSave.length + window.pendingSaveState.length > 2600000) {
 			autoSave();
 		
 			return chrome.i18n.getMessage("unableToAutoSave");
 		}
 	}).unload(function() {
-		if (!GameBoyEmulatorInitialized()) {
-			return;
+		if (GameBoyEmulatorInitialized()) {
+			try {
+				localStorage.pendingSave = window.pendingSave;
+				if (Settings.autoSaveState) {
+					localStorage.pendingSaveState = window.pendingSaveState;
+				}
+			} catch(e) {}
 		}
-		
-		var sram = gameboy.saveSRAMState();
-		if (sram.length > 0) {
-			var s = "";
-			for (var i = 0; i < s.length; i++) {
-				s += String.fromCharCode(sram[i]);
-			}
-			sram = s;
-		} else {
-			sram = null;
-		}
-		try {
-			localStorage.pendingSave = JSON.stringify({			
-				id: gameboy.name,
-				system: Number(db.getGBColor()),
-				SRAM: sram,
-				RTC: gameboy.saveRTCState()
-			});
-			if (Settings.autoSaveState) {
-				localStorage.pendingSaveState = JSON.stringify({
-					game: gameboy.name,
-					state: gameboy.saveState()
-				});
-			}
-		} catch(e) {}
+		delete window.pendingSave;
+		delete window.pendingSaveState;
 	}).on("deviceorientation", GameBoyGyroSignalHandler).focus(function() {
 		window.isFocused = true;
 	}).blur(function() {
@@ -294,19 +276,7 @@ $(document).ready(function() {
 
 	setVolume({target: {value: Settings.volume}});
 	
-	db.ready = function() {
-		if (localStorage.pendingSave) {
-			db.writeGamesRecord(JSON.parse(localStorage.pendingSave));
-			delete localStorage.pendingSave;
-		}
-		
-		if(localStorage.pendingSaveState) {
-			var x = JSON.parse(localStorage.pendingSaveState);
-			x.slot = 0;
-			db.writeStateRecord(x);
-			delete localStorage.pendingSaveState;
-		}
-		
+	db.readyHandlers.push(function() {
 		var query = location.search;
 		if (query[0] == "?") {
 			query = query.substr(1).split("&");
@@ -319,7 +289,7 @@ $(document).ready(function() {
 				loadROM(decodeURI(kvp.file));
 			}
 		}
-	}
+	});
 	db.init();
 });
 
@@ -362,15 +332,18 @@ function cout(message, colorIndex) {
 	console[["log", "warn", "error"][colorIndex || 0]](message);
 }
 
-function closeROM() {
-	clearLastEmulation();
-	if (reset) {
-		db.writeGame();
-	} else {
-		autoSave();	//If we are about to load a new game, then save the last one...
+function closeROM(reset) {
+	if (GameBoyEmulatorInitialized()) {
+		if (reset === true) {
+			db.writeGame();
+		} else {
+			autoSave();	//If we are about to load a new game, then save the last one...
+		}
+		clearLastEmulation();
 	}
 
-	$("#pause, #resume, #loadstate, #savestate, #close").addClass("disabled");
+	$("#pause, #resume, #reset, #loadstate, #savestate, #close").
+		addClass("disabled");
 	$("#resume").addClass("hidden");
 	$("#pause").removeClass("hidden");
 	$("#selectstate_dropdown > button, #selectstate").removeClass("slotused");
@@ -383,7 +356,7 @@ function closeROM() {
 }
 
 function loadROM(data, reset) {
-	closeROM();
+	closeROM(reset);
 
 	$("#toolbar button").removeClass("disabled");
 	$("#resume").addClass("hidden");
@@ -420,14 +393,13 @@ function autoSaveLoaded() {
 		each(function(index, element) {
 		
 		SaveStates.exists(index + 1, function(data, n) {
-			if (data) {
-				$("#selectstate_dropdown > button:nth-child(" + n + ")").
-					addClass("slotused");
+			if (data && data.state) {
+				$($("#selectstate_dropdown > button")[n - 1]).addClass("slotused");
 			}
 		});
 	});
 	SaveStates.exists(window.slotUsed, function(data) {
-		if (data) {
+		if (data && data.state) {
 			$("#selectstate").addClass("slotused");
 			$("#loadstate").removeClass("disabled");
 		} else {
@@ -451,8 +423,8 @@ function sizeCanvas() {
 	var container = $("#canvasContainer");
 	var canvas = container.children("canvas");
 	
-	var nativeWidth = 394;
-	var nativeHeight = 304;	
+	var nativeWidth = 160;
+	var nativeHeight = 140;	
 	
 	if (document.isFullScreen || document.webkitIsFullScreen ||
 		document.fullScreenElement || document.webkitFullScreenElement) {
@@ -559,13 +531,12 @@ function closeAbout() {
 
 function switchSlot(slot) {
 	var index = parseInt(slot.substr(4), 10);
-	$("#selectstate_dropdown > button:nth-child(" + window.slotUsed + ")").
+	$($("#selectstate_dropdown > button")[window.slotUsed - 1]).
 		removeClass("selected");
-	$("#selectstate_dropdown > button:nth-child(" + index + ")").
-		addClass("selected");
+	$($("#selectstate_dropdown > button")[index - 1]).addClass("selected");
 	$("#selectstate").text(index);
 	SaveStates.exists(index, function(data) {
-		if (data) {
+		if (data && data.state) {
 			$("#selectstate").addClass("slotused");
 			$("#loadstate").removeClass("disabled");
 		} else {
@@ -609,6 +580,8 @@ SaveStates = {
 	exists: function(n, callback) {
 		if (n && n.substr) {
 			n = parseInt(n.substr(4), 10);
+		} else if (isNaN(n)) {
+			n = window.slotUsed;
 		}
 
 		db.saveStateLoad(n, callback);
@@ -616,13 +589,14 @@ SaveStates = {
 	save: function(n) {
 		if (n && n.substr) {
 			n = parseInt(n.substr(4), 10);
+		} else if (isNaN(n)) {
+			n = window.slotUsed;
 		}
 	
 		db.saveStateSave(n);
 	
 		if (n && GameBoyEmulatorInitialized()) {
-			$("#selectstate_dropdown > button:nth-child(" + n +
-				")").addClass("slotused");
+			$($("#selectstate_dropdown > button")[n - 1]).addClass("slotused");
 			$("#selectstate").addClass("slotused");
 			$("#loadstate").removeClass("disabled");
 		}
@@ -630,21 +604,33 @@ SaveStates = {
 	load: function(n, callback) {
 		if (n && n.substr) {
 			n = parseInt(n.substr(4), 10);
+		} else if (isNaN(n)) {
+			n = window.slotUsed;
 		}
 
 		db.saveStateLoad(n, function(data) {
 			if (!data) {
-				callback(null);
+				if (callback) {
+					callback(null);
+				}
 				return;
 			}
 			
+			var ROM = gameboy.getROMImage();
+			var SRAM = gameboy.saveSRAMState();
+			var RTC = gameboy.saveRTCState();
 			clearLastEmulation();
-			gameboy = new GameBoyCore($("canvas")[0], "");
-			gameboy.returnFromState(data);
+			gameboy = new GameBoyCore($("canvas")[0], ROM);
+			gameboy.openMBC = function() { return SRAM };
+			gameboy.openRTC = function() { return RTC };
+			gameboy.start();
+			gameboy.returnFromState(data.state);
 			gameboy.setSpeed($("#speed_text").val());
 			$("#resume").click();
 			
-			callback(data);
+			if (callback) {
+				callback(data);
+			}
 		});
 	}
 }

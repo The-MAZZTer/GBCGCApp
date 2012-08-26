@@ -274,6 +274,28 @@
 		"message": "Games",
 		"description": "Option page section."
 	},
+	"clearAll": {
+		"message": "Delete All",
+		"description": "Option button caption."
+	},
+	"savedGame": {
+		"message": "Game cartridge data",
+		"description": "Caption to indicate a save is a saved game."
+	},
+	"slot0Description": {
+		"message": "Auto-save state",
+		"description": "Caption to indicate a save is an auto-save state."
+	},
+	"slotDescription": {
+		"message": "Save state $number$",
+		"description": "Caption to indicate a save is a save state.",
+		"placeholders": {
+			"number": {
+				"content": "$1",
+				"example": "1"
+			}
+		}
+	},
 	
 	"javascriptCategory": {
 		"message": "Compatibility",

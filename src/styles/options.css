@@ -60,7 +60,7 @@ body {
 #content > div:not(.selected) {
 	display: none;
 }
-#content h1, #content h2 {
+#content h1, #content h2, #content h3 {
 	-webkit-user-select: none;
 	font-weight: normal;
 	line-height: 1;
@@ -99,7 +99,7 @@ body {
 	vertical-align: middle;
 	width: 13px;
 }
-#content input[type=checkbox], #content button {
+#content input[type=checkbox], #content .button button, #content .manage > button {
 	-webkit-appearance: none;
 	-webkit-user-select: none;
 	background-image: -webkit-linear-gradient(#EDEDED, #EDEDED 38%, #DEDEDE);
@@ -111,13 +111,13 @@ body {
 	margin: 0 1px 0 0;
 	text-shadow: 0 1px 0 #F0F0F0;
 }
-#content label:hover input[type=checkbox], #content button:hover {
+#content label:hover input[type=checkbox], #content .button button:hover, #content .manage > button:hover {
 	background-image: -webkit-linear-gradient(#F0F0F0, #F0F0F0 38%, #E0E0E0);
 	border-color: rgba(0, 0, 0, 0.3);
 	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.95);
 	color: black;
 }
-#content label:active input[type=checkbox], #content button:active {
+#content label:active input[type=checkbox], #content .button button:active, #content .manage > button:active {
 	background-image: -webkit-linear-gradient(#E7E7E7, #E7E7E7 38%, #D7D7D7);
 	box-shadow: none;
 	text-shadow: none;
@@ -139,14 +139,14 @@ body {
 #content .button {
 	margin: 0.65em 0;
 }
-#content .button button {
+#content .button button, #content .manage > button {
 	-webkit-padding-end: 10px;
 	-webkit-padding-start: 10px;
 	min-height: 2em;
 	min-width: 4em;
 	padding-bottom: 1px;
 }
-#content .button button:focus {
+#content .button button:focus, #content .manage > button:focus {
 	-webkit-transition: border-color 200ms;
 	border-color: #4D90FE;
 	outline: none;
@@ -191,6 +191,8 @@ body {
 	overflow: auto;
 	position: relative;
 	color: #333;
+}
+#content list.controls {
 	width: 225px;
 }
 #content list > * {
@@ -261,7 +263,7 @@ body {
 #content list button:active {
 	background-image: -webkit-image-set( url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAARElEQVQoz2P4z4AfMlBLAYMdwxkghgEwD1XBGTC0g0sDIaYJECVwFqoChBK4WegKkJWArSJZAQErCDqSKG/iCyhaRhYA9LDIbULDzlIAAAAASUVORK5CYII=") 1x, url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAA/ElEQVR4Xu3UsWrCUBiG4efGlIBoIMFbcnYolYJ3pg4iKGrGYFTRwaUFhYAekiDt0EG++X2W83N8/3J/DbwBMJJSsdQItcDY1VlCOImzq3Ed8OmicHASB3ns5KBw8VUNpDJrW7uAiJ3sbK1l0mqArpmFTUlQ5jYWZrrUAUSmT0SZm4qoA56JvVhs/5g3A7RLolA85A1ASOTye65NMxASK6syfxGITMzvMxG9CvRkliWwlOm9AsSOcitzU1NzK7mjuBkQvHtLK7iLBiB5PhttJSGpB8I8vM6kDuiHeUjoVwMfYR4SRtUAw1veIZzOjRhSBzCoyKFjgH/3K7+BHzg+Cgw0eSW3AAAAAElFTkSuQmCC") 2x);
 }
-#content list .nameCol {
+#content list.controls .nameCol {
 	-webkit-box-align: center;
 	-webkit-padding-end: 1ex;
 	box-sizing: border-box;
@@ -269,12 +271,46 @@ body {
 	width: 55%;
 	padding-left: 7px;
 }
-#content list .keyCol {
+#content list.controls .keyCol {
 	-webkit-box-align: center;
 	box-sizing: border-box;
 	display: -webkit-box;
 	width: 45%;
 	color: #666;
+}
+
+#content .manage list {
+	width: 300px;
+}
+#content h3 {
+	color: black;
+	font-size: 1.2em;
+	margin-bottom: 0.8em;
+}
+.manage h3 {
+	height: 22px;
+	padding-left: 32px;
+	padding-top: 10px;
+	background-repeat: no-repeat;
+	-webkit-margin-start: -18px;
+}
+.system0 {
+	background-image: url("../images/gameboy.png");
+}
+.system1 {
+	background-image: url("../images/32.png");
+}
+.savedGame div {
+	margin-left: 167px;
+}
+.canvasContainer {
+	height: 32px;
+	margin-right: 7px;
+}
+canvas {
+	margin-top: -56px;
+	width: 160px;
+	height: 144px;
 }
 
 #warning {
