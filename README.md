@@ -1,12 +1,14 @@
 I am porting this project to a Chrome app.  It will be able to run in the browser without an active internet connection.
 
-Favicon: http://starvingartist.deviantart.com/art/Antiseptic-Videogame-Systems-23217105
+GB/GBC icons: http://starvingartist.deviantart.com/art/Antiseptic-Videogame-Systems-23217105
 Other icons: http://www.famfamfam.com/lab/icons/silk/
 
 Borrowed some old Chrome NTP code to make i18n stuff in HTML easier (see source for details).
 
 TODO:
 - Make manage saves options page
+	- Add Import/Export
+	- Reordering
 - Add hotkey for fast forward.
 - Add support for gamepad input. (API seems broken in Chrome)
 - Look into registering this App as a handler for .gb/.gbc files on Chrome OS. (Done, test)
