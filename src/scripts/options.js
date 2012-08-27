@@ -198,6 +198,10 @@ $(document).off("ready").ready(function(e) {
 		syncKeys();
 	});
 	
+	var canvas = $("#hoverCanvas")[0];
+	canvas.width = 160;
+	canvas.height = 144;
+	
 	$(window).on("hashchange", function() {
 		switchPage(location.hash);
 	});
@@ -402,6 +406,21 @@ function generateManage(name, setting, parent) {
 						
 						$("list").children().removeAttr("selected");
 						$(this).attr("selected", "selected");
+					}).mouseover(function() {
+						var src = $(this).find("canvas")[0];
+						var target = $("#hoverCanvas")[0];
+						
+						var context = src.getContext("2d");
+						var imageData = context.getImageData(0, 0, 160, 144);
+						var context = target.getContext("2d");
+						
+						context.putImageData(imageData, 0, 0);
+						
+						var pos = getAbsPos(src);
+						$(target).css("left", pos.x + 1 + "px").css("top", pos.y + 1 +
+							"px").addClass("visible");
+					}).mouseout(function() {
+						$("#hoverCanvas").removeClass("visible");
 					}).append(
 						$.create("div").append(
 							$.create("div").addClass("canvasContainer").append(
@@ -469,4 +488,21 @@ function renderFrameBuffer(buffer, canvas) {
 		imageData.data[to++] = 0xFF;
 	}
 	context.putImageData(imageData, 0, 0);
+}
+
+function getAbsPos(element) {
+	var elem2 = element;
+	var pos = {x: 0, y: 0};
+	do {
+		pos.x += element.offsetLeft - element.scrollLeft;
+		pos.y += element.offsetTop - element.scrollTop;
+		element = element.offsetParent;
+		elem2 = elem2.parentNode;
+		while (elem2 != element) {
+			pos.x -= elem2.scrollLeft;
+			pos.y -= elem2.scrollTop;
+			elem2 = elem2.parentNode;
+		}
+	} while (element.offsetParent);
+	return pos;
 }

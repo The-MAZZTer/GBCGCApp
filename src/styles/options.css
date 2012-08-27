@@ -308,9 +308,20 @@ body {
 	margin-right: 7px;
 }
 canvas {
-	margin-top: -56px;
 	width: 160px;
 	height: 144px;
+}
+.manage canvas {
+	margin-top: -56px;
+}
+#hoverCanvas {
+	position: absolute;
+	display: none;
+	pointer-events: none;
+	z-index: 1;
+}
+#hoverCanvas.visible {
+	display: block;
 }
 
 #warning {
