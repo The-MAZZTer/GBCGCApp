@@ -269,8 +269,8 @@ function generateRange(name, setting, parent) {
 function generateButton(name, setting, parent) {
 	parent.append(
 		$.create("div").addClass("button").append(
-			$.create("button").attr("i18n-content", name + "Setting").prop("target",
-				setting.target).click(function() {
+			$.create("button").addClass("realButton").attr("i18n-content", name +
+				"Setting").prop("target", setting.target).click(function() {
 				
 				$("#" + this.target).click();
 			})
@@ -331,7 +331,7 @@ function generateControls(name, setting, parent) {
 						map[keys[i]]) || ("Unknown (" + map[keys[i]] + ")")) : "")
 				)
 			).append(
-				$.create("button").click(function() {
+				$.create("button").addClass("delete").click(function() {
 					delete Settings.keyMap[this.parentNode.key];
 					Settings.onchange();
 					delete this.parentNode.key;
@@ -347,7 +347,9 @@ function generateManage(name, setting, parent) {
 	var container;
 	parent.append(
 		container = $.create("div").addClass("manage").append(
-			$.create("button").attr("i18n-content", "clearAll").click(function() {
+			$.create("button").addClass("realButton").attr("i18n-content",
+				"clearAll").click(function() {
+				
 				if (confirm(chrome.i18n.getMessage("areYouSure"))) {
 					db.clear();
 					$(".manage > div").remove();
@@ -363,8 +365,14 @@ function generateManage(name, setting, parent) {
 			
 			var list;
 			container.append(
-				$.create("div").append(
-					$.create("h3").addClass("system" + data.system).text(data.id)
+				$.create("div").addClass("empty").append(
+					$.create("h3").addClass("system" + data.system).text(data.id).append(
+						$.create("button").addClass("realButton").text(
+							chrome.i18n.getMessage("importSaveGame"))
+					).append(
+						$.create("button").addClass("realButton").text(
+							chrome.i18n.getMessage("importSaveState"))
+					)
 				).append(
 					list = $.create("list")
 				)
@@ -382,16 +390,42 @@ function generateManage(name, setting, parent) {
 						$("list").children().removeAttr("selected");
 						$(this).attr("selected", "selected");
 					}).append(
-						$.create("div").text(chrome.i18n.getMessage("savedGame"))
+						$.create("div").append(
+							$.create("div").addClass("iconCol")
+						).append(
+							$.create("div").addClass("nameCol").
+								text(chrome.i18n.getMessage("savedGame"))
+						).append(
+							$.create("div").addClass("slotCol").append(
+								$.create("button").addClass("export").
+									text(chrome.i18n.getMessage("export")).click(function() {
+									
+									
+								})
+							)
+						)
 					).append(
-						$.create("button").click(function() {
+						$.create("button").addClass("delete").click(function() {
+							var row = $(this).parent();
+							var game = row.prop("name");
+							db.deleteSRAM(game);
 							
+							var list = row.parent()
+							row.mouseout();
+							row.remove();
+							
+							if (!(list.children().length)) {
+								list.parent().addClass("empty");
+							}
 						})
 					)
 				);
 			}
 			db.eachState(data.id, function(data) {
 				if (!data) {
+					if (list.children().length) {
+						list.parent().removeClass("empty");
+					}
 					return;
 				}
 				
@@ -423,23 +457,48 @@ function generateManage(name, setting, parent) {
 						$("#hoverCanvas").removeClass("visible");
 					}).append(
 						$.create("div").append(
-							$.create("div").addClass("canvasContainer").append(
+							$.create("div").addClass("iconCol").append(
 								canvas = $.create("canvas")
 							)
 						).append(
-							name = $.create("span")
+							$.create("div").addClass("nameCol").
+								text(chrome.i18n.getMessage("slotDescription"))
+						).append(
+							$.create("div").addClass("slotCol").append(
+								$.create("div").append(
+									$.create("div").text(data.slot)
+								).append(
+									$.create("input").prop("type", "number").prop("min", 0).
+										prop("step", 1).prop("value", data.slot).change(function() {
+										
+										
+									})
+								)
+							).append(
+								$.create("button").addClass("export").
+									text(chrome.i18n.getMessage("export")).click(function() {
+									
+									
+								})
+							)
 						)
 					).append(
-						$.create("button").click(function() {
+						$.create("button").addClass("delete").click(function() {
+							var row = $(this).parent();
+							var game = row.prop("name");
+							var slot = row.prop("slot");
+							db.deleteState(game, slot);
 							
+							var list = row.parent();
+							row.mouseout();
+							row.remove();
+							
+							if (!(list.children().length)) {
+								list.parent().addClass("empty");
+							}
 						})
 					)
 				);
-				if (data.slot == 0) {
-					name.text(chrome.i18n.getMessage("slot0Description"));
-				} else {
-					name.text(chrome.i18n.getMessage("slotDescription", [data.slot]));
-				}
 				
 				canvas[0].width = 160;
 				canvas[0].height = 144;

@@ -360,14 +360,15 @@ db = {
 		if (!GameBoyEmulatorInitialized()) {
 			return false;
 		}
-		var colorbyte = gameboy.ROM[0x143];
-		if (colorbyte === 0x80) {
-			return true;
+		switch (gameboy.ROM[0x143]) {
+			case 0x80:
+			case 0xC0:
+				return true;
+			case 0x32:
+				return (gameboy.name + gameboy.gameCode == "Game and Watch ");
+			default:
+				return false;
 		}
-		if (colorbyte === 0x32 && this.name + this.gameCode == "Game and Watch ") {
-			return true;
-		}
-		return gameboy.cGBC;
 	},
 	writeGamesRecord: function(data) {
 		this.handle.transaction("games", IDBTransaction.READ_WRITE).
@@ -464,5 +465,18 @@ db = {
 				callback();
 			}
 		}
+	},
+	deleteSRAM: function(game) {
+		var os = this.handle.transaction("games", IDBTransaction.READ_WRITE).
+			objectStore("games");
+		os.get(game).onsuccess = function(e) {
+			var res = e.target.result;
+			res.SRAM = res.RTC = null;
+			os.put(res);
+		}
+	},
+	deleteState: function(game, slot) {
+		this.handle.transaction("states", IDBTransaction.READ_WRITE).
+			objectStore("states").delete(slot + "|" + game);
 	}
 }

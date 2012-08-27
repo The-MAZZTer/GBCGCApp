@@ -129,7 +129,7 @@
 		"description": "Options page section."
 	},
 	"autoSaveStateSetting": {
-		"message": "Automatically save and restore states on ROM unload/load",
+		"message": "Automatically save and restore state 0 on ROM unload/load",
 		"description": "Option caption."
 	},
 	"manageButtonSetting": {
@@ -278,23 +278,25 @@
 		"message": "Delete All",
 		"description": "Option button caption."
 	},
+	"importSaveGame": {
+		"message": "Import Game Cartridge SRAM",
+		"description": "Caption for import button."
+	},
+	"importSaveState": {
+		"message": "Import Save State",
+		"description": "Caption for import button."
+	},
 	"savedGame": {
-		"message": "Game cartridge data",
+		"message": "Game cartridge SRAM",
 		"description": "Caption to indicate a save is a saved game."
 	},
-	"slot0Description": {
-		"message": "Auto-save state",
-		"description": "Caption to indicate a save is an auto-save state."
-	},
 	"slotDescription": {
-		"message": "Save state $number$",
-		"description": "Caption to indicate a save is a save state.",
-		"placeholders": {
-			"number": {
-				"content": "$1",
-				"example": "1"
-			}
-		}
+		"message": "Save state",
+		"description": "Caption to indicate a save is a save state."
+	},
+	"export": {
+		"message": "Export",
+		"description": "Button caption to export."
 	},
 	
 	"javascriptCategory": {
@@ -772,5 +774,10 @@
 	"unableToAutoSave": {
 		"message": "Due to Chrome security restrictions I won't be able to save your data, cancel and close from the toolbar to save.",
 		"description": "Warning when the user closes the page and we can't save the state."
+	},
+	
+	"areYouSure": {
+		"message": "Are you sure you wish to delete all save data?",
+		"description": "Prompt when the user goes to remove all saves."
 	}
 }
