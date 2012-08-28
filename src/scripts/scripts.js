@@ -290,7 +290,6 @@ SaveMemory = {
 }
 
 window.indexedDB = window.indexedDB || window.webkitIndexedDB;
-window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
 window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange;
 db = {
 	init: function() {
@@ -336,10 +335,9 @@ db = {
 		}
 	},
 	clear: function() {
-		this.handle.transaction("games", IDBTransaction.READ_WRITE).
-			objectStore("games").clear();
-		this.handle.transaction("states", IDBTransaction.READ_WRITE).
-			objectStore("states").clear();
+		this.handle.transaction("games", "readwrite").objectStore("games").clear();
+		this.handle.transaction("states", "readwrite").objectStore("states").
+			clear();
 	},
 	destroy: function() {
 		this.dispose();
@@ -347,15 +345,6 @@ db = {
 	},
 	handle: null,
 	version: 1,
-	tableExists: function(name) {
-		var tables = this.handle.objectStoreNames;
-		for (var i = 0; i < tables.length; i++) {
-			if (tables[i] === name) {
-				return true;
-			}
-		}
-		return false;
-	},
 	getGBColor: function() {
 		if (!GameBoyEmulatorInitialized()) {
 			return false;
@@ -371,8 +360,8 @@ db = {
 		}
 	},
 	writeGamesRecord: function(data) {
-		this.handle.transaction("games", IDBTransaction.READ_WRITE).
-			objectStore("games").put(data);
+		this.handle.transaction("games", "readwrite").objectStore("games").
+			put(data);
 	},
 	writeGame: function() {
 		if (!GameBoyEmulatorInitialized()) {
@@ -387,8 +376,8 @@ db = {
 		});
 	},
 	readGame: function(name, callback) {
-		this.handle.transaction("games", IDBTransaction.READ_ONLY).
-			objectStore("games").get(name).onsuccess = function(e) {
+		this.handle.transaction("games", "readonly").objectStore("games").get(name).
+			onsuccess = function(e) {
 			
 			var res = e.target.result;
 			if (!res) {
@@ -400,8 +389,8 @@ db = {
 		}
 	},
 	readStateRecord: function(game, n, callback) {
-		this.handle.transaction("states", IDBTransaction.READ_ONLY).
-			objectStore("states").get(n + "|" + game).onsuccess = function(e) {
+		this.handle.transaction("states", "readonly").objectStore("states").get(n +
+			"|" + game).onsuccess = function(e) {
 			
 			var res = e.target.result;
 			if (!res) {
@@ -423,8 +412,8 @@ db = {
 	},
 	writeStateRecord: function(data) {
 		data.id = data.slot + "|" + data.game;
-		this.handle.transaction("states", IDBTransaction.READ_WRITE).
-			objectStore("states").put(data);
+		this.handle.transaction("states", "readwrite").objectStore("states").
+			put(data);
 	},
 	saveStateSave: function(n) {
 		if (!GameBoyEmulatorInitialized()) {
@@ -440,8 +429,8 @@ db = {
 		});
 	},
 	eachGame: function(callback) {
-		this.handle.transaction("games", IDBTransaction.READ_WRITE).
-			objectStore("games").openCursor().onsuccess = function(e) {
+		this.handle.transaction("games", "readwrite").objectStore("games").
+			openCursor().onsuccess = function(e) {
 			
 			var x = e.target.result;
 			if (x) {
@@ -453,9 +442,8 @@ db = {
 		}
 	},
 	eachState: function(game, callback) {
-		this.handle.transaction("states", IDBTransaction.READ_WRITE).
-			objectStore("states").index("game").openCursor(IDBKeyRange.only(game)).
-			onsuccess = function(e) {
+		this.handle.transaction("states", "readwrite").objectStore("states").
+			index("game").openCursor(IDBKeyRange.only(game)).onsuccess = function(e) {
 			
 			var x = e.target.result;
 			if (x) {
@@ -467,8 +455,7 @@ db = {
 		}
 	},
 	deleteSRAM: function(game) {
-		var os = this.handle.transaction("games", IDBTransaction.READ_WRITE).
-			objectStore("games");
+		var os = this.handle.transaction("games", "readwrite").objectStore("games");
 		os.get(game).onsuccess = function(e) {
 			var res = e.target.result;
 			res.SRAM = res.RTC = null;
@@ -476,7 +463,36 @@ db = {
 		}
 	},
 	deleteState: function(game, slot) {
-		this.handle.transaction("states", IDBTransaction.READ_WRITE).
-			objectStore("states").delete(slot + "|" + game);
+		this.handle.transaction("states", "readwrite").objectStore("states").
+			delete(slot + "|" + game);
+	},
+	renumberState: function(game, slot, newslot) {
+		if (slot == newslot) {
+			return;
+		}
+	
+		var os = this.handle.transaction("states", "readwrite").objectStore(
+			"states");
+		os.get(slot + "|" + game).onsuccess = function(e) {
+			var res = e.target.result;
+			if (!res) {
+				return;
+			}
+
+			os.get(newslot + "|" + game).onsuccess = function(e) {
+				var res2 = e.target.result;
+				res.slot = newslot;
+				res.id = newslot + "|" + game;
+				if (!res2) {
+					os.put(res);
+					os.delete(slot + "|" + game);
+				} else {
+					res2.slot = slot;
+					res2.id = slot + "|" + game;
+					os.put(res);
+					os.put(res2);
+				}
+			}
+		}
 	}
 }

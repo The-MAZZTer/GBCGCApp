@@ -297,9 +297,6 @@ body {
 	margin-left: 7px;
 	font-size: 12px;
 }
-.empty {
-	display: none;
-}
 .system0 {
 	background-image: url("../images/gameboy.png");
 }
@@ -379,6 +376,9 @@ body {
 .export:hover {
 	opacity: 1;
 }
+#content .manage list:empty {
+	display: none;
+}
 
 canvas {
 	width: 160px;
@@ -392,6 +392,7 @@ canvas {
 	display: none;
 	pointer-events: none;
 	z-index: 9001;
+	border: 1px black solid;
 }
 #hoverCanvas.visible {
 	display: block;

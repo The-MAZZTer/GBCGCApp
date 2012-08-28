@@ -364,68 +364,72 @@ function generateManage(name, setting, parent) {
 			}
 			
 			var list;
+			var header;
 			container.append(
-				$.create("div").addClass("empty").append(
-					$.create("h3").addClass("system" + data.system).text(data.id).append(
-						$.create("button").addClass("realButton").text(
-							chrome.i18n.getMessage("importSaveGame"))
-					).append(
-						$.create("button").addClass("realButton").text(
-							chrome.i18n.getMessage("importSaveState"))
-					)
+				$.create("div").append(
+					header = $.create("h3").addClass("system" + data.system).text(data.id)
 				).append(
 					list = $.create("list")
 				)
 			);
 			
-			if ((data.SRAM && data.SRAM.length) || (data.RTC && data.RTC.length)) {
-				list.append(
-					$.create("div").addClass("savedGame").prop("name", data.id).
-						mousedown(function(e) {
+			if (data.SRAM != null || data.RTC != null) {
+				header.append(
+					$.create("button").addClass("realButton").text(
+						chrome.i18n.getMessage("importSaveGame")).click(function() {
 						
-						if (e.target.tagName == "BUTTON") {
-							return;
-						}
 						
-						$("list").children().removeAttr("selected");
-						$(this).attr("selected", "selected");
-					}).append(
-						$.create("div").append(
-							$.create("div").addClass("iconCol")
-						).append(
-							$.create("div").addClass("nameCol").
-								text(chrome.i18n.getMessage("savedGame"))
-						).append(
-							$.create("div").addClass("slotCol").append(
-								$.create("button").addClass("export").
-									text(chrome.i18n.getMessage("export")).click(function() {
-									
-									
-								})
-							)
-						)
-					).append(
-						$.create("button").addClass("delete").click(function() {
-							var row = $(this).parent();
-							var game = row.prop("name");
-							db.deleteSRAM(game);
-							
-							var list = row.parent()
-							row.mouseout();
-							row.remove();
-							
-							if (!(list.children().length)) {
-								list.parent().addClass("empty");
-							}
-						})
-					)
+					})
 				);
+				if ((data.SRAM && data.SRAM.length) || (data.RTC && data.RTC.length)) {
+					list.append(
+						$.create("div").addClass("savedGame").prop("name", data.id).
+							mousedown(function(e) {
+							
+							if (e.target.tagName == "BUTTON") {
+								return;
+							}
+							
+							$("list").children().removeAttr("selected");
+							$(this).attr("selected", "selected");
+						}).append(
+							$.create("div").append(
+								$.create("div").addClass("iconCol")
+							).append(
+								$.create("div").addClass("nameCol").
+									text(chrome.i18n.getMessage("savedGame"))
+							).append(
+								$.create("div").addClass("slotCol").append(
+									$.create("button").addClass("export").
+										text(chrome.i18n.getMessage("export")).click(function() {
+										
+										
+									})
+								)
+							)
+						).append(
+							$.create("button").addClass("delete").click(function() {
+								var row = $(this).parent();
+								var game = row.prop("name");
+								db.deleteSRAM(game);
+								
+								var list = row.parent()
+								row.mouseout();
+								row.remove();
+							})
+						)
+					);
+				}
 			}
+			header.append(
+				$.create("button").addClass("realButton").text(
+					chrome.i18n.getMessage("importSaveState")).click(function() {
+					
+					
+				})
+			);
 			db.eachState(data.id, function(data) {
 				if (!data) {
-					if (list.children().length) {
-						list.parent().removeClass("empty");
-					}
 					return;
 				}
 				
@@ -451,8 +455,8 @@ function generateManage(name, setting, parent) {
 						context.putImageData(imageData, 0, 0);
 						
 						var pos = getAbsPos(src);
-						$(target).css("left", pos.x + 1 + "px").css("top", pos.y + 1 +
-							"px").addClass("visible");
+						$(target).css("left", pos.x + "px").css("top", pos.y + "px").
+							addClass("visible");
 					}).mouseout(function() {
 						$("#hoverCanvas").removeClass("visible");
 					}).append(
@@ -471,7 +475,59 @@ function generateManage(name, setting, parent) {
 									$.create("input").prop("type", "number").prop("min", 0).
 										prop("step", 1).prop("value", data.slot).change(function() {
 										
+										var node = $(this).parent().parent().parent().parent();
+										var val = Math.max(0, Math.round(this.value));
+										var slot = node.prop("slot");
+										if (isNaN(val) || slot == val) {
+											return;
+										}
+										db.renumberState(node.prop("name"), slot, val);
+										var list = node.parent();
+										var swapnode = null;
+										list.children().each(function(index, element) {
+											element = $(element);
+											var curr = element.prop("slot");
+											if (curr == val) {
+												swapnode = element;
+												return false;
+											}
+										});
+										node.prop("slot", val);
+										$(this).parent().children("div").text(val);
 										
+										node.detach();
+										if (swapnode.length) {
+											swapnode.prop("slot", slot).
+												find(".slotCol > div > input").prop("value", slot);
+											swapnode.find(".slotCol > div > div").text(slot);
+											swapnode.detach();
+										}
+										
+										list.children().each(function(index, element) {
+											element = $(element);
+											var curr = element.prop("slot");
+											if (curr > val) {
+												element.before(node);
+												return false;
+											}
+										});
+										if (!node.parent().length) {
+											list.append(node);
+										}
+										
+										if (swapnode.length) {
+											list.children().each(function(index, element) {
+												element = $(element);
+												var curr = element.prop("slot");
+												if (curr > slot) {
+													element.before(swapnode);
+													return false;
+												}
+											});
+											if (!swapnode.parent().length) {
+												list.append(swapnode);
+											}
+										}
 									})
 								)
 							).append(
@@ -492,10 +548,6 @@ function generateManage(name, setting, parent) {
 							var list = row.parent();
 							row.mouseout();
 							row.remove();
-							
-							if (!(list.children().length)) {
-								list.parent().addClass("empty");
-							}
 						})
 					)
 				);

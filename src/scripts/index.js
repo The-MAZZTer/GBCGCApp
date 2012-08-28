@@ -47,7 +47,7 @@ $(document).ready(function() {
 			id: gameboy.name,
 			system: Number(db.getGBColor()),
 			SRAM: sram,
-			RTC: gameboy.saveRTCState()
+			RTC: gameboy.cTIMER ? gameboy.saveRTCState() : null
 		});
 		
 		delete window.pendingSaveState;
