@@ -112,7 +112,7 @@
 	},
 	
 	"autopauseCategory": {
-		"message": "Auto Pause",
+		"message": "Running",
 		"description": "Options page section."
 	},
 	"runWhenUnfocusedSetting": {
@@ -121,6 +121,10 @@
 	},
 	"runWhenHiddenSetting": {
 		"message": "Keep running when window isn't visible",
+		"description": "Option caption."
+	},
+	"fastForwardSpeedSetting": {
+		"message": "Speed multiplier for fast forward hotkey",
 		"description": "Option caption."
 	},
 	
@@ -213,51 +217,51 @@
 		"description": "Option page section."
 	},
 	"savestateControl": {
-		"message": "Save State",
+		"message": "Save state",
 		"description": "Control name."
 	},
 	"loadstateControl": {
-		"message": "Load State",
+		"message": "Load state",
 		"description": "Control name."
 	},
 	"slot1Control": {
-		"message": "Select Slot 1",
+		"message": "Select slot 1",
 		"description": "Control name."
 	},
 	"slot2Control": {
-		"message": "Select Slot 2",
+		"message": "Select slot 2",
 		"description": "Control name."
 	},
 	"slot3Control": {
-		"message": "Select Slot 3",
+		"message": "Select slot 3",
 		"description": "Control name."
 	},
 	"slot4Control": {
-		"message": "Select Slot 4",
+		"message": "Select slot 4",
 		"description": "Control name."
 	},
 	"slot5Control": {
-		"message": "Select Slot 5",
+		"message": "Select slot 5",
 		"description": "Control name."
 	},
 	"slot6Control": {
-		"message": "Select Slot 6",
+		"message": "Select slot 6",
 		"description": "Control name."
 	},
 	"slot7Control": {
-		"message": "Select Slot 7",
+		"message": "Select slot 7",
 		"description": "Control name."
 	},
 	"slot8Control": {
-		"message": "Select Slot 8",
+		"message": "Select slot 8",
 		"description": "Control name."
 	},
 	"slot9Control": {
-		"message": "Select Slot 9",
+		"message": "Select slot 9",
 		"description": "Control name."
 	},
 	"slot10Control": {
-		"message": "Select Slot 10",
+		"message": "Select slot 10",
 		"description": "Control name."
 	},
 	
@@ -266,7 +270,11 @@
 		"description": "Option page section."
 	},
 	"fullscreenControl": {
-		"message": "Toggle Fullscreen",
+		"message": "Toggle fullscreen",
+		"description": "Control name."
+	},
+	"fastforwardControl": {
+		"message": "Fast forward",
 		"description": "Control name."
 	},
 	

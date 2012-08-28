@@ -12,7 +12,13 @@ $(document).ready(function() {
 		"start": GameBoyKeyDown,
 		"savestate": SaveStates.save,
 		"loadstate": SaveStates.load,
-		"fullscreen": toggleFullScreen
+		"fullscreen": toggleFullScreen,
+		"fastforward": function() {
+			window.fastforward = true
+			if (GameBoyEmulatorInitialized) {
+				gameboy.setSpeed(Settings.fastForwardSpeed);
+			}
+		}
 	}
 	var controlUpMap = {
 		"right": GameBoyKeyUp,
@@ -25,7 +31,13 @@ $(document).ready(function() {
 		"start": GameBoyKeyUp,
 		"savestate": Function.Empty,
 		"loadstate": Function.Empty,
-		"fullscreen": Function.Empty
+		"fullscreen": Function.Empty,
+		"fastforward": function() {
+			delete window.fastforward;
+			if (GameBoyEmulatorInitialized) {
+				gameboy.setSpeed($("#speed_text").val());
+			}
+		}
 	}
 	
 	$(window).resize(sizeCanvas).on("beforeunload", function() {
@@ -386,8 +398,12 @@ function loadROM(data, reset) {
 
 function autoSaveLoaded() {
 	run();
-
-	gameboy.setSpeed($("#speed_text").val());
+	
+	if (window.fastforward) {
+		gameboy.setSpeed(Settings.fastForwardSpeed);
+	} else {
+		gameboy.setSpeed($("#speed_text").val());
+	}
 	
 	$("#selectstate_dropdown > button").removeClass("slotused").
 		each(function(index, element) {
@@ -516,7 +532,7 @@ function setSpeed(e) {
 		$("#speed_button").removeClass();
 	}
 	
-	if (GameBoyEmulatorInitialized()) {
+	if (GameBoyEmulatorInitialized() && !window.fastforward) {
 		gameboy.setSpeed(val);
 	}
 }

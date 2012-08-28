@@ -159,6 +159,7 @@ Settings = {
 		colorizeGB: true,
 		disableTypedArrays: false,
 		emulatorLoopInterval: 4,
+		fastForwardSpeed: 8,
 		gameBoyMode: false,
 		imageSmoothing: false,
 		keyMap: {
@@ -173,6 +174,7 @@ Settings = {
 			116: "savestate",
 			120: "loadstate",
 			122: "fullscreen",
+			192: "fastforward",
 			49: "slot1",
 			50: "slot2",
 			51: "slot3",
@@ -204,6 +206,7 @@ Settings = {
 		colorizeGB: true,
 		disableTypedArrays: false,
 		emulatorLoopInterval: 4,
+		fastForwardSpeed: 8,
 		gameBoyMode: false,
 		imageSmoothing: false,
 		keyMap: {
@@ -218,6 +221,7 @@ Settings = {
 			113: "savestate",
 			112: "loadstate",
 			115: "fullscreen",
+			192: "fastforward",
 			49: "slot1",
 			50: "slot2",
 			51: "slot3",

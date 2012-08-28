@@ -16,6 +16,13 @@ layout = {
 			},
 			"runWhenHidden": {
 				type: "checkbox"
+			},
+			"fastForwardSpeed": {
+				type: "range",
+				min: 1,
+				max: 999,
+				rangeMax: 32,
+				step: 1
 			}
 		},
 		"saves": {
@@ -70,7 +77,7 @@ layout = {
 		"miscControls": {
 			"": {
 				type: "controls",
-				keys: ["fullscreen"]
+				keys: ["fullscreen", "fastforward"]
 			}
 		}
 	},

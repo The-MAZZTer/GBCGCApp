@@ -391,7 +391,7 @@ canvas {
 	position: absolute;
 	display: none;
 	pointer-events: none;
-	z-index: 9001;
+	z-index: 100;
 	border: 1px black solid;
 }
 #hoverCanvas.visible {
@@ -411,6 +411,8 @@ canvas {
 }
 .changed #warning {
 	display: block;
+	
+	z-index: 1000;
 }
 #warning > div {
 	color: black;
