@@ -525,18 +525,18 @@ function generateManage(name, setting, parent) {
 						
 						e.stopPropagation();
 					}).mouseover(function() {
-						var src = $(this).find("canvas")[0];
-						var target = $("#hoverCanvas")[0];
+						var src = $(this).find("canvas");
+						var target = $("#hoverCanvas");
 						
-						var context = src.getContext("2d");
+						var context = src[0].getContext("2d");
 						var imageData = context.getImageData(0, 0, 160, 144);
-						var context = target.getContext("2d");
+						var context = target[0].getContext("2d");
 						
 						context.putImageData(imageData, 0, 0);
 						
-						var pos = getAbsPos(src);
-						$(target).css("left", pos.x + "px").css("top", pos.y + "px").
-							addClass("visible");
+						var pos = src.offset();
+						target.css("left", pos.left - 1 + "px").css("top", pos.top - 1 +
+							"px").addClass("visible");
 					}).mouseout(function() {
 						$("#hoverCanvas").removeClass("visible");
 					}).append(
@@ -681,21 +681,4 @@ function renderFrameBuffer(buffer, canvas) {
 		imageData.data[to++] = 0xFF;
 	}
 	context.putImageData(imageData, 0, 0);
-}
-
-function getAbsPos(element) {
-	var elem2 = element;
-	var pos = {x: 0, y: 0};
-	do {
-		pos.x += element.offsetLeft - element.scrollLeft;
-		pos.y += element.offsetTop - element.scrollTop;
-		element = element.offsetParent;
-		elem2 = elem2.parentNode;
-		while (elem2 != element) {
-			pos.x -= elem2.scrollLeft;
-			pos.y -= elem2.scrollTop;
-			elem2 = elem2.parentNode;
-		}
-	} while (element.offsetParent);
-	return pos;
 }
