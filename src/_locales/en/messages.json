@@ -286,17 +286,25 @@
 		"message": "Delete All",
 		"description": "Option button caption."
 	},
-	"importSaveGame": {
-		"message": "Import Game Cartridge SRAM",
+	"importSaveSRAM": {
+		"message": "Import Save Data",
+		"description": "Caption for import button."
+	},
+	"importSaveRTC": {
+		"message": "Import Clock Data",
 		"description": "Caption for import button."
 	},
 	"importSaveState": {
 		"message": "Import Save State",
 		"description": "Caption for import button."
 	},
-	"savedGame": {
-		"message": "Game cartridge SRAM",
+	"manageSRAM": {
+		"message": "Game save data",
 		"description": "Caption to indicate a save is a saved game."
+	},
+	"manageRTC": {
+		"message": "Game clock data",
+		"description": "Caption to indicate a save is clock data."
 	},
 	"slotDescription": {
 		"message": "Save state",

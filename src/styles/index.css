@@ -188,10 +188,10 @@ input, label {
 }
 canvas {
 	background-color: white;
-	image-smoothing: auto;
+	image-rendering: -webkit-optimize-contrast;
 }
 canvas.smooth {
-	image-smoothing: -webkit-optimize-contrast;
+	image-rendering: auto;
 }
 
 #aboutlayer {

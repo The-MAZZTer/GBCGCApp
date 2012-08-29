@@ -462,7 +462,15 @@ db = {
 		var os = this.handle.transaction("games", "readwrite").objectStore("games");
 		os.get(game).onsuccess = function(e) {
 			var res = e.target.result;
-			res.SRAM = res.RTC = null;
+			res.SRAM = "";
+			os.put(res);
+		}
+	},
+	deleteRTC: function(game) {
+		var os = this.handle.transaction("games", "readwrite").objectStore("games");
+		os.get(game).onsuccess = function(e) {
+			var res = e.target.result;
+			res.RTC = [];
 			os.put(res);
 		}
 	},

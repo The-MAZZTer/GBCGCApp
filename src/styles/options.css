@@ -279,7 +279,7 @@ body {
 }
 
 #content .manage list {
-	width: 450px;
+	width: 410px;
 }
 #content h3 {
 	color: black;
@@ -316,14 +316,23 @@ body {
 	color: #666;
 	-webkit-padding-end: 1ex;
 	box-sizing: border-box;
-	width: 140px;
+	width: 100px;
 }
 #content .manage .slotCol {
 	-webkit-box-align: center;
 	display: -webkit-box;
 	color: #666;
 	box-sizing: border-box;
-	width: 120px;
+	width: 60px;
+	height: 32px;
+}
+#content .manage .exportCol {
+	-webkit-box-align: center;
+	display: -webkit-box;
+	color: #666;
+	box-sizing: border-box;
+	width: 60px;
+	height: 32px;
 }
 #content .manage .slotCol :first-child {
 	-webkit-box-flex: 1;
@@ -333,7 +342,7 @@ body {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
-#content .manage [selected] .slotCol > div > div {
+#content .manage [focus] .slotCol > div > div {
 	display: none;
 }
 #content .manage .slotCol input {
@@ -348,6 +357,7 @@ body {
 	padding-bottom: 4px;
 	line-height: normal;
 	vertical-align: middle;
+	width: 50px;
 	-webkit-box-flex: 1;
 }
 #content .manage .slotCol input:focus {
@@ -355,7 +365,7 @@ body {
 	border-color: #4D90FE;
 	outline: none;
 }
-#content .manage list > :not([selected]) .slotCol input {
+#content .manage list > :not([focus]) .slotCol input {
 	display: none;
 }
 .export {

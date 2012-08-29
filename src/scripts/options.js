@@ -100,10 +100,10 @@ layout = {
 				max: 999,
 				rangeMax: 20,
 				step: 1
-			},
+			}/*,
 			"imageSmoothing": {
 				type: "checkbox"
-			}
+			}*/
 		},
 		"audioBuffer": {
 			"audioBufferMinSpan": {
@@ -380,33 +380,44 @@ function generateManage(name, setting, parent) {
 				)
 			);
 			
-			if (data.SRAM != null || data.RTC != null) {
+			if (data.SRAM != null) {
 				header.append(
 					$.create("button").addClass("realButton").text(
-						chrome.i18n.getMessage("importSaveGame")).click(function() {
+						chrome.i18n.getMessage("importSaveSRAM")).click(function() {
 						
 						
 					})
 				);
-				if ((data.SRAM && data.SRAM.length) || (data.RTC && data.RTC.length)) {
+				if (data.SRAM.length) {
 					list.append(
-						$.create("div").addClass("savedGame").prop("name", data.id).
+						$.create("div").prop("name", data.id).
 							mousedown(function(e) {
 							
 							if (e.target.tagName == "BUTTON") {
 								return;
 							}
 							
-							$("list").children().removeAttr("selected");
-							$(this).attr("selected", "selected");
+							$("list").children().removeAttr("selected").removeAttr("focus");
+							$(this).attr("selected", "selected").attr("focus", "focus");
+							
+							$(document).mousedown(function() {
+								$("list").children().removeAttr("focus");
+								$(document).off("mousedown");
+							});
+							
+							e.stopPropagation();
+							e.preventDefault();
+							return false;
 						}).append(
 							$.create("div").append(
 								$.create("div").addClass("iconCol")
 							).append(
 								$.create("div").addClass("nameCol").
-									text(chrome.i18n.getMessage("savedGame"))
+									text(chrome.i18n.getMessage("manageSRAM"))
 							).append(
-								$.create("div").addClass("slotCol").append(
+								$.create("div").addClass("slotCol")
+							).append(
+								$.create("div").addClass("exportCol").append(
 									$.create("button").addClass("export").
 										text(chrome.i18n.getMessage("export")).click(function() {
 										
@@ -419,6 +430,65 @@ function generateManage(name, setting, parent) {
 								var row = $(this).parent();
 								var game = row.prop("name");
 								db.deleteSRAM(game);
+								
+								var list = row.parent()
+								row.mouseout();
+								row.remove();
+							})
+						)
+					);
+				}
+			}
+			if (data.RTC != null) {
+				header.append(
+					$.create("button").addClass("realButton").text(
+						chrome.i18n.getMessage("importSaveRTC")).click(function() {
+						
+						
+					})
+				);
+				if (data.RTC.length) {
+					list.append(
+						$.create("div").prop("name", data.id).
+							mousedown(function(e) {
+							
+							if (e.target.tagName == "BUTTON") {
+								return;
+							}
+							
+							$("list").children().removeAttr("selected").removeAttr("focus");
+							$(this).attr("selected", "selected").attr("focus", "focus");
+							
+							$(document).mousedown(function() {
+								$("list").children().removeAttr("focus");
+								$(document).off("mousedown");
+							});
+							
+							e.stopPropagation();
+							e.preventDefault();
+							return false;
+						}).append(
+							$.create("div").append(
+								$.create("div").addClass("iconCol")
+							).append(
+								$.create("div").addClass("nameCol").
+									text(chrome.i18n.getMessage("manageRTC"))
+							).append(
+								$.create("div").addClass("slotCol")
+							).append(
+								$.create("div").addClass("exportCol").append(
+									$.create("button").addClass("export").
+										text(chrome.i18n.getMessage("export")).click(function() {
+										
+										
+									})
+								)
+							)
+						).append(
+							$.create("button").addClass("delete").click(function() {
+								var row = $(this).parent();
+								var game = row.prop("name");
+								db.deleteRTC(game);
 								
 								var list = row.parent()
 								row.mouseout();
@@ -449,8 +519,17 @@ function generateManage(name, setting, parent) {
 							return;
 						}
 						
-						$("list").children().removeAttr("selected");
-						$(this).attr("selected", "selected");
+						$("list").children().removeAttr("selected").removeAttr("focus");
+						$(this).attr("selected", "selected").attr("focus", "focus");
+						
+						$(document).mousedown(function() {
+							$("list").children().removeAttr("focus");
+							$(document).off("mousedown");
+						});
+						
+						e.stopPropagation();
+						e.preventDefault();
+						return false;
 					}).mouseover(function() {
 						var src = $(this).find("canvas")[0];
 						var target = $("#hoverCanvas")[0];
@@ -537,7 +616,9 @@ function generateManage(name, setting, parent) {
 										}
 									})
 								)
-							).append(
+							)
+						).append(
+							$.create("div").addClass("exportCol").append(
 								$.create("button").addClass("export").
 									text(chrome.i18n.getMessage("export")).click(function() {
 									
