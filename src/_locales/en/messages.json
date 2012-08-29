@@ -299,11 +299,11 @@
 		"description": "Caption for import button."
 	},
 	"manageSRAM": {
-		"message": "Game save data",
+		"message": "Save data",
 		"description": "Caption to indicate a save is a saved game."
 	},
 	"manageRTC": {
-		"message": "Game clock data",
+		"message": "Clock data",
 		"description": "Caption to indicate a save is clock data."
 	},
 	"slotDescription": {

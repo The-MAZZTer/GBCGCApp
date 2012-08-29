@@ -279,7 +279,7 @@ body {
 }
 
 #content .manage list {
-	width: 410px;
+	width: 370px;
 }
 #content h3 {
 	color: black;
@@ -316,14 +316,14 @@ body {
 	color: #666;
 	-webkit-padding-end: 1ex;
 	box-sizing: border-box;
-	width: 100px;
+	width: 65px;
 }
 #content .manage .slotCol {
 	-webkit-box-align: center;
 	display: -webkit-box;
 	color: #666;
 	box-sizing: border-box;
-	width: 60px;
+	width: 55px;
 	height: 32px;
 }
 #content .manage .exportCol {
@@ -380,7 +380,7 @@ body {
 	margin: 6px 2px 8px 2px;
 	padding: 1px 6px 2px 6px;
 }
-:not(:hover):not([selected]) .export {
+list > div:not(:hover):not([selected]) .export {
 	display: none;
 }
 .export:hover {
