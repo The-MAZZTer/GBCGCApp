@@ -406,8 +406,6 @@ function generateManage(name, setting, parent) {
 							});
 							
 							e.stopPropagation();
-							e.preventDefault();
-							return false;
 						}).append(
 							$.create("div").append(
 								$.create("div").addClass("iconCol")
@@ -465,8 +463,6 @@ function generateManage(name, setting, parent) {
 							});
 							
 							e.stopPropagation();
-							e.preventDefault();
-							return false;
 						}).append(
 							$.create("div").append(
 								$.create("div").addClass("iconCol")
@@ -528,8 +524,6 @@ function generateManage(name, setting, parent) {
 						});
 						
 						e.stopPropagation();
-						e.preventDefault();
-						return false;
 					}).mouseover(function() {
 						var src = $(this).find("canvas")[0];
 						var target = $("#hoverCanvas")[0];
@@ -559,7 +553,7 @@ function generateManage(name, setting, parent) {
 									$.create("div").text(data.slot)
 								).append(
 									$.create("input").prop("type", "number").prop("min", 0).
-										prop("step", 1).prop("value", data.slot).change(function() {
+										prop("step", 1).prop("value", data.slot).blur(function() {
 										
 										var node = $(this).parent().parent().parent().parent();
 										var val = Math.max(0, Math.round(this.value));
@@ -582,7 +576,7 @@ function generateManage(name, setting, parent) {
 										$(this).parent().children("div").text(val);
 										
 										node.detach();
-										if (swapnode.length) {
+										if (swapnode) {
 											swapnode.prop("slot", slot).
 												find(".slotCol > div > input").prop("value", slot);
 											swapnode.find(".slotCol > div > div").text(slot);
@@ -601,7 +595,7 @@ function generateManage(name, setting, parent) {
 											list.append(node);
 										}
 										
-										if (swapnode.length) {
+										if (swapnode) {
 											list.children().each(function(index, element) {
 												element = $(element);
 												var curr = element.prop("slot");
