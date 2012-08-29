@@ -365,7 +365,10 @@ db = {
 	},
 	writeGamesRecord: function(data) {
 		this.handle.transaction("games", "readwrite").objectStore("games").
-			put(data);
+			put(data).onsuccess = function() {
+			
+			delete window.pendingSave;
+		}
 	},
 	writeGame: function() {
 		if (!GameBoyEmulatorInitialized()) {
@@ -378,6 +381,20 @@ db = {
 			SRAM: SaveMemory.get.SRAM(),
 			RTC: SaveMemory.get.RTC()
 		});
+	},
+	quickWriteGame: function() {
+		if (!GameBoyEmulatorInitialized()) {
+			return false;
+		}
+		
+		var record = {			
+			id: gameboy.name,
+			system: Number(this.getGBColor()),
+			SRAM: SaveMemory.get.SRAM(),
+			RTC: SaveMemory.get.RTC()
+		};
+		window.pendingSave = JSON.stringify(record);
+		this.writeGamesRecord(record);
 	},
 	readGame: function(name, callback) {
 		this.handle.transaction("games", "readonly").objectStore("games").get(name).
@@ -417,7 +434,10 @@ db = {
 	writeStateRecord: function(data) {
 		data.id = data.slot + "|" + data.game;
 		this.handle.transaction("states", "readwrite").objectStore("states").
-			put(data);
+			put(data).onsuccess = function() {
+			
+			delete window.pendingSaveState;
+		}
 	},
 	saveStateSave: function(n) {
 		if (!GameBoyEmulatorInitialized()) {
@@ -431,6 +451,18 @@ db = {
 			slot: n,
 			state: gameboy.saveState()
 		});
+	},
+	quickSaveStateSave: function() {
+		if (!GameBoyEmulatorInitialized()) {
+			return;
+		}
+		var record = {
+			game: gameboy.name,
+			state: gameboy.saveState()
+		};
+		window.pendingSaveState = JSON.stringify(record);
+		record.slot = 0;
+		this.writeStateRecord(record);
 	},
 	eachGame: function(callback) {
 		this.handle.transaction("games", "readwrite").objectStore("games").

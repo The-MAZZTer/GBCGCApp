@@ -45,41 +45,26 @@ $(document).ready(function() {
 			return;
 		}
 		
-		var sram = gameboy.saveSRAMState();
-		if (sram.length > 0) {
-			var s = "";
-			for (var i = 0; i < s.length; i++) {
-				s += String.fromCharCode(sram[i]);
-			}
-			sram = s;
-		} else {
-			sram = null;
-		}
-		window.pendingSave = JSON.stringify({			
-			id: gameboy.name,
-			system: Number(db.getGBColor()),
-			SRAM: sram,
-			RTC: gameboy.cTIMER ? gameboy.saveRTCState() : null
-		});
-		
-		delete window.pendingSaveState;
+		db.quickWriteGame();
 		if (Settings.autoSaveState) {
-			window.pendingSaveState = JSON.stringify({
-				game: gameboy.name,
-				state: gameboy.saveState()
-			});
+			db.quickSaveStateSave();
+		} else {
+			delete window.pendingSaveState;
 		}
 		
-		if (window.pendingSave.length + window.pendingSaveState.length > 2600000) {
-			autoSave();
-		
+		if ((window.pendingSave ? window.pendingSave.length : 0) +
+			(window.pendingSaveState ? window.pendingSaveState.length : 0) > 2600000)
+			{
+			
 			return chrome.i18n.getMessage("unableToAutoSave");
 		}
 	}).unload(function() {
 		if (GameBoyEmulatorInitialized()) {
 			try {
-				localStorage.pendingSave = window.pendingSave;
-				if (Settings.autoSaveState) {
+				if (window.pendingSave) {
+					localStorage.pendingSave = window.pendingSave;
+				}
+				if (Settings.autoSaveState && window.pendingSaveState) {
 					localStorage.pendingSaveState = window.pendingSaveState;
 				}
 			} catch(e) {}
