@@ -191,7 +191,7 @@ canvas {
 	image-rendering: -webkit-optimize-contrast;
 }
 canvas.smooth {
-	image-rendering: auto;
+	image-rendering: optimizeQuality;
 }
 
 #aboutlayer {
@@ -205,15 +205,21 @@ canvas.smooth {
 #aboutcenterer {
 	float: left;
 	height: 50%;
-	margin-bottom: -270px;
+	margin-bottom: -120px;
 }
 #aboutbox {
 	clear: left;
 	background-color: lightgray;
-	width: 500px;
-	height: 500px;
+	width: 400px;
+	height: 200px;
 	padding: 20px;
 	margin: auto;
 	border-radius: 20px;
 	overflow: auto;
+}
+#aboutbox :not(a) {
+	cursor: default;
+}
+#aboutbox h1 {
+	margin-top: 0px;
 }

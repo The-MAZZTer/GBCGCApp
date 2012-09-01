@@ -45,7 +45,7 @@ var i18nTemplate = (function() {
 								// In case we set innerHTML (ignoring others) we need to
 								// recursively check the content
 								if (path == 'innerHTML') {
-									process(element, obj);
+									process(element);
 								}
 							}
 						} else {

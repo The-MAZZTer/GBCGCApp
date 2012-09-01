@@ -73,6 +73,15 @@
 		"description": "Caption of toolbar button."
 	},
 	
+	"emulatorInfo": {
+		"message": "Based on a GameBoy Color emulator written purely in HTML5 and JavaScript by Grant Galitz.  For more information about this emulator and its source code, visit the GIT repository at: <a href=\"https://github.com/grantgalitz/GameBoy-Online\" target=\"_blank\">https://github.com/grantgalitz/GameBoy-Online</a>.",
+		"description": "Info in the about dialog."
+	},
+	"appInfo": {
+		"message": "This Chrome App and accompanying UI was made by Dan Bugglin.  <a href=\"http://github.com/The-MAZZTer/GBCGCApp\" target=\"_blank\">http://github.com/The-MAZZTer/GBCGCApp</a>",
+		"description": "Info in the about dialog."
+	},
+	
 	"gbcgcTitle": {
 		"message": "GBCGC",
 		"description": "Options page header."
