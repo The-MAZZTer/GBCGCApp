@@ -138,7 +138,7 @@ $(document).ready(function() {
 		"webkitfullscreenchange", sizeCanvas);
 	
 	$("#openfile").click(function() {
-		$.create("INPUT").prop("type", "file").prop("accept",
+		$.create("input").prop("type", "file").prop("accept",
 			".gb,.gbc").change(function() {
 			
 			$(this).off("change");

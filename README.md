@@ -8,7 +8,9 @@ Borrowed some old Chrome NTP code to make i18n stuff in HTML easier (see source 
 TODO:
 - Make manage saves options page
 	- Add Import/Export
-		- Only use "Import compatible format" so we're compatible with the original import/export.
+		- Add import support
+- Rewrite about dialog.
+	- Localize about dialog.
 - Add support for gamepad input. (API seems broken in Chrome)
 - Look into registering this App as a handler for .gb/.gbc files on Chrome OS. (Done, test)
 	- Different default fullscreen key bind to reflect Chrome OS keyboard layout. (Done, test)

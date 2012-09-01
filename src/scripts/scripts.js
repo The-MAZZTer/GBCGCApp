@@ -429,7 +429,12 @@ db = {
 		
 		n = isNaN(n) ? window.slotUsed : n;
 		
-		this.readStateRecord(gameboy.name, n, callback);
+		this.readStateRecord(gameboy.name, n, function(res) {
+			if (res) {
+				res.state.unshift(gameboy.ROM);
+			}
+			callback(res);
+		});
 	},
 	writeStateRecord: function(data) {
 		data.id = data.slot + "|" + data.game;
@@ -446,19 +451,23 @@ db = {
 		
 		n = isNaN(n) ? window.slotUsed : n;
 		
+		var state = gameboy.saveState();
+		state.shift();
 		this.writeStateRecord({
 			game: gameboy.name,
 			slot: n,
-			state: gameboy.saveState()
+			state: state
 		});
 	},
 	quickSaveStateSave: function() {
 		if (!GameBoyEmulatorInitialized()) {
 			return;
 		}
+		var state = gameboy.saveState();
+		state.shift();
 		var record = {
 			game: gameboy.name,
-			state: gameboy.saveState()
+			state: state
 		};
 		window.pendingSaveState = JSON.stringify(record);
 		record.slot = 0;

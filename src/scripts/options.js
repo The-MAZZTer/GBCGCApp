@@ -419,7 +419,10 @@ function generateManage(name, setting, parent) {
 									$.create("button").addClass("export").
 										text(chrome.i18n.getMessage("export")).click(function() {
 										
-										
+										var id = $(this).parent().parent().parent().prop("name");
+										db.readGame(id, function(sram) {
+											download(id + ".sram", sram);
+										});
 									})
 								)
 							)
@@ -476,7 +479,10 @@ function generateManage(name, setting, parent) {
 									$.create("button").addClass("export").
 										text(chrome.i18n.getMessage("export")).click(function() {
 										
-										
+										var id = $(this).parent().parent().parent().prop("name");
+										db.readGame(id, function(sram, rtc) {
+											download(id + ".rtc", serialize(rtc));
+										});
 									})
 								)
 							)
@@ -616,7 +622,13 @@ function generateManage(name, setting, parent) {
 								$.create("button").addClass("export").
 									text(chrome.i18n.getMessage("export")).click(function() {
 									
-									
+									var row = $(this).parent().parent().parent();
+									var id = row.prop("name");
+									var slot = row.prop("slot");
+									db.readStateRecord(id, slot, function(data) {
+										download(data.game + "." + data.slot + ".state",
+											serialize(data.state));
+									});
 								})
 							)
 						)
@@ -636,7 +648,7 @@ function generateManage(name, setting, parent) {
 				
 				canvas[0].width = 160;
 				canvas[0].height = 144;
-				renderFrameBuffer(data.state[71], canvas[0]);
+				renderFrameBuffer(data.state[70], canvas[0]);
 			});
 		});
 	});
@@ -681,4 +693,344 @@ function renderFrameBuffer(buffer, canvas) {
 		imageData.data[to++] = 0xFF;
 	}
 	context.putImageData(imageData, 0, 0);
+}
+
+function download(filename, data) {
+	//location.href = "data:application/octet-stream;headers=Content-Disposition%3A%20attachment%3B%20filename=\"" + encodeURI(filename) + "\";base64," + btoa(data);
+	var x = "";
+	for (var i = 0; i < data.length; i++) {
+		x += String.fromCharCode(data[i]);
+	}
+	data = x;
+	
+	var filesystem;
+	
+	var pending = 1;
+	
+	window.requestFileSystem = window.requestFileSystem ||
+		window.webkitRequestFileSystem;
+	window.requestFileSystem(window.TEMPORARY, data.length + (8 * 1024),
+		function(fs) {
+		
+		filesystem = fs;
+		
+		var dr = fs.root.createReader();
+		dr.readEntries(function removeEntries(res) {
+			if (!res.length) {
+				dec();
+				return;
+			}
+			
+			pending += res.length;
+			for (var i = 0; i < res.length; i++) {
+				res[i].remove(dec);
+			}
+			dr.readEntries(arguments.callee);
+		});
+	});
+	
+	function dec() {
+		if (--pending) {
+			return;
+		}
+		filesystem.root.getFile(filename, {create: true}, function(file) {
+			file.createWriter(function(fw) {
+				fw.onwriteend = function() {
+					fw.onwriteend = function() {
+						location.href = file.toURL();
+					}
+					fw.write(new Blob([data]));
+				}
+				fw.truncate(data.length);
+			});
+		});
+	}
+}
+
+function serialize(src, dest) {
+	if (!src) {
+		return null;
+	}
+	
+	var types = {
+		"boolean": 0,
+		"string": 1,
+		"byte": 2,
+		"sbyte": 3,
+		"short": 4,
+		"ushort": 5,
+		"long": 6,
+		"ulong": 7,
+		"ulonglong": 8,
+		"double": 9,
+		"array": 10,
+		"null": 11,
+		"undefined": 12
+	}
+	
+	var dest = dest || [];
+	function encodeNumber(src) {
+		if (isNaN(src)) {
+			throw new Error();
+		}
+		if (src === Infinity) {
+			throw new Error();
+		}
+		if (src === -Infinity) {
+			throw new Error();
+		}
+		if (Math.round(src) !== src) {
+			dest.push(types.double);
+			
+			var signbit = 0;
+			if (src < 0) {
+				signbit = 1;
+				src *= -1;
+			}
+			var exp = 0;
+			while (src >= 2) {
+				exp++;
+				src /= 2;
+			}
+			while (src < 1) {
+				exp--;
+				src *= 2;
+			}
+			exp = (exp >>> 0) & 0x7FF;
+			
+			var sig = 0;
+			for (var i = 0; i < 4; i++) {
+				sig <<= 1;
+				if (src >= 1) {
+					src -= 1;
+					sig |= 1;
+				}
+				src *= 2;
+			}
+			
+			dest.push((signbit << 7) | (exp >> 4));
+			dest.push(((exp & 0x0F) << 4) | sig);
+			
+			for (var i = 0; i < 6; i++) {
+				sig = 0;
+				for (var j = 0; j < 8; j++) {
+					sig <<= 1;
+					if (src >= 1) {
+						src -= 1;
+						sig |= 1;
+					}
+					src *= 2;
+				}
+				dest.push(sig);
+			}
+
+			return;
+		}
+		
+		if (src >= 0 && src < 256) {
+			dest.push(types.byte);
+			dest.push(src);
+			return;
+		}
+		if (src >= -128 && src < 127) {
+			dest.push(types.sbyte);
+			dest.push((src >>> 0) & 0xFF);
+			return;
+		}
+		var bytes;
+		if (src >= -32768 && src <= 32767) {
+			dest.push(types.short);
+			bytes = 2;
+			src = (src >>> 0);
+		} else if (src >= 0 && src < 65536) {
+			dest.push(types.ushort);
+			bytes = 2;
+		} else if (src >= -2147483648 && src < 2147483647) {
+			dest.push(types.long);
+			bytes = 4;
+			src = (src >>> 0);
+		} else if (src >= 0 && src < 4294967296) {
+			dest.push(types.ulong);
+			bytes = 4;
+		} else {
+			dest.push(types.ulonglong);
+			for (var i = 0; i < 8; i++) {
+				dest.push(src & 0xFF);
+				src /= 0x100;
+			}
+			return;
+		}
+		
+		for (var i = 0; i < bytes; i++) {
+			dest.push(src & 0xFF);
+			src >>= 8;
+		}
+	}
+
+	for (var i = 0; i < src.length; i++) {
+		if (src[i] instanceof Array) {
+			dest.push(types.array);
+			encodeNumber(src[i].length);
+			if (src[i].length) {
+				serialize(src[i], dest);
+			}
+			continue;
+		}
+		if (src[i] === null) {
+			dest.push(types.null);
+			continue;
+		}
+		switch (typeof(src[i])) {
+			case "undefined":
+				dest.push(type.undefined);
+				continue;
+			case "boolean":
+				dest.push(types.boolean);
+				dest.push(Number(src[i]));
+				continue;
+			case "string":
+				dest.push(types.string);
+				if (src[i].indexOf("\x00") > -1) {
+					throw new Error();
+				}
+				for (var j = 0; j < src[i].length; j++) {
+					dest.push(src[i].charCodeAt(j));
+				}
+				dest.push(0);
+				continue;
+			case "number":
+				encodeNumber(src[i]);
+				continue;
+			default:
+				throw new Error();
+		}
+	}
+	return dest;
+}
+function deserialize(src, length) {
+	if (arguments.callee.caller !== arguments.callee) {
+		window._pos = 0;
+	}
+
+	if (!src) {
+		return null;
+	}
+	
+	var types = {
+		"boolean": 0,
+		"string": 1,
+		"byte": 2,
+		"sbyte": 3,
+		"short": 4,
+		"ushort": 5,
+		"long": 6,
+		"ulong": 7,
+		"ulonglong": 8,
+		"double": 9,
+		"array": 10,
+		"null": 11,
+		"undefined": 12
+	}
+	
+	var dest = [];
+	for (var i = window._pos; i < src.length && (!length || dest.length <
+		length); ) {
+		
+		switch (src[i++]) {
+			case types.null:
+				dest.push(null);
+				continue;
+			case types.undefined:
+				dest.push(undefined);
+				continue;
+			case types.boolean:
+				dest.push(Boolean(src[i++]));
+				continue;
+			case types.string:
+				var chr;
+				var s = "";
+				while (chr = src[i++]) {
+					s += String.fromCharCode(chr);
+				}
+				dest.push(s);
+				continue;
+			case types.byte:
+				dest.push(src[i++]);
+				continue;
+			case types.sbyte:
+				dest.push(src[i++] << 24 >> 24);
+				continue;
+			case types.ushort:
+				dest.push(src[i++] | (src[i++] << 8));
+				continue;
+			case types.short:
+				dest.push((src[i++] | (src[i++] << 8)) << 16 >> 16);
+				continue;
+			case types.ulong:
+				dest.push((src[i++] | (src[i++] << 8) | (src[i++] << 16) |
+					(src[i++] << 24)) >>> 0);
+				continue;
+			case types.long:
+				dest.push(src[i++] | (src[i++] << 8) | (src[i++] << 16) |
+					(src[i++] << 24));
+				continue;
+			case types.ulonglong:
+				var value = 0;
+				for (var j = 0; j < 8; j++) {
+					value += src[i++] * Math.pow(256, j);
+				}
+				dest.push(value);
+				continue;
+			case types.double:
+				var b = [src[i++], src[i++], src[i++], src[i++], src[i++], src[i++],
+					src[i++], src[i++]];
+				
+				var num = 0;
+				for (var j = 7; j >= 2; j--) {
+					for (var k = 0; k < 8; k++) {
+						num /= 2;
+						var bit = (b[j] >> k) & 0x1;
+						if (bit) {
+							num += 1;
+						}
+					}
+				}
+				for (var k = 0; k < 4; k++) {
+					num /= 2;
+					var bit = (b[1] >> k) & 0x1;
+					if (bit) {
+						num += 1;
+					}
+				}
+				
+				var exp = ((b[0] & 0x7F) << 4) | ((b[1] & 0xF0) >> 4);
+				exp = exp << 20 >> 20;
+				while (exp < 0) {
+					exp++;
+					num /= 2;
+				}
+				while (exp > 0) {
+					exp--;
+					num *= 2;
+				}
+				
+				if (b[0] & 0x80) {
+					num *= -1;
+				}
+				dest.push(num);
+				continue;
+			case types.array:
+				window._pos = i;
+				var len = deserialize(src, 1)[0];
+				if (len) {
+					dest.push(deserialize(src, len));
+				}
+				i = window._pos;
+				continue;
+			default:
+				throw new Error();
+		}
+	}
+	window._pos = i;
+	return dest;
 }
