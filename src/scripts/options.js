@@ -390,8 +390,8 @@ function generateManage(name, setting, parent) {
 				);
 				if (data.SRAM.length) {
 					list.append(
-						$.create("div").prop("name", data.id).
-							mousedown(function(e) {
+						$.create("div").prop("name", data.id).prop("id", "save_" +
+							data.id.replace(" ", "_") + "_SRAM").mousedown(function(e) {
 							
 							if (e.target.tagName == "BUTTON") {
 								return;
@@ -420,8 +420,8 @@ function generateManage(name, setting, parent) {
 										text(chrome.i18n.getMessage("export")).click(function() {
 										
 										var id = $(this).parent().parent().parent().prop("name");
-										db.readGame(id, function(sram) {
-											download(id + ".sram", sram);
+										db.readGame(id, function(res) {
+											download(id + ".sram", res.SRAM);
 										});
 									})
 								)
@@ -450,8 +450,8 @@ function generateManage(name, setting, parent) {
 				);
 				if (data.RTC.length) {
 					list.append(
-						$.create("div").prop("name", data.id).
-							mousedown(function(e) {
+						$.create("div").prop("name", data.id).prop("id", "save_" +
+							data.id.replace(" ", "_") + "_RTC").mousedown(function(e) {
 							
 							if (e.target.tagName == "BUTTON") {
 								return;
@@ -480,8 +480,8 @@ function generateManage(name, setting, parent) {
 										text(chrome.i18n.getMessage("export")).click(function() {
 										
 										var id = $(this).parent().parent().parent().prop("name");
-										db.readGame(id, function(sram, rtc) {
-											download(id + ".rtc", serialize(rtc));
+										db.readGame(id, function(res) {
+											download(id + ".rtc", serialize(res.RTC));
 										});
 									})
 								)
@@ -515,6 +515,7 @@ function generateManage(name, setting, parent) {
 				var canvas, name;
 				list.append(
 					$.create("div").prop("name", data.game).prop("slot", data.slot).
+						prop("id", "save_" + data.id.replace(" ", "_") + "_" + data.slot).
 						mousedown(function(e) {
 						
 						if (e.target.tagName == "BUTTON") {

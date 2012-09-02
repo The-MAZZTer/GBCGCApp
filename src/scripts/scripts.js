@@ -247,52 +247,6 @@ Settings = {
 }
 Settings.init();
 
-SaveMemory = {
-	get: {
-		SRAM: function() {
-			if (!GameBoyEmulatorInitialized() || !gameboy.cBATT) {
-				return null;
-			}
-			
-			var sram = gameboy.saveSRAMState();
-			if (sram.length > 0) {
-				var s = "";
-				for (var i = 0; i < sram.length; i++) {
-					s += String.fromCharCode(sram[i]);
-				}
-				return s;
-			} else {
-				return null;
-			}
-		},
-		RTC: function() {
-			if (!GameBoyEmulatorInitialized() || !gameboy.cTIMER) {
-				return null;
-			}
-			
-			return gameboy.saveRTCState();
-		}
-	},
-	decode: {
-		SRAM: function(s) {
-			if (!s) {
-				return [];
-			}
-			var x = new Array(s.length);
-			for (var i = 0; i < s.length; i++) {
-				x[i] = s.charCodeAt(i);
-			}
-			return x;
-		},
-		RTC: function(x) {
-			if (!x) {
-				return [];
-			}
-			return x;
-		}
-	}
-}
-
 window.indexedDB = window.indexedDB || window.webkitIndexedDB;
 window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange;
 db = {
@@ -321,7 +275,7 @@ db = {
 	},
 	readyHandlers: [function() {
 		if (localStorage.pendingSave) {
-			this.writeGamesRecord(JSON.parse(localStorage.pendingSave));
+			this.writeGameRecord(JSON.parse(localStorage.pendingSave));
 			delete localStorage.pendingSave;
 		}
 		
@@ -363,38 +317,39 @@ db = {
 				return false;
 		}
 	},
-	writeGamesRecord: function(data) {
+	writeGameRecord: function(data) {
 		this.handle.transaction("games", "readwrite").objectStore("games").
 			put(data).onsuccess = function() {
 			
 			delete window.pendingSave;
 		}
 	},
-	writeGame: function() {
+	writeGame: function(quick) {
 		if (!GameBoyEmulatorInitialized()) {
 			return false;
 		}
 		
-		this.writeGamesRecord({
-			id: gameboy.name,
-			system: Number(this.getGBColor()),
-			SRAM: SaveMemory.get.SRAM(),
-			RTC: SaveMemory.get.RTC()
-		});
-	},
-	quickWriteGame: function() {
-		if (!GameBoyEmulatorInitialized()) {
-			return false;
+		var sram = gameboy.saveSRAMState();
+		if (sram.length > 0) {
+			var s = "";
+			for (var i = 0; i < sram.length; i++) {
+				s += String.fromCharCode(sram[i]);
+			}
+			sram = s;
+		} else {
+			sram = null;
 		}
 		
 		var record = {			
 			id: gameboy.name,
 			system: Number(this.getGBColor()),
-			SRAM: SaveMemory.get.SRAM(),
-			RTC: SaveMemory.get.RTC()
+			SRAM: sram,
+			RTC: gameboy.cTIMER ? gameboy.saveRTCState() : null
 		};
-		window.pendingSave = JSON.stringify(record);
-		this.writeGamesRecord(record);
+		if (quick) {
+			window.pendingSave = JSON.stringify(record);
+		}
+		this.writeGameRecord(record);
 	},
 	readGame: function(name, callback) {
 		this.handle.transaction("games", "readonly").objectStore("games").get(name).
@@ -402,10 +357,18 @@ db = {
 			
 			var res = e.target.result;
 			if (!res) {
-				callback([], []);
+				callback(null);
 			} else {
-				callback(SaveMemory.decode.SRAM(res.SRAM),
-					SaveMemory.decode.RTC(res.RTC));
+				var sram = res.SRAM ? new Array(res.SRAM.length) : [];
+				if (res.SRAM) {
+					for (var i = 0; i < res.SRAM.length; i++) {
+						sram[i] = res.SRAM.charCodeAt(i);
+					}
+					res.SRAM = sram;
+				}
+				res.RTC = res.RTC || [];
+			
+				callback(res);
 			}
 		}
 	},
@@ -474,7 +437,7 @@ db = {
 		this.writeStateRecord(record);
 	},
 	eachGame: function(callback) {
-		this.handle.transaction("games", "readwrite").objectStore("games").
+		this.handle.transaction("games", "readonly").objectStore("games").
 			openCursor().onsuccess = function(e) {
 			
 			var x = e.target.result;
@@ -487,7 +450,7 @@ db = {
 		}
 	},
 	eachState: function(game, callback) {
-		this.handle.transaction("states", "readwrite").objectStore("states").
+		this.handle.transaction("states", "readonly").objectStore("states").
 			index("game").openCursor(IDBKeyRange.only(game)).onsuccess = function(e) {
 			
 			var x = e.target.result;
@@ -547,5 +510,45 @@ db = {
 				}
 			}
 		}
+	},
+	importSRAM: function(name, sram) {
+		var self = this;
+		this.readGame(name, function(res) {
+			res.SRAM = sram;
+			self.writeGame(res);
+		});
+	},
+	importRTC: function(name, rtc) {
+		var self = this;
+		this.readGame(name, function(res) {
+			res.RTC = rtc;
+			self.writeGame(res);
+		});
+	},
+	importState: function(name, state, callback, slot) {
+		var self = this;
+		slot = slot || 1;
+		this.readStateRecord(name, slot, function(res) {
+			if (res) {
+				self.importState(name, state, slot + 1);
+				return;
+			}
+			
+			self.writeStateRecord({
+				game: name,
+				slot: slot,
+				state: state
+			});
+			callback(slot);
+		});
 	}
+}
+
+function openFile(callback, accept) {
+	$.create("input").prop("type", "file").prop("accept", accept || "").change(
+		function() {
+			
+		$(this).off("change");
+		callback(this.files[0]);
+	}).click();
 }

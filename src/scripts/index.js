@@ -45,7 +45,7 @@ $(document).ready(function() {
 			return;
 		}
 		
-		db.quickWriteGame();
+		db.writeGame(true);
 		if (Settings.autoSaveState) {
 			db.quickSaveStateSave();
 		} else {
@@ -138,12 +138,7 @@ $(document).ready(function() {
 		"webkitfullscreenchange", sizeCanvas);
 	
 	$("#openfile").click(function() {
-		$.create("input").prop("type", "file").prop("accept",
-			".gb,.gbc").change(function() {
-			
-			$(this).off("change");
-			openROM(this.files[0]);
-		}).click();
+		openFile(openROM, ".gb,.gbc");
 	});
 	$("#pause").click(function() {
 		$("#pause").addClass("hidden");
@@ -365,10 +360,10 @@ function loadROM(data, reset) {
 		}
 	}
 	
-	db.readGame(name, function(SRAM, RTC) {
+	db.readGame(name, function(res) {
 		gameboy = new GameBoyCore($("canvas")[0], data);
-		gameboy.openMBC = function() { return SRAM };
-		gameboy.openRTC = function() { return RTC };
+		gameboy.openMBC = function() { return res.SRAM };
+		gameboy.openRTC = function() { return res.RTC };
 		gameboy.start();
 		
 		if (!reset && Settings.autoSaveState) {
@@ -425,7 +420,7 @@ function sizeCanvas() {
 	var canvas = container.children("canvas");
 	
 	var nativeWidth = 160;
-	var nativeHeight = 140;	
+	var nativeHeight = 140;
 	
 	if (document.isFullScreen || document.webkitIsFullScreen ||
 		document.fullScreenElement || document.webkitFullScreenElement) {
