@@ -205,13 +205,13 @@ canvas.smooth {
 #aboutcenterer {
 	float: left;
 	height: 50%;
-	margin-bottom: -120px;
+	margin-bottom: -170px;
 }
 #aboutbox {
 	clear: left;
 	background-color: lightgray;
 	width: 400px;
-	height: 200px;
+	height: 300px;
 	padding: 20px;
 	margin: auto;
 	border-radius: 20px;

@@ -678,7 +678,8 @@ function syncKeys() {
 			$(element).removeProp("key").find(".keyCol").text("");
 		} else {
 			$(element).prop("key", key).find(".keyCol").
-				text(chrome.i18n.getMessage("key" + key) || ("Unknown (" + key + ")"));
+				text(chrome.i18n.getMessage("key" + key) ||
+					chrome.i18n.getMessage("unknownkey", key.toString()));
 		}
 	});
 }

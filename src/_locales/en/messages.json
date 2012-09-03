@@ -81,6 +81,10 @@
 		"message": "This Chrome App and accompanying UI was made by Dan Bugglin.  <a href=\"http://github.com/The-MAZZTer/GBCGCApp\" target=\"_blank\">http://github.com/The-MAZZTer/GBCGCApp</a>",
 		"description": "Info in the about dialog."
 	},
+	"techInfo": {
+		"message": "Many modern web technologies were used in the making of this app, including jQuery, File APIs, DeviceOrientation, Chrome APIs, Drag and Drop, Fullscreen API, Page Visibility API, IndexedDB, and Canvas.",
+		"description": "Info in the about dialog."
+	},
 	
 	"gbcgcTitle": {
 		"message": "GBCGC",
@@ -784,6 +788,16 @@
 	"key222": {
 		"message": "'",
 		"description": "A key name."
+	},
+	"unknownkey": {
+		"message": "Unknown ($key$)",
+		"description": "A key name.",
+		"placeholders": {
+			"key": {
+				"content": "$1",
+				"example": "123"
+			}
+		}
 	},
 	
 	"fileBrowserCaption": {
