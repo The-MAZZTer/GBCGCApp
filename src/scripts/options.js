@@ -334,8 +334,9 @@ function generateControls(name, setting, parent) {
 					$.create("div").addClass("nameCol").attr("i18n-content", keys[i] +
 						"Control")
 				).append(
-					$.create("div").addClass("keyCol").text(map[keys[i]] ? (chrome.i18n.getMessage("key" +
-						map[keys[i]]) || ("Unknown (" + map[keys[i]] + ")")) : "")
+					$.create("div").addClass("keyCol").text(map[keys[i]] ?
+						(chrome.i18n.getMessage("key" + map[keys[i]]) || ("Unknown (" +
+						map[keys[i]] + ")")) : "")
 				)
 			).append(
 				$.create("button").addClass("delete").click(function() {
@@ -348,6 +349,245 @@ function generateControls(name, setting, parent) {
 		);
 	}
 	parent.append(list);
+}
+
+function createSRAMRow(id) {
+	return $.create("div").prop("id", "save_" + id.replace(" ", "_") + "_SRAM").
+			mousedown(function(e) {
+			
+			if (e.target.tagName == "BUTTON") {
+				return;
+			}
+			
+			$("list").children().removeAttr("selected").removeAttr("focus");
+			$(this).attr("selected", "selected").attr("focus", "focus");
+			
+			$(document).mousedown(function() {
+				$("list").children().removeAttr("focus");
+				$(document).off("mousedown");
+			});
+			
+			e.stopPropagation();
+		}).append(
+			$.create("div").append(
+				$.create("div").addClass("iconCol")
+			).append(
+				$.create("div").addClass("nameCol").
+					text(chrome.i18n.getMessage("manageSRAM"))
+			).append(
+				$.create("div").addClass("slotCol")
+			).append(
+				$.create("div").addClass("exportCol").append(
+					$.create("button").addClass("export").
+						text(chrome.i18n.getMessage("export")).click(function() {
+						
+						var id = $(this).parent().parent().parent().parent().parent().
+							prop("name");
+						db.readGame(id, function(res) {
+							download(id + ".sram", res.SRAM);
+						});
+					})
+				)
+			)
+		).append(
+			$.create("button").addClass("delete").click(function() {
+				var row = $(this).parent();
+				var game = row.parent().parent().prop("name");
+				db.deleteSRAM(game);
+				
+				row.mouseout();
+				row.remove();
+			})
+		);
+}
+
+function createRTCRow(id) {
+	return $.create("div").prop("id", "save_" + id.replace(" ", "_") + "_RTC").
+			mousedown(function(e) {
+			
+			if (e.target.tagName == "BUTTON") {
+				return;
+			}
+			
+			$("list").children().removeAttr("selected").removeAttr("focus");
+			$(this).attr("selected", "selected").attr("focus", "focus");
+			
+			$(document).mousedown(function() {
+				$("list").children().removeAttr("focus");
+				$(document).off("mousedown");
+			});
+			
+			e.stopPropagation();
+		}).append(
+			$.create("div").append(
+				$.create("div").addClass("iconCol")
+			).append(
+				$.create("div").addClass("nameCol").
+					text(chrome.i18n.getMessage("manageRTC"))
+			).append(
+				$.create("div").addClass("slotCol")
+			).append(
+				$.create("div").addClass("exportCol").append(
+					$.create("button").addClass("export").
+						text(chrome.i18n.getMessage("export")).click(function() {
+						
+						var id = $(this).parent().parent().parent().parent().parent().
+							prop("name");
+						db.readGame(id, function(res) {
+							download(id + ".rtc", serialize(res.RTC));
+						});
+					})
+				)
+			)
+		).append(
+			$.create("button").addClass("delete").click(function() {
+				var row = $(this).parent();
+				var game = row.parent().parent().prop("name");
+				db.deleteRTC(game);
+				
+				row.mouseout();
+				row.remove();
+			})
+		);
+}
+
+function createStateRow(id, slot, bitmap) {
+	var canvas;
+	var res =
+		$.create("div").prop("slot", slot).prop("id", "save_" + id.replace(" ", "_")
+			+ "_" + slot).mousedown(function(e) {
+			
+			if (e.target.tagName == "BUTTON") {
+				return;
+			}
+			
+			$("list").children().removeAttr("selected").removeAttr("focus");
+			$(this).attr("selected", "selected").attr("focus", "focus");
+			
+			$(document).mousedown(function() {
+				$("list").children().removeAttr("focus");
+				$(document).off("mousedown");
+			});
+			
+			e.stopPropagation();
+		}).mouseover(function() {
+			var src = $(this).find("canvas");
+			var target = $("#hoverCanvas");
+			
+			var context = src[0].getContext("2d");
+			var imageData = context.getImageData(0, 0, 160, 144);
+			var context = target[0].getContext("2d");
+			
+			context.putImageData(imageData, 0, 0);
+			
+			var pos = src.offset();
+			target.css("left", pos.left - 1 + "px").css("top", pos.top - 1 + "px").
+				addClass("visible");
+		}).mouseout(function() {
+			$("#hoverCanvas").removeClass("visible");
+		}).append(
+			$.create("div").append(
+				$.create("div").addClass("iconCol").append(
+					canvas = $.create("canvas")
+				)
+			).append(
+				$.create("div").addClass("nameCol").
+					text(chrome.i18n.getMessage("slotDescription"))
+			).append(
+				$.create("div").addClass("slotCol").append(
+					$.create("div").append(
+						$.create("div").text(slot)
+					).append(
+						$.create("input").prop("type", "number").prop("min", 0).
+							prop("step", 1).prop("value", slot).blur(function() {
+							
+							var node = $(this).parent().parent().parent().parent();
+							var val = Math.max(0, Math.round(this.value));
+							var slot = node.prop("slot");
+							if (isNaN(val) || slot == val) {
+								return;
+							}
+							db.renumberState(node.parent().parent().prop("name"), slot, val);
+							var list = node.parent();
+							var swapnode = null;
+							list.children().each(function(index, element) {
+								element = $(element);
+								var curr = element.prop("slot");
+								if (curr == val) {
+									swapnode = element;
+									return false;
+								}
+							});
+							node.prop("slot", val);
+							$(this).parent().children("div").text(val);
+							
+							node.detach();
+							if (swapnode) {
+								swapnode.prop("slot", slot).find(".slotCol > div > input").
+									prop("value", slot);
+								swapnode.find(".slotCol > div > div").text(slot);
+								swapnode.detach();
+							}
+							
+							list.children().each(function(index, element) {
+								element = $(element);
+								var curr = element.prop("slot");
+								if (curr > val) {
+									element.before(node);
+									return false;
+								}
+							});
+							if (!node.parent().length) {
+								list.append(node);
+							}
+							
+							if (swapnode) {
+								list.children().each(function(index, element) {
+									element = $(element);
+									var curr = element.prop("slot");
+									if (curr > slot) {
+										element.before(swapnode);
+										return false;
+									}
+								});
+								if (!swapnode.parent().length) {
+									list.append(swapnode);
+								}
+							}
+						})
+					)
+				)
+			).append(
+				$.create("div").addClass("exportCol").append(
+					$.create("button").addClass("export").
+						text(chrome.i18n.getMessage("export")).click(function() {
+						
+						var row = $(this).parent().parent().parent();
+						var id = row.parent().parent().prop("name");
+						var slot = row.prop("slot");
+						db.readStateRecord(id, slot, function(data) {
+							download(data.game + "." + data.slot + ".state",
+								serialize(data.state));
+						});
+					})
+				)
+			)
+		).append(
+			$.create("button").addClass("delete").click(function() {
+				var row = $(this).parent();
+				var game = row.parent().parent().prop("name");
+				var slot = row.prop("slot");
+				db.deleteState(game, slot);
+				
+				row.mouseout();
+				row.remove();
+			})
+		);
+	
+	canvas[0].width = 160;
+	canvas[0].height = 144;
+	renderFrameBuffer(bitmap, canvas[0]);
+	return res;
 }
 
 function generateManage(name, setting, parent) {
@@ -373,7 +613,7 @@ function generateManage(name, setting, parent) {
 			var list;
 			var header;
 			container.append(
-				$.create("div").append(
+				$.create("div").prop("name", data.id).append(
 					header = $.create("h3").addClass("system" + data.system).text(data.id)
 				).append(
 					list = $.create("list")
@@ -385,59 +625,25 @@ function generateManage(name, setting, parent) {
 					$.create("button").addClass("realButton").text(
 						chrome.i18n.getMessage("importSaveSRAM")).click(function() {
 						
-						
+						var self = this;
+						openFile(function(file) {
+							var fr = new FileReader();
+							fr.onload = function() {
+								var container = $(self).parent().parent();
+								var id = container.prop("name");
+								db.importSRAM(id, this.result);
+								
+								var row = $("#save_" + id.replace(" ", "_") + "_SRAM");
+								if (!row.length) {
+									container.children("list").prepend(createSRAMRow(id));
+								}
+							}
+							fr.readAsBinaryString(file);
+						}, ".sram");
 					})
 				);
 				if (data.SRAM.length) {
-					list.append(
-						$.create("div").prop("name", data.id).prop("id", "save_" +
-							data.id.replace(" ", "_") + "_SRAM").mousedown(function(e) {
-							
-							if (e.target.tagName == "BUTTON") {
-								return;
-							}
-							
-							$("list").children().removeAttr("selected").removeAttr("focus");
-							$(this).attr("selected", "selected").attr("focus", "focus");
-							
-							$(document).mousedown(function() {
-								$("list").children().removeAttr("focus");
-								$(document).off("mousedown");
-							});
-							
-							e.stopPropagation();
-						}).append(
-							$.create("div").append(
-								$.create("div").addClass("iconCol")
-							).append(
-								$.create("div").addClass("nameCol").
-									text(chrome.i18n.getMessage("manageSRAM"))
-							).append(
-								$.create("div").addClass("slotCol")
-							).append(
-								$.create("div").addClass("exportCol").append(
-									$.create("button").addClass("export").
-										text(chrome.i18n.getMessage("export")).click(function() {
-										
-										var id = $(this).parent().parent().parent().prop("name");
-										db.readGame(id, function(res) {
-											download(id + ".sram", res.SRAM);
-										});
-									})
-								)
-							)
-						).append(
-							$.create("button").addClass("delete").click(function() {
-								var row = $(this).parent();
-								var game = row.prop("name");
-								db.deleteSRAM(game);
-								
-								var list = row.parent()
-								row.mouseout();
-								row.remove();
-							})
-						)
-					);
+					list.append(createSRAMRow(data.id));
 				}
 			}
 			if (data.RTC != null) {
@@ -445,66 +651,66 @@ function generateManage(name, setting, parent) {
 					$.create("button").addClass("realButton").text(
 						chrome.i18n.getMessage("importSaveRTC")).click(function() {
 						
-						
+						var self = this;
+						openFile(function(file) {
+							var fr = new FileReader();
+							fr.onload = function() {
+								var container = $(self).parent().parent();
+								var id = container.prop("name");
+								db.importRTC(id, this.result);
+								
+								var row = $("#save_" + id.replace(" ", "_") + "_RTC");
+								if (!row.length) {
+									var row = $("#save_" + id.replace(" ", "_") + "_SRAM");
+									if (row.length) {
+										row.after(createRTCRow(id));
+									} else {
+										container.children("list").prepend(createRTCRow(id));
+									}
+								}
+							}
+							fr.readAsBinaryString(file);
+						}, ".rtc");
 					})
 				);
 				if (data.RTC.length) {
-					list.append(
-						$.create("div").prop("name", data.id).prop("id", "save_" +
-							data.id.replace(" ", "_") + "_RTC").mousedown(function(e) {
-							
-							if (e.target.tagName == "BUTTON") {
-								return;
-							}
-							
-							$("list").children().removeAttr("selected").removeAttr("focus");
-							$(this).attr("selected", "selected").attr("focus", "focus");
-							
-							$(document).mousedown(function() {
-								$("list").children().removeAttr("focus");
-								$(document).off("mousedown");
-							});
-							
-							e.stopPropagation();
-						}).append(
-							$.create("div").append(
-								$.create("div").addClass("iconCol")
-							).append(
-								$.create("div").addClass("nameCol").
-									text(chrome.i18n.getMessage("manageRTC"))
-							).append(
-								$.create("div").addClass("slotCol")
-							).append(
-								$.create("div").addClass("exportCol").append(
-									$.create("button").addClass("export").
-										text(chrome.i18n.getMessage("export")).click(function() {
-										
-										var id = $(this).parent().parent().parent().prop("name");
-										db.readGame(id, function(res) {
-											download(id + ".rtc", serialize(res.RTC));
-										});
-									})
-								)
-							)
-						).append(
-							$.create("button").addClass("delete").click(function() {
-								var row = $(this).parent();
-								var game = row.prop("name");
-								db.deleteRTC(game);
-								
-								var list = row.parent()
-								row.mouseout();
-								row.remove();
-							})
-						)
-					);
+					list.append(createRTCRow(data.id));
 				}
 			}
 			header.append(
 				$.create("button").addClass("realButton").text(
 					chrome.i18n.getMessage("importSaveState")).click(function() {
-					
-					
+						
+					var self = this;
+					openFile(function(file) {
+						var fr = new FileReader();
+						fr.onload = function() {
+							var container = $(self).parent().parent();
+							var id = container.prop("name");
+							db.importState(id, this.result, function(slot, state) {
+								var list = container.children("list");
+								var row = createStateRow(id, slot, state[70]);
+								list.children().each(function(index, element) {
+									var slot2 = $(element).prop("slot");
+									if (slot2 === undefined) {
+										return;
+									}
+									
+									if (slot2 < slot) {
+										return;
+									}
+									
+									$(element).before(row);
+									row = null;
+									return false;
+								});
+								if (row) {
+									list.append(row);
+								}
+							});
+						}
+						fr.readAsBinaryString(file);
+					}, ".state");
 				})
 			);
 			db.eachState(data.id, function(data) {
@@ -512,144 +718,7 @@ function generateManage(name, setting, parent) {
 					return;
 				}
 				
-				var canvas, name;
-				list.append(
-					$.create("div").prop("name", data.game).prop("slot", data.slot).
-						prop("id", "save_" + data.id.replace(" ", "_") + "_" + data.slot).
-						mousedown(function(e) {
-						
-						if (e.target.tagName == "BUTTON") {
-							return;
-						}
-						
-						$("list").children().removeAttr("selected").removeAttr("focus");
-						$(this).attr("selected", "selected").attr("focus", "focus");
-						
-						$(document).mousedown(function() {
-							$("list").children().removeAttr("focus");
-							$(document).off("mousedown");
-						});
-						
-						e.stopPropagation();
-					}).mouseover(function() {
-						var src = $(this).find("canvas");
-						var target = $("#hoverCanvas");
-						
-						var context = src[0].getContext("2d");
-						var imageData = context.getImageData(0, 0, 160, 144);
-						var context = target[0].getContext("2d");
-						
-						context.putImageData(imageData, 0, 0);
-						
-						var pos = src.offset();
-						target.css("left", pos.left - 1 + "px").css("top", pos.top - 1 +
-							"px").addClass("visible");
-					}).mouseout(function() {
-						$("#hoverCanvas").removeClass("visible");
-					}).append(
-						$.create("div").append(
-							$.create("div").addClass("iconCol").append(
-								canvas = $.create("canvas")
-							)
-						).append(
-							$.create("div").addClass("nameCol").
-								text(chrome.i18n.getMessage("slotDescription"))
-						).append(
-							$.create("div").addClass("slotCol").append(
-								$.create("div").append(
-									$.create("div").text(data.slot)
-								).append(
-									$.create("input").prop("type", "number").prop("min", 0).
-										prop("step", 1).prop("value", data.slot).blur(function() {
-										
-										var node = $(this).parent().parent().parent().parent();
-										var val = Math.max(0, Math.round(this.value));
-										var slot = node.prop("slot");
-										if (isNaN(val) || slot == val) {
-											return;
-										}
-										db.renumberState(node.prop("name"), slot, val);
-										var list = node.parent();
-										var swapnode = null;
-										list.children().each(function(index, element) {
-											element = $(element);
-											var curr = element.prop("slot");
-											if (curr == val) {
-												swapnode = element;
-												return false;
-											}
-										});
-										node.prop("slot", val);
-										$(this).parent().children("div").text(val);
-										
-										node.detach();
-										if (swapnode) {
-											swapnode.prop("slot", slot).
-												find(".slotCol > div > input").prop("value", slot);
-											swapnode.find(".slotCol > div > div").text(slot);
-											swapnode.detach();
-										}
-										
-										list.children().each(function(index, element) {
-											element = $(element);
-											var curr = element.prop("slot");
-											if (curr > val) {
-												element.before(node);
-												return false;
-											}
-										});
-										if (!node.parent().length) {
-											list.append(node);
-										}
-										
-										if (swapnode) {
-											list.children().each(function(index, element) {
-												element = $(element);
-												var curr = element.prop("slot");
-												if (curr > slot) {
-													element.before(swapnode);
-													return false;
-												}
-											});
-											if (!swapnode.parent().length) {
-												list.append(swapnode);
-											}
-										}
-									})
-								)
-							)
-						).append(
-							$.create("div").addClass("exportCol").append(
-								$.create("button").addClass("export").
-									text(chrome.i18n.getMessage("export")).click(function() {
-									
-									var row = $(this).parent().parent().parent();
-									var id = row.prop("name");
-									var slot = row.prop("slot");
-									db.readStateRecord(id, slot, function(data) {
-										download(data.game + "." + data.slot + ".state",
-											serialize(data.state));
-									});
-								})
-							)
-						)
-					).append(
-						$.create("button").addClass("delete").click(function() {
-							var row = $(this).parent();
-							var game = row.prop("name");
-							var slot = row.prop("slot");
-							db.deleteState(game, slot);
-							
-							var list = row.parent();
-							row.mouseout();
-							row.remove();
-						})
-					)
-				);
-				
-				canvas[0].width = 160;
-				canvas[0].height = 144;
-				renderFrameBuffer(data.state[70], canvas[0]);
+				list.append(createStateRow(data.id, data.slot, data.state[70]));
 			});
 		});
 	});
@@ -699,11 +768,7 @@ function renderFrameBuffer(buffer, canvas) {
 
 function download(filename, data) {
 	//location.href = "data:application/octet-stream;headers=Content-Disposition%3A%20attachment%3B%20filename=\"" + encodeURI(filename) + "\";base64," + btoa(data);
-	var x = "";
-	for (var i = 0; i < data.length; i++) {
-		x += String.fromCharCode(data[i]);
-	}
-	data = x;
+	data = new Uint8Array(data);
 	
 	var filesystem;
 	
@@ -747,292 +812,4 @@ function download(filename, data) {
 			});
 		});
 	}
-}
-
-function serialize(src, dest) {
-	if (!src) {
-		return null;
-	}
-	
-	var types = {
-		"boolean": 0,
-		"string": 1,
-		"byte": 2,
-		"sbyte": 3,
-		"short": 4,
-		"ushort": 5,
-		"long": 6,
-		"ulong": 7,
-		"ulonglong": 8,
-		"double": 9,
-		"array": 10,
-		"null": 11,
-		"undefined": 12
-	}
-	
-	var dest = dest || [];
-	function encodeNumber(src) {
-		if (isNaN(src)) {
-			throw new Error();
-		}
-		if (src === Infinity) {
-			throw new Error();
-		}
-		if (src === -Infinity) {
-			throw new Error();
-		}
-		if (Math.round(src) !== src) {
-			dest.push(types.double);
-			
-			var signbit = 0;
-			if (src < 0) {
-				signbit = 1;
-				src *= -1;
-			}
-			var exp = 0;
-			while (src >= 2) {
-				exp++;
-				src /= 2;
-			}
-			while (src < 1) {
-				exp--;
-				src *= 2;
-			}
-			exp = (exp >>> 0) & 0x7FF;
-			
-			var sig = 0;
-			for (var i = 0; i < 4; i++) {
-				sig <<= 1;
-				if (src >= 1) {
-					src -= 1;
-					sig |= 1;
-				}
-				src *= 2;
-			}
-			
-			dest.push((signbit << 7) | (exp >> 4));
-			dest.push(((exp & 0x0F) << 4) | sig);
-			
-			for (var i = 0; i < 6; i++) {
-				sig = 0;
-				for (var j = 0; j < 8; j++) {
-					sig <<= 1;
-					if (src >= 1) {
-						src -= 1;
-						sig |= 1;
-					}
-					src *= 2;
-				}
-				dest.push(sig);
-			}
-
-			return;
-		}
-		
-		if (src >= 0 && src < 256) {
-			dest.push(types.byte);
-			dest.push(src);
-			return;
-		}
-		if (src >= -128 && src < 127) {
-			dest.push(types.sbyte);
-			dest.push((src >>> 0) & 0xFF);
-			return;
-		}
-		var bytes;
-		if (src >= -32768 && src <= 32767) {
-			dest.push(types.short);
-			bytes = 2;
-			src = (src >>> 0);
-		} else if (src >= 0 && src < 65536) {
-			dest.push(types.ushort);
-			bytes = 2;
-		} else if (src >= -2147483648 && src < 2147483647) {
-			dest.push(types.long);
-			bytes = 4;
-			src = (src >>> 0);
-		} else if (src >= 0 && src < 4294967296) {
-			dest.push(types.ulong);
-			bytes = 4;
-		} else {
-			dest.push(types.ulonglong);
-			for (var i = 0; i < 8; i++) {
-				dest.push(src & 0xFF);
-				src /= 0x100;
-			}
-			return;
-		}
-		
-		for (var i = 0; i < bytes; i++) {
-			dest.push(src & 0xFF);
-			src >>= 8;
-		}
-	}
-
-	for (var i = 0; i < src.length; i++) {
-		if (src[i] instanceof Array) {
-			dest.push(types.array);
-			encodeNumber(src[i].length);
-			if (src[i].length) {
-				serialize(src[i], dest);
-			}
-			continue;
-		}
-		if (src[i] === null) {
-			dest.push(types.null);
-			continue;
-		}
-		switch (typeof(src[i])) {
-			case "undefined":
-				dest.push(type.undefined);
-				continue;
-			case "boolean":
-				dest.push(types.boolean);
-				dest.push(Number(src[i]));
-				continue;
-			case "string":
-				dest.push(types.string);
-				if (src[i].indexOf("\x00") > -1) {
-					throw new Error();
-				}
-				for (var j = 0; j < src[i].length; j++) {
-					dest.push(src[i].charCodeAt(j));
-				}
-				dest.push(0);
-				continue;
-			case "number":
-				encodeNumber(src[i]);
-				continue;
-			default:
-				throw new Error();
-		}
-	}
-	return dest;
-}
-function deserialize(src, length) {
-	if (arguments.callee.caller !== arguments.callee) {
-		window._pos = 0;
-	}
-
-	if (!src) {
-		return null;
-	}
-	
-	var types = {
-		"boolean": 0,
-		"string": 1,
-		"byte": 2,
-		"sbyte": 3,
-		"short": 4,
-		"ushort": 5,
-		"long": 6,
-		"ulong": 7,
-		"ulonglong": 8,
-		"double": 9,
-		"array": 10,
-		"null": 11,
-		"undefined": 12
-	}
-	
-	var dest = [];
-	for (var i = window._pos; i < src.length && (!length || dest.length <
-		length); ) {
-		
-		switch (src[i++]) {
-			case types.null:
-				dest.push(null);
-				continue;
-			case types.undefined:
-				dest.push(undefined);
-				continue;
-			case types.boolean:
-				dest.push(Boolean(src[i++]));
-				continue;
-			case types.string:
-				var chr;
-				var s = "";
-				while (chr = src[i++]) {
-					s += String.fromCharCode(chr);
-				}
-				dest.push(s);
-				continue;
-			case types.byte:
-				dest.push(src[i++]);
-				continue;
-			case types.sbyte:
-				dest.push(src[i++] << 24 >> 24);
-				continue;
-			case types.ushort:
-				dest.push(src[i++] | (src[i++] << 8));
-				continue;
-			case types.short:
-				dest.push((src[i++] | (src[i++] << 8)) << 16 >> 16);
-				continue;
-			case types.ulong:
-				dest.push((src[i++] | (src[i++] << 8) | (src[i++] << 16) |
-					(src[i++] << 24)) >>> 0);
-				continue;
-			case types.long:
-				dest.push(src[i++] | (src[i++] << 8) | (src[i++] << 16) |
-					(src[i++] << 24));
-				continue;
-			case types.ulonglong:
-				var value = 0;
-				for (var j = 0; j < 8; j++) {
-					value += src[i++] * Math.pow(256, j);
-				}
-				dest.push(value);
-				continue;
-			case types.double:
-				var b = [src[i++], src[i++], src[i++], src[i++], src[i++], src[i++],
-					src[i++], src[i++]];
-				
-				var num = 0;
-				for (var j = 7; j >= 2; j--) {
-					for (var k = 0; k < 8; k++) {
-						num /= 2;
-						var bit = (b[j] >> k) & 0x1;
-						if (bit) {
-							num += 1;
-						}
-					}
-				}
-				for (var k = 0; k < 4; k++) {
-					num /= 2;
-					var bit = (b[1] >> k) & 0x1;
-					if (bit) {
-						num += 1;
-					}
-				}
-				
-				var exp = ((b[0] & 0x7F) << 4) | ((b[1] & 0xF0) >> 4);
-				exp = exp << 20 >> 20;
-				while (exp < 0) {
-					exp++;
-					num /= 2;
-				}
-				while (exp > 0) {
-					exp--;
-					num *= 2;
-				}
-				
-				if (b[0] & 0x80) {
-					num *= -1;
-				}
-				dest.push(num);
-				continue;
-			case types.array:
-				window._pos = i;
-				var len = deserialize(src, 1)[0];
-				if (len) {
-					dest.push(deserialize(src, len));
-				}
-				i = window._pos;
-				continue;
-			default:
-				throw new Error();
-		}
-	}
-	window._pos = i;
-	return dest;
 }
