@@ -275,14 +275,33 @@ db = {
 	},
 	readyHandlers: [function() {
 		if (localStorage.pendingSave) {
-			this.writeGameRecord(JSON.parse(localStorage.pendingSave));
+			var s = localStorage.pendingSave;
+			var x = new Uint8Array(s.length);
+			for (var i = 0; i < s.length; i++) {
+				x[i] = s.charCodeAt(i);
+			}
+			var x = deserialize(x);
+			this.writeGameRecord({
+				id: x[0],
+				system: x[1],
+				SRAM: x[2],
+				RTC: x[3]
+			});
 			delete localStorage.pendingSave;
 		}
 		
 		if(localStorage.pendingSaveState) {
-			var x = JSON.parse(localStorage.pendingSaveState);
-			x.slot = 0;
-			this.writeStateRecord(x);
+			var s = localStorage.pendingSaveState;
+			var x = new Uint8Array(s.length);
+			for (var i = 0; i < s.length; i++) {
+				x[i] = s.charCodeAt(i);
+			}
+			var x = deserialize(x);
+			this.writeStateRecord({
+				game: x[0],
+				slot: 0,
+				state: x[1]
+			});
 			delete localStorage.pendingSaveState;
 		}
 	}],
@@ -336,7 +355,13 @@ db = {
 			RTC: gameboy.cTIMER ? gameboy.saveRTCState() : null
 		};
 		if (quick) {
-			window.pendingSave = JSON.stringify(record);
+			var x = serialize([record.id, record.system, record.SRAM,
+				record.RTC]);
+			var s = "";
+			for (var i = 0; i < x.length; i++) {
+				s += String.fromCharCode(x[i]);
+			}
+			window.pendingSave = s;
 		}
 		this.writeGameRecord(record);
 	},
@@ -348,9 +373,6 @@ db = {
 			if (!res) {
 				callback(null);
 			} else {
-				res.SRAM = res.SRAM || [];
-				res.RTC = res.RTC || [];
-			
 				callback(res);
 			}
 		}
@@ -413,10 +435,17 @@ db = {
 		state.shift();
 		var record = {
 			game: gameboy.name,
+			slot: 0,
 			state: state
 		};
-		window.pendingSaveState = JSON.stringify(record);
-		record.slot = 0;
+
+		var x = serialize([record.game, record.state]);
+		var s = "";
+		for (var i = 0; i < x.length; i++) {
+			s += String.fromCharCode(x[i]);
+		}
+		window.pendingSaveState = s;
+
 		this.writeStateRecord(record);
 	},
 	eachGame: function(callback) {

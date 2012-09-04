@@ -362,8 +362,8 @@ function loadROM(data, reset) {
 	
 	db.readGame(name, function(res) {
 		gameboy = new GameBoyCore($("canvas")[0], data);
-		gameboy.openMBC = function() { return res.SRAM };
-		gameboy.openRTC = function() { return res.RTC };
+		gameboy.openMBC = function() { return (res && res.SRAM) || [] };
+		gameboy.openRTC = function() { return (res && res.RTC) || [] };
 		gameboy.start();
 		
 		if (!reset && Settings.autoSaveState) {
