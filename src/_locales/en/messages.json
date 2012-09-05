@@ -82,7 +82,7 @@
 		"description": "Info in the about dialog."
 	},
 	"techInfo": {
-		"message": "Many modern web technologies were used in the making of this app, including jQuery, File APIs, DeviceOrientation, Chrome APIs, Drag and Drop, Fullscreen API, Page Visibility API, IndexedDB, and Canvas.",
+		"message": "Many modern web technologies were used in the making of this app, including jQuery, File APIs, DeviceOrientation, Chrome APIs, Drag and Drop, Fullscreen API, Page Visibility API, IndexedDB, Audio APIs, and Canvas.",
 		"description": "Info in the about dialog."
 	},
 	
@@ -222,6 +222,27 @@
 	},
 	"startControl": {
 		"message": "Start",
+		"description": "Control name."
+	},
+	
+	"tiltControlsCategory": {
+		"message": "Tilt Controls",
+		"description": "Option page section."
+	},
+	"tiltupControl": {
+		"message": "Up",
+		"description": "Control name."
+	},
+	"tiltdownControl": {
+		"message": "Down",
+		"description": "Control name."
+	},
+	"tiltleftControl": {
+		"message": "Left",
+		"description": "Control name."
+	},
+	"tiltrightControl": {
+		"message": "Right",
 		"description": "Control name."
 	},
 		

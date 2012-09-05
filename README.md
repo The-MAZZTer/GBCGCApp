@@ -6,7 +6,7 @@ Other icons: http://www.famfamfam.com/lab/icons/silk/
 Borrowed some old Chrome NTP code to make i18n stuff in HTML easier (see source for details).
 
 TODO:
-- Add keybindings to simulate tilt?
+- Add keybindings to simulate tilt? (test... kirby's tilt-n-tumble doesn't seem to run)
 - Add support for gamepad input. (API seems broken in Chrome)
 - Look into registering this App as a handler for .gb/.gbc files on Chrome OS. (Done, test)
 - Different default fullscreen key bind to reflect Chrome OS keyboard layout. (Done, test)

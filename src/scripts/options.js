@@ -67,6 +67,12 @@ layout = {
 				keys: ["up", "down", "left", "right", "a", "b", "select", "start"]
 			}
 		},
+		"tiltControls": {
+			"": {
+				type: "controls",
+				keys: ["tiltup", "tiltdown", "tiltleft", "tiltright"]
+			}
+		},
 		"stateControls": {
 			"": {
 				type: "controls",

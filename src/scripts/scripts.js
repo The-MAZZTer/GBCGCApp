@@ -184,7 +184,11 @@ Settings = {
 			55: "slot7",
 			56: "slot8",
 			57: "slot9",
-			48: "slot10"
+			48: "slot10",
+			104: "tiltup",
+			98: "tiltdown",
+			100: "tiltleft",
+			102: "tiltright"
 		},
 		MBC1Only: false,
 		preserveAspect: true,
@@ -231,7 +235,11 @@ Settings = {
 			55: "slot7",
 			56: "slot8",
 			57: "slot9",
-			48: "slot10"
+			48: "slot10",
+			87: "tiltup",
+			83: "tiltdown",
+			65: "tiltleft",
+			68: "tiltright"
 		},
 		MBC1Only: false,
 		preserveAspect: true,

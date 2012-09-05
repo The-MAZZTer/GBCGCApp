@@ -1,6 +1,7 @@
 Function.Empty = function() {}
 
 $(document).ready(function() {
+	window.forceTilt = {up: false, down: false, left: false, right: false};
 	var controlDownMap = {
 		"right": GameBoyKeyDown,
 		"up": GameBoyKeyDown,
@@ -18,6 +19,22 @@ $(document).ready(function() {
 			if (GameBoyEmulatorInitialized) {
 				gameboy.setSpeed(Settings.fastForwardSpeed);
 			}
+		},
+		"tiltup": function() {
+			window.forceTilt.up = true;
+			$(window).on("deviceorientation");
+		},
+		"tiltdown": function() {
+			window.forceTilt.down = true;
+			$(window).on("deviceorientation");
+		},
+		"tiltleft": function() {
+			window.forceTilt.left = true;
+			$(window).on("deviceorientation");
+		},
+		"tiltright": function() {
+			window.forceTilt.right = true;
+			$(window).on("deviceorientation");
 		}
 	}
 	var controlUpMap = {
@@ -37,6 +54,22 @@ $(document).ready(function() {
 			if (GameBoyEmulatorInitialized) {
 				gameboy.setSpeed($("#speed_text").val());
 			}
+		},
+		"tiltup": function() {
+			window.forceTilt.up = false;
+			$(window).on("deviceorientation");
+		},
+		"tiltdown": function() {
+			window.forceTilt.down = false;
+			$(window).on("deviceorientation");
+		},
+		"tiltleft": function() {
+			window.forceTilt.left = false;
+			$(window).on("deviceorientation");
+		},
+		"tiltright": function() {
+			window.forceTilt.right = false;
+			$(window).on("deviceorientation");
 		}
 	}
 	
@@ -71,7 +104,28 @@ $(document).ready(function() {
 		}
 		delete window.pendingSave;
 		delete window.pendingSaveState;
-	}).on("deviceorientation", GameBoyGyroSignalHandler).focus(function() {
+	}).on("deviceorientation", function(e) {
+		if (GameBoyEmulatorInitialized() && GameBoyEmulatorPlaying()) {
+			if (window.forceTilt.left && !window.forceTilt.right) {
+				var x = -1;
+			} else if (!window.forceTilt.left && window.forceTilt.right) {
+				var x = 1;
+			} else {
+				var x = (e.gamma * Math.PI / 180) || 0;
+			}
+			if (window.forceTilt.up && !window.forceTilt.down) {
+				var y = -1;
+			} else if (!window.forceTilt.up && window.forceTilt.down) {
+				var y = 1;
+			} else {
+				var y = (e.beta * Math.PI / 180) || 0;
+			}
+			
+			gameboy.GyroEvent(x, y);
+			e.preventDefault();
+		}
+	}
+	}).focus(function() {
 		window.isFocused = true;
 	}).blur(function() {
 		window.isFocused = false;
