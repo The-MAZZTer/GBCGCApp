@@ -124,7 +124,6 @@ $(document).ready(function() {
 			gameboy.GyroEvent(x, y);
 			e.preventDefault();
 		}
-	}
 	}).focus(function() {
 		window.isFocused = true;
 	}).blur(function() {
