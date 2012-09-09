@@ -331,7 +331,7 @@ db = {
 	handle: null,
 	version: 1,
 	getGBColor: function() {
-		if (!GameBoyEmulatorInitialized()) {
+		if (!GameBoyEmulatorInitialized() || !gameboy.name) {
 			return false;
 		}
 		switch (gameboy.ROM[0x143]) {
@@ -352,7 +352,7 @@ db = {
 		}
 	},
 	writeGame: function(quick) {
-		if (!GameBoyEmulatorInitialized()) {
+		if (!GameBoyEmulatorInitialized() || !gameboy.name) {
 			return false;
 		}
 		
@@ -398,7 +398,7 @@ db = {
 		}
 	},
 	saveStateLoad: function(n, callback) {
-		if (!GameBoyEmulatorInitialized()) {
+		if (!GameBoyEmulatorInitialized() || !gameboy.name) {
 			callback(null);
 			return;
 		}
@@ -421,7 +421,7 @@ db = {
 		}
 	},
 	saveStateSave: function(n) {
-		if (!GameBoyEmulatorInitialized()) {
+		if (!GameBoyEmulatorInitialized() || !gameboy.name) {
 			return;
 		}
 		
