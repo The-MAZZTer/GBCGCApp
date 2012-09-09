@@ -5229,6 +5229,7 @@ GameBoyCore.prototype.GyroEvent = function (x, y) {
 	y += 2047;
 	this.highY = y >> 8;
 	this.lowY = y & 0xFF;
+	console.log(x, y);
 }
 GameBoyCore.prototype.initSound = function () {
 	this.audioResamplerFirstPassFactor = Math.max(Math.min(Math.floor(this.clocksPerSecond / 44100), Math.floor(0xFFFF / 0x1E0)), 1);

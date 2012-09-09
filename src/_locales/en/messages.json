@@ -229,6 +229,10 @@
 		"message": "Tilt Controls",
 		"description": "Option page section."
 	},
+	"mouseTiltSetting": {
+		"message": "Move the mouse over the canvas to simulate tilt.",
+		"description": "Option caption."
+	},
 	"tiltupControl": {
 		"message": "Up",
 		"description": "Control name."

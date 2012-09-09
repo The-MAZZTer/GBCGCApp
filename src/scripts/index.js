@@ -21,19 +21,19 @@ $(document).ready(function() {
 			}
 		},
 		"tiltup": function() {
-			window.forceTilt.up = true;
+			lastTilt.y = -1;
 			changeTilt();
 		},
 		"tiltdown": function() {
-			window.forceTilt.down = true;
+			lastTilt.y = 1;
 			changeTilt();
 		},
 		"tiltleft": function() {
-			window.forceTilt.left = true;
+			lastTilt.x = -1;
 			changeTilt();
 		},
 		"tiltright": function() {
-			window.forceTilt.right = true;
+			lastTilt.x = 1;
 			changeTilt();
 		}
 	}
@@ -56,19 +56,19 @@ $(document).ready(function() {
 			}
 		},
 		"tiltup": function() {
-			window.forceTilt.up = false;
+			lastTilt.y = 0;
 			changeTilt();
 		},
 		"tiltdown": function() {
-			window.forceTilt.down = false;
+			lastTilt.y = 0;
 			changeTilt();
 		},
 		"tiltleft": function() {
-			window.forceTilt.left = false;
+			lastTilt.x = 0;
 			changeTilt();
 		},
 		"tiltright": function() {
-			window.forceTilt.right = false;
+			lastTilt.x = 0;
 			changeTilt();
 		}
 	}
@@ -308,40 +308,25 @@ $(document).ready(function() {
 	});
 	db.init();
 	
-	$("canvas").mousemove(function(e) {
-		if (GameBoyEmulatorInitialized() && GameBoyEmulatorPlaying()) {
-			var x = e.offsetX / this.offsetWidth;
-			var y = e.offsetY / this.offsetHeight;
-			gameboy.GyroEvent(x * 2 - 1, y * 2 - 1);
-		}
-	});
+	if (Settings.mouseTilt) {
+		$("canvas").mousemove(function(e) {
+			lastTilt.x = ((e.offsetX / this.offsetWidth * 2) - 1);
+			lastTilt.y = ((e.offsetY / this.offsetHeight * 2) - 1);
+			changeTilt();
+		});
+	}
 });
 
-var lastTilt = { beta: 0, gamma: 0 };
+var lastTilt = { x: 0, y: 0 };
 function changeTilt(e) {
-	/*if (e) {
-		lastTilt.beta = e.beta;
-		lastTilt.gamma = e.gamma;
+	if (e) {
+		lastTilt.x = (e.gamma * Math.PI / 180) || 0;
+		lastTilt.y = (e.beta * Math.PI / 180) || 0;
 		e.preventDefault();
 	}
 	if (GameBoyEmulatorInitialized() && GameBoyEmulatorPlaying()) {
-		if (window.forceTilt.left && !window.forceTilt.right) {
-			var x = -1;
-		} else if (!window.forceTilt.left && window.forceTilt.right) {
-			var x = 1;
-		} else {
-			var x = (lastTilt.gamma * Math.PI / 180) || 0;
-		}
-		if (window.forceTilt.up && !window.forceTilt.down) {
-			var y = -1;
-		} else if (!window.forceTilt.up && window.forceTilt.down) {
-			var y = 1;
-		} else {
-			var y = (lastTilt.beta * Math.PI / 180) || 0;
-		}
-		
-		gameboy.GyroEvent(x, y);
-	}*/
+		gameboy.GyroEvent(lastTilt.x, lastTilt.y);
+	}
 }
 function closeDropDown(e) {
 	window.isFocused = true;	

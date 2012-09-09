@@ -68,6 +68,9 @@ layout = {
 			}
 		},
 		"tiltControls": {
+			"mouseTilt": {
+				type: "checkbox"
+			},
 			"": {
 				type: "controls",
 				keys: ["tiltup", "tiltdown", "tiltleft", "tiltright"]
@@ -146,7 +149,7 @@ layout = {
 	}
 }
 
-$(document).off("ready").ready(function(e) {
+$(document).ready(function(e) {
 	var frag = $.create();
 	var frag2 = $.create();
 	for (var i in layout) {
@@ -155,19 +158,19 @@ $(document).off("ready").ready(function(e) {
 			$.create("li").prop("id", i).click(function() {
 				location.hash = "#" + this.id;
 			}).append(
-				$.create("button").attr("i18n-content", i + "Nav")
+				$.create("button").text(chrome.i18n.getMessage(i + "Nav"))
 			)
 		);
 			
 		var content = $.create("div").prop("id", i + "Content")
 		content.append(
-			$.create("h1").attr("i18n-content", i + "Nav")
+			$.create("h1").text(chrome.i18n.getMessage(i + "Nav"))
 		);
 		for (var j in page) {
 			var category = page[j];
 			var section = $.create("div");
 			section.append(
-				$.create("h2").attr("i18n-content", j + "Category")
+				$.create("h2").text(chrome.i18n.getMessage(j + "Category"))
 			);
 
 			for (var k in category) {
@@ -198,8 +201,6 @@ $(document).off("ready").ready(function(e) {
 	}
 	$("#nav ul").prepend(frag);
 	$("#content").append(frag2);
-	
-	i18nTemplate.process(document);
 	
 	$("#nav li:last-child").click(function() {
 		for (var i in Settings.defaults) {
@@ -244,7 +245,7 @@ function generateCheckbox(name, setting, parent) {
 					Settings.onchange();
 				})
 			).append(
-				$.create("span").attr("i18n-content", name + "Setting")
+				$.create("span").text(chrome.i18n.getMessage(name + "Setting"))
 			)
 		)
 	);
@@ -273,7 +274,7 @@ function generateRange(name, setting, parent) {
 	parent.append(
 		$.create("div").addClass("range").append(
 			$.create("label").append(
-				$.create("span").attr("i18n-content", name + "Setting")
+				$.create("span").text(chrome.i18n.getMessage(name + "Setting"))
 			).append(range).append(updown)
 		)
 	);
@@ -282,8 +283,8 @@ function generateRange(name, setting, parent) {
 function generateButton(name, setting, parent) {
 	parent.append(
 		$.create("div").addClass("button").append(
-			$.create("button").addClass("realButton").attr("i18n-content", name +
-				"Setting").prop("target", setting.target).click(function() {
+			$.create("button").addClass("realButton").text(chrome.i18n.getMessage(name
+				+ "Setting")).prop("target", setting.target).click(function() {
 				
 				$("#" + this.target).click();
 			})
@@ -337,8 +338,8 @@ function generateControls(name, setting, parent) {
 				return false;
 			}).append(
 				$.create("div").append(
-					$.create("div").addClass("nameCol").attr("i18n-content", keys[i] +
-						"Control")
+					$.create("div").addClass("nameCol").
+						text(chrome.i18n.getMessage(keys[i] + "Control"))
 				).append(
 					$.create("div").addClass("keyCol").text(map[keys[i]] ?
 						(chrome.i18n.getMessage("key" + map[keys[i]]) || ("Unknown (" +
@@ -600,8 +601,8 @@ function generateManage(name, setting, parent) {
 	var container;
 	parent.append(
 		container = $.create("div").addClass("manage").append(
-			$.create("button").addClass("realButton").attr("i18n-content",
-				"clearAll").click(function() {
+			$.create("button").addClass("realButton").
+				text(chrome.i18n.getMessage("clearAll")).click(function() {
 				
 				if (confirm(chrome.i18n.getMessage("areYouSure"))) {
 					db.clear();

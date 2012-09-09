@@ -191,6 +191,7 @@ Settings = {
 			102: "tiltright"
 		},
 		MBC1Only: false,
+		mouseTilt: true,
 		preserveAspect: true,
 		runWhenHidden: false,
 		runWhenUnfocused: false,
@@ -242,6 +243,7 @@ Settings = {
 			68: "tiltright"
 		},
 		MBC1Only: false,
+		mouseTilt: true,
 		preserveAspect: true,
 		runWhenHidden: false,
 		runWhenUnfocused: false,
