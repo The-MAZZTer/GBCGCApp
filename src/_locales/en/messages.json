@@ -826,7 +826,7 @@
 	},
 	
 	"fileBrowserCaption": {
-		"message": "Run",
+		"message": "Play",
 		"description": "Caption of the file browser handler button on Chrome OS."
 	},
 	
