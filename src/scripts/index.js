@@ -287,26 +287,6 @@ $(document).ready(function() {
 	if (Settings.imageSmoothing) {
 		$("canvas").addClass("smooth");
 	}
-
-	sizeCanvas();
-
-	setVolume({target: {value: Settings.volume}});
-	
-	db.readyHandlers.push(function() {
-		var query = location.search;
-		if (query[0] == "?") {
-			query = query.substr(1).split("&");
-			var kvp = {};
-			for (var i = 0; i < query.length; i++) {
-				var x = query[i].split("=");
-				kvp[x[0]] = x[1];
-			}
-			if (kvp.file) {
-				loadROM(decodeURI(kvp.file));
-			}
-		}
-	});
-	db.init();
 	
 	if (Settings.mouseTilt) {
 		$("canvas").mousemove(function(e) {
@@ -315,6 +295,19 @@ $(document).ready(function() {
 			changeTilt();
 		});
 	}
+
+	sizeCanvas();
+
+	setVolume({target: {value: Settings.volume}});
+	
+	db.readyHandlers.push(function() {
+		db.readROM(function(data) {
+			if (data) {
+				loadROM(data, false);
+			}
+		});
+	});
+	db.init();
 });
 
 var lastTilt = { x: 0, y: 0 };

@@ -17,8 +17,12 @@
 		}
 	},
   "background": {
-    "scripts": ["scripts/background.js"],
-    "persistent": false
+    "scripts": [
+			"scripts/jquery-1.8.0.min.js",
+			"scripts/scripts.js",
+			"scripts/background.js"
+		],
+		"persistent": false
   },
 	"file_browser_handlers": [{
 		"id": "open",
@@ -28,6 +32,6 @@
 			"filesystem:*.gbc"
 		]
 	}],
-  "options_page": "options.html",
+	"options_page": "options.html",
 	"permissions": ["unlimitedStorage", "fileBrowserHandler"]
 }

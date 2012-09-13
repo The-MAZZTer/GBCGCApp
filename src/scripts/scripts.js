@@ -262,26 +262,23 @@ window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange;
 db = {
 	init: function() {
 		var self = this;
-		indexedDB.open("gbcgc").onsuccess = function(e) {
-			var h = self.handle = e.target.result;
-			if (h.version != self.version) {
-				h.setVersion(self.version).onsuccess = function(e) {
-					self.handle.createObjectStore("games", { keyPath: "id" });
-					self.handle.createObjectStore("states", { keyPath: "id" }).
-						createIndex("game", "game", { unique: false })
-					
-					self.ready();
-				}
-			} else {
-				self.ready();
-			}
+		var d = indexedDB.open("gbcgc", 1)
+		d.onsuccess = function(e) {
+			self.handle = e.target.result;
+			self.ready();
+		}
+		d.onupgradeneeded = function(e) {
+			var h = e.target.result;
+			h.createObjectStore("games", { keyPath: "id" });
+			h.createObjectStore("states", { keyPath: "id" }).
+				createIndex("game", "game", { unique: false })
+			h.createObjectStore("roms", { keyPath: "id" });
 		}
 	},
 	ready: function() {
 		for (var i = 0; i < this.readyHandlers.length; i++) {
 			this.readyHandlers[i].apply(this, arguments);
 		}
-		delete this.readyHandlers;
 	},
 	readyHandlers: [function() {
 		if (localStorage.pendingSave) {
@@ -325,6 +322,7 @@ db = {
 		this.handle.transaction("games", "readwrite").objectStore("games").clear();
 		this.handle.transaction("states", "readwrite").objectStore("states").
 			clear();
+		this.handle.transaction("roms", "readwrite").objectStore("roms").clear();
 	},
 	destroy: function() {
 		this.dispose();
@@ -579,6 +577,24 @@ db = {
 			});
 			callback(slot, state);
 		});
+	},
+	writeROM: function(rom, callback) {
+		this.handle.transaction("roms", "readwrite").objectStore(
+			"roms").put({id: "", data: rom}).onsuccess = callback;
+	},
+	readROM: function(callback) {
+		var os = this.handle.transaction("roms", "readwrite").objectStore(
+			"roms");
+		os.get("").onsuccess = function(e) {
+			var res = e.target.result;
+			if (!res) {
+				callback(null);
+				return;
+			}
+			var data = res.data;
+			os.clear();
+			callback(data);
+		}
 	}
 }
 
