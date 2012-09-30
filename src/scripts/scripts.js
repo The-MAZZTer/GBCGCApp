@@ -173,7 +173,7 @@ Settings = {
 			13: "start",
 			116: "savestate",
 			120: "loadstate",
-			122: "fullscreen",
+			70: "fullscreen",
 			192: "fastforward",
 			49: "slot1",
 			50: "slot2",
@@ -359,7 +359,8 @@ db = {
 		var record = {			
 			id: gameboy.name,
 			system: Number(this.getGBColor()),
-			SRAM: gameboy.saveSRAMState(),
+			SRAM: (gameboy.cBATT && gameboy.MBCRam.length) ? gameboy.saveSRAMState() :
+				null,
 			RTC: gameboy.cTIMER ? gameboy.saveRTCState() : null
 		};
 		if (quick) {
